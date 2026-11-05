@@ -192,7 +192,6 @@
                         <span>Login to Student Portal</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
-                    <p class="text-xs text-center text-slate-500 mt-2">Demo Student: Mobile <span class="text-slate-300 font-mono">9876543210</span> | Passcode <span class="text-slate-300 font-mono">1234</span></p>
                 </form>
 
                 <!-- ADMIN LOGIN FORM -->
@@ -212,9 +211,8 @@
                 </form>
             </section>
 
-            <!-- 2. STUDENT PORTAL (STRICT READ-ONLY ACCESS WITH PRINT ID) -->
+            <!-- 2. STUDENT PORTAL -->
             <section id="view-student-portal" class="hidden space-y-6">
-                <!-- Welcome Banner -->
                 <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/40 border border-teal-500/30 rounded-2xl p-6 relative overflow-hidden">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div class="flex items-center gap-4">
@@ -230,7 +228,6 @@
                             </div>
                         </div>
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
-                            <!-- Student Print ID Button -->
                             <button onclick="app.openIDCardModal(app.state.activeStudent.id)" class="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-xs transition shadow-lg shadow-teal-500/20 flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-address-card"></i>
                                 <span>My Digital ID Card</span>
@@ -243,7 +240,6 @@
                     </div>
                 </div>
 
-                <!-- Overview Stat Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
                         <div class="text-xs text-slate-400 font-medium">Assigned Seat</div>
@@ -273,9 +269,7 @@
                     </div>
                 </div>
 
-                <!-- Main Portal Details Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Fee Details & Payment History -->
                     <div class="lg:col-span-2 space-y-6">
                         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                             <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
@@ -298,15 +292,11 @@
                             </div>
 
                             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Payment History Timeline</h4>
-                            <div class="space-y-3" id="stu-payment-history">
-                                <!-- Dynamic receipts generated here -->
-                            </div>
+                            <div class="space-y-3" id="stu-payment-history"></div>
                         </div>
                     </div>
 
-                    <!-- Library Rules & Guidelines -->
                     <div class="space-y-6">
-                        <!-- Student Password Change Box -->
                         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                             <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
                                 <i class="fa-solid fa-key text-teal-400"></i>
@@ -347,26 +337,14 @@
                                     <i class="fa-solid fa-id-badge text-indigo-400 mt-0.5"></i>
                                     <span>Always carry your Trisha Digital Library ID Card for verification.</span>
                                 </li>
-                                <li class="flex items-start gap-2.5">
-                                    <i class="fa-solid fa-utensils text-emerald-400 mt-0.5"></i>
-                                    <span>Eating inside the desk area is strictly prohibited.</span>
-                                </li>
-                                <li class="flex items-start gap-2.5">
-                                    <i class="fa-solid fa-triangle-exclamation text-rose-400 mt-0.5"></i>
-                                    <span>Clear your pending fees prior to the due date to retain seat reservation.</span>
-                                </li>
                             </ul>
-                            <div class="mt-6 pt-4 border-t border-slate-800 text-center">
-                                <p class="text-[11px] text-slate-500">Need help or fee extension? Contact Admin at front desk.</p>
-                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 3. ADMIN PORTAL (FULL CONTROL DASHBOARD) -->
+            <!-- 3. ADMIN PORTAL -->
             <section id="view-admin-portal" class="hidden space-y-6">
-                <!-- Navigation Tabs for Admin Sections -->
                 <div class="flex items-center gap-2 border-b border-slate-800 pb-2 overflow-x-auto no-scrollbar text-sm font-medium">
                     <button id="admin-tab-students" onclick="app.setAdminTab('students')" class="px-4 py-2 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 whitespace-nowrap flex items-center gap-2">
                         <i class="fa-solid fa-users"></i> Students
@@ -381,7 +359,6 @@
 
                 <!-- ADMIN SECTION 1: STUDENTS MANAGEMENT -->
                 <div id="admin-sec-students" class="space-y-6">
-                    <!-- Actions Header -->
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                         <div class="relative flex-1 max-w-md">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-magnifying-glass"></i></span>
@@ -394,7 +371,6 @@
                         </div>
                     </div>
 
-                    <!-- Student Table -->
                     <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse text-xs sm:text-sm">
@@ -408,9 +384,7 @@
                                         <th class="p-3 sm:p-4 text-right">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody id="students-table-body" class="divide-y divide-slate-800">
-                                    <!-- Dynamic Rows -->
-                                </tbody>
+                                <tbody id="students-table-body" class="divide-y divide-slate-800"></tbody>
                             </table>
                         </div>
                     </div>
@@ -426,24 +400,8 @@
                                 </h3>
                                 <p class="text-xs text-slate-400 mt-1">Click on any seat to view assigned student or assign a new student</p>
                             </div>
-
-                            <!-- Seat Status Legend -->
-                            <div class="flex items-center gap-4 text-xs">
-                                <div class="flex items-center gap-1.5">
-                                    <span class="w-3 h-3 rounded-md bg-slate-800 border border-slate-700"></span>
-                                    <span class="text-slate-400">Available</span>
-                                </div>
-                                <div class="flex items-center gap-1.5">
-                                    <span class="w-3 h-3 rounded-md bg-teal-500/20 border border-teal-500 text-teal-400"></span>
-                                    <span class="text-slate-400">Occupied</span>
-                                </div>
-                            </div>
                         </div>
-
-                        <!-- 106 Seat Grid Container -->
-                        <div id="seat-map-grid" class="seat-grid max-h-[550px] overflow-y-auto p-2 bg-slate-950 rounded-xl border border-slate-800">
-                            <!-- Dynamically generated seats 1 to 106 -->
-                        </div>
+                        <div id="seat-map-grid" class="seat-grid max-h-[550px] overflow-y-auto p-2 bg-slate-950 rounded-xl border border-slate-800"></div>
                     </div>
                 </div>
 
@@ -464,7 +422,6 @@
                         </div>
                     </div>
 
-                    <!-- Expenses List & Add Form -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                             <h4 class="text-sm font-bold text-white mb-4">Record New Expense</h4>
@@ -494,23 +451,19 @@
                                             <th class="py-2 text-right">Amount</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="expenses-table-body" class="divide-y divide-slate-800/50">
-                                        <!-- Dynamic expense items -->
-                                    </tbody>
+                                    <tbody id="expenses-table-body" class="divide-y divide-slate-800/50"></tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-
         </main>
 
         <!-- FOOTER -->
         <footer class="mt-auto border-t border-slate-900 bg-slate-950/80 py-4 text-center text-xs text-slate-500">
             <p>© 2026 Trisha Digital Library Software. All rights reserved.</p>
         </footer>
-
     </div>
 
     <!-- MODAL: CHANGE ADMIN PASSCODE -->
@@ -522,7 +475,6 @@
                 </h3>
                 <button onclick="app.closeAdminPasswordModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-
             <form onsubmit="app.handleChangeAdminPassword(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs text-slate-400 mb-1">Current Master Passcode</label>
@@ -536,7 +488,6 @@
                     <label class="block text-xs text-slate-400 mb-1">Confirm New Passcode</label>
                     <input type="password" id="admin-confirm-pass" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                 </div>
-
                 <div class="flex justify-end gap-2 pt-3 border-t border-slate-800">
                     <button type="button" onclick="app.closeAdminPasswordModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-medium hover:bg-slate-700">Cancel</button>
                     <button type="submit" class="px-5 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold hover:bg-indigo-700 shadow-lg shadow-indigo-600/20">Update Passcode</button>
@@ -552,10 +503,8 @@
                 <h3 class="text-lg font-bold text-white" id="modal-student-title">Add New Student</h3>
                 <button onclick="app.closeStudentModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-
             <form onsubmit="app.handleSaveStudent(event)" class="space-y-4">
                 <input type="hidden" id="form-stu-id">
-
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs text-slate-400 mb-1">Full Name</label>
@@ -566,7 +515,6 @@
                         <input type="tel" id="form-stu-mobile" required placeholder="10-digit number" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
                     </div>
                 </div>
-
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs text-slate-400 mb-1">Seat Number (1-106)</label>
@@ -577,7 +525,6 @@
                         <input type="text" id="form-stu-pin" required value="1234" placeholder="Set 1st-time passcode" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm font-mono text-white focus:outline-none focus:border-teal-500">
                     </div>
                 </div>
-
                 <div class="grid grid-cols-3 gap-3">
                     <div>
                         <label class="block text-xs text-slate-400 mb-1">Total Fee (₹)</label>
@@ -592,7 +539,6 @@
                         <input type="date" id="form-stu-duedate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
                     </div>
                 </div>
-
                 <div class="flex justify-end gap-2 pt-3 border-t border-slate-800">
                     <button type="button" onclick="app.closeStudentModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm font-medium hover:bg-slate-700">Cancel</button>
                     <button type="submit" class="px-5 py-2 bg-teal-500 text-white rounded-xl text-sm font-semibold hover:bg-teal-600 shadow-lg shadow-teal-500/20">Save Student Data</button>
@@ -601,16 +547,14 @@
         </div>
     </div>
 
-    <!-- MODAL: DIGITAL ID CARD GENERATOR & PRINTABLE ZONE -->
+    <!-- MODAL: DIGITAL ID CARD GENERATOR -->
     <div id="modal-idcard" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
             <div class="flex items-center justify-between mb-4 no-print">
                 <h3 class="text-sm font-bold text-white uppercase tracking-wider">Official Student ID Card</h3>
                 <button onclick="app.closeIDCardModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-
             <div id="printable-area">
-                <!-- ID Card Preview Box -->
                 <div id="idcard-printable-box" class="bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 border-2 border-teal-500/40 rounded-2xl p-5 shadow-2xl relative overflow-hidden text-center">
                     <div class="flex items-center justify-center gap-2 mb-3">
                         <div class="w-7 h-7 rounded-lg bg-teal-500 flex items-center justify-center text-white font-black text-sm">T</div>
@@ -619,29 +563,21 @@
                             <div class="text-[9px] text-teal-400 uppercase font-semibold">Member Identity Card</div>
                         </div>
                     </div>
-
-                    <div class="w-16 h-16 rounded-full bg-teal-500/20 border-2 border-teal-400 mx-auto mb-2 flex items-center justify-center text-teal-300 text-2xl font-bold uppercase" id="idcard-avatar">
-                        S
-                    </div>
-
+                    <div class="w-16 h-16 rounded-full bg-teal-500/20 border-2 border-teal-400 mx-auto mb-2 flex items-center justify-center text-teal-300 text-2xl font-bold uppercase" id="idcard-avatar">S</div>
                     <h4 id="idcard-name" class="font-bold text-base">Student Name</h4>
                     <p id="idcard-id" class="text-xs text-teal-400 font-mono font-semibold">ID: TDL-101</p>
-
                     <div class="grid grid-cols-2 gap-2 text-left bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 my-3 text-[11px]">
                         <div><span class="text-slate-400 block">Mobile:</span> <span id="idcard-mobile" class="font-medium">---</span></div>
                         <div><span class="text-slate-400 block">Timings:</span> <span class="text-teal-400 font-medium">8 AM - 8 PM</span></div>
                         <div><span class="text-slate-400 block">Seat No:</span> <span id="idcard-seat" class="font-medium">#12</span></div>
                         <div><span class="text-slate-400 block">Valid Till:</span> <span id="idcard-valid" class="text-emerald-400 font-medium">N/A</span></div>
                     </div>
-
-                    <!-- QR Code Container -->
                     <div class="flex flex-col items-center justify-center pt-2 border-t border-slate-800/80">
                         <div id="idcard-qrcode" class="p-1.5 bg-white rounded-lg inline-block"></div>
                         <span class="text-[9px] text-slate-400 mt-1">Authorized Digital Stamp</span>
                     </div>
                 </div>
             </div>
-
             <div class="mt-4 flex gap-2 no-print">
                 <button onclick="app.printIDCard()" class="w-full py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5">
                     <i class="fa-solid fa-print"></i> Print ID Card
@@ -650,55 +586,34 @@
         </div>
     </div>
 
-
     <!-- APP CORE JAVASCRIPT LOGIC -->
     <script type="module">
-        // Import Firebase JS SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, collection, onSnapshot, setDoc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global variables provided by environment or defaults
-        // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+        const firebaseConfig = {
+          apiKey: "AIzaSyCbb_NbL_H7v2Pq3IZtLCg46YXleesAkN4",
+          authDomain: "trisha-library.firebaseapp.com",
+          projectId: "trisha-library",
+          storageBucket: "trisha-library.firebasestorage.app",
+          messagingSenderId: "908599781452",
+          appId: "1:908599781452:web:28024e427d0d0fae33ece9",
+          measurementId: "G-84ENC56J38"
+        };
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCbb_NbL_H7v2Pq3IZtLCg46YXleesAkN4",
-  authDomain: "trisha-library.firebaseapp.com",
-  projectId: "trisha-library",
-  storageBucket: "trisha-library.firebasestorage.app",
-  messagingSenderId: "908599781452",
-  appId: "1:908599781452:web:28024e427d0d0fae33ece9",
-  measurementId: "G-84ENC56J38"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+        const appId = "trisha-library-app";
         let db = null;
         let auth = null;
         let currentUser = null;
 
-        // Application State Controller
         window.app = {
             state: {
                 adminPasscode: 'admin123',
-                authRole: null, // 'admin' | 'student' | null
+                authRole: null,
                 activeStudent: null,
-                students: [
-                    { id: 'TDL-101', name: 'Aarav Kumar', mobile: '9876543210', pin: '1234', seat: 12, totalFees: 800, paidFees: 800, pendingFees: 0, dueDate: '2026-11-01', admissionDate: '2026-01-10', history: [{ amount: 800, date: '2026-10-01', note: 'Monthly Fee Paid' }] },
-                    { id: 'TDL-102', name: 'Priya Singh', mobile: '9812345678', pin: '1234', seat: 25, totalFees: 800, paidFees: 400, pendingFees: 400, dueDate: '2026-10-28', admissionDate: '2026-02-15', history: [{ amount: 400, date: '2026-10-01', note: 'Partial Payment' }] },
-                    { id: 'TDL-103', name: 'Rohan Sharma', mobile: '9765432109', pin: '1234', seat: 45, totalFees: 1200, paidFees: 1200, pendingFees: 0, dueDate: '2026-11-05', admissionDate: '2026-03-01', history: [{ amount: 1200, date: '2026-10-05', note: 'Full Access Renewal' }] }
-                ],
-                expenses: [
-                    { id: 'exp-1', title: 'High-speed Fiber Internet', amount: 1500, date: '2026-10-05' },
-                    { id: 'exp-2', title: 'AC Electricity Bill', amount: 4200, date: '2026-10-10' }
-                ]
+                students: [], // Demo data removed, connected to real database
+                expenses: []  // Demo data removed, connected to real database
             },
 
             activeAuthTab: 'student',
@@ -835,26 +750,19 @@ const analytics = getAnalytics(app);
                 const newP = document.getElementById('stu-new-pass').value;
 
                 if (!this.state.activeStudent) return;
-
                 if (currP !== this.state.activeStudent.pin) {
                     alert("Current passcode is incorrect!");
                     return;
                 }
-
                 if (newP.length < 4) {
                     alert("New passcode must be at least 4 characters!");
                     return;
                 }
 
                 this.state.activeStudent.pin = newP;
-
-                // Sync update
                 if (db && currentUser) {
                     const studentDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', this.state.activeStudent.id);
                     await updateDoc(studentDocRef, { pin: newP });
-                } else {
-                    const idx = this.state.students.findIndex(s => s.id === this.state.activeStudent.id);
-                    if (idx >= 0) this.state.students[idx].pin = newP;
                 }
 
                 alert("Passcode updated successfully!");
@@ -868,7 +776,6 @@ const analytics = getAnalytics(app);
                 }
             },
 
-            // STUDENT PORTAL READ-ONLY RENDERING
             renderStudentPortal() {
                 const s = this.state.activeStudent;
                 if (!s) return;
@@ -880,24 +787,13 @@ const analytics = getAnalytics(app);
                 document.getElementById('stu-seat').innerText = s.seat ? `Seat #${s.seat}` : 'Not Assigned';
 
                 const pending = (s.totalFees || 0) - (s.paidFees || 0);
-                const pendingEl = document.getElementById('stu-pending');
-                pendingEl.innerText = `₹${pending}`;
-                
-                const pendingContainer = document.getElementById('stu-pending-container');
-                if (pending > 0) {
-                    pendingContainer.className = "text-2xl font-bold text-rose-400 mt-1 flex items-center gap-2";
-                } else {
-                    pendingContainer.className = "text-2xl font-bold text-emerald-400 mt-1 flex items-center gap-2";
-                }
-
+                document.getElementById('stu-pending').innerText = `₹${pending}`;
                 document.getElementById('stu-due-date').innerText = s.dueDate || 'N/A';
                 document.getElementById('stu-admission').innerText = s.admissionDate || 'N/A';
-
                 document.getElementById('stu-total-fee').innerText = `₹${s.totalFees || 0}`;
                 document.getElementById('stu-paid-fee').innerText = `₹${s.paidFees || 0}`;
                 document.getElementById('stu-balance-fee').innerText = `₹${pending}`;
 
-                // History List
                 const historyBox = document.getElementById('stu-payment-history');
                 historyBox.innerHTML = '';
                 if (s.history && s.history.length > 0) {
@@ -918,7 +814,6 @@ const analytics = getAnalytics(app);
                 }
             },
 
-            // ADMIN NAVIGATION
             setAdminTab(tab) {
                 const tabs = ['students', 'seats', 'finance'];
                 tabs.forEach(t => {
@@ -934,14 +829,14 @@ const analytics = getAnalytics(app);
                 });
             },
 
-            // ADMIN: STUDENTS RENDER & SEARCH
             renderStudentsTable(filtered = null) {
                 const list = filtered || this.state.students;
                 const tbody = document.getElementById('students-table-body');
                 tbody.innerHTML = '';
 
                 if (list.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">No student records found.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">No student records found in database. Add a new student to begin.</td></tr>`;
+                    this.updateFinanceSummary();
                     return;
                 }
 
@@ -963,7 +858,6 @@ const analytics = getAnalytics(app);
                             <div class="font-semibold ${pending > 0 ? 'text-rose-400' : 'text-emerald-400'}">
                                 Paid: ₹${s.paidFees} / ₹${s.totalFees}
                             </div>
-                            ${pending > 0 ? `<div class="text-[10px] text-rose-400 font-medium">Pending: ₹${pending}</div>` : `<div class="text-[10px] text-emerald-400">Paid in Full</div>`}
                         </td>
                         <td class="p-3 sm:p-4 text-slate-300 font-mono">${s.dueDate || 'N/A'}</td>
                         <td class="p-3 sm:p-4 text-center">
@@ -972,13 +866,13 @@ const analytics = getAnalytics(app);
                             </button>
                         </td>
                         <td class="p-3 sm:p-4 text-right space-x-1">
-                            <button onclick="app.sendWhatsAppReminder('${s.mobile}', '${s.name}', ${pending}, '${s.dueDate}')" class="p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" title="Send WhatsApp Reminder">
+                            <button onclick="app.sendWhatsAppReminder('${s.mobile}', '${s.name}', ${pending}, '${s.dueDate}')" class="p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" title="Send WhatsApp">
                                 <i class="fa-brands fa-whatsapp"></i>
                             </button>
-                            <button onclick="app.openStudentModal('${s.id}')" class="p-2 rounded-lg bg-teal-500/10 hover:bg-teal-500/20 text-teal-400 border border-teal-500/30" title="Edit Student">
+                            <button onclick="app.openStudentModal('${s.id}')" class="p-2 rounded-lg bg-teal-500/10 hover:bg-teal-500/20 text-teal-400 border border-teal-500/30" title="Edit">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
-                            <button onclick="app.deleteStudent('${s.id}')" class="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30" title="Delete Student">
+                            <button onclick="app.deleteStudent('${s.id}')" class="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30" title="Delete">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </td>
@@ -1000,12 +894,9 @@ const analytics = getAnalytics(app);
                 this.renderStudentsTable(filtered);
             },
 
-            // 106-SEAT MAP RENDER
             renderSeatMap() {
                 const grid = document.getElementById('seat-map-grid');
                 grid.innerHTML = '';
-
-                // Map assigned seats
                 const assignedMap = {};
                 this.state.students.forEach(s => {
                     if (s.seat) assignedMap[s.seat] = s;
@@ -1014,20 +905,13 @@ const analytics = getAnalytics(app);
                 for (let i = 1; i <= 106; i++) {
                     const occupant = assignedMap[i];
                     const btn = document.createElement('button');
-                    
                     if (occupant) {
                         btn.className = "h-14 rounded-xl bg-teal-500/20 border border-teal-500/50 text-teal-300 p-1 flex flex-col items-center justify-center hover:bg-teal-500/30 transition text-xs font-medium";
-                        btn.innerHTML = `
-                            <span class="font-bold">#${i}</span>
-                            <span class="text-[9px] truncate w-full text-center text-slate-300">${occupant.name.split(' ')[0]}</span>
-                        `;
-                        btn.onclick = () => alert(`Seat #${i} occupied by ${occupant.name} (Fixed Timing: 8 AM - 8 PM)`);
+                        btn.innerHTML = `<span class="font-bold">#${i}</span><span class="text-[9px] truncate w-full text-center text-slate-300">${occupant.name.split(' ')[0]}</span>`;
+                        btn.onclick = () => alert(`Seat #${i} occupied by ${occupant.name}`);
                     } else {
                         btn.className = "h-14 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 p-1 flex flex-col items-center justify-center hover:bg-slate-800 transition text-xs font-medium";
-                        btn.innerHTML = `
-                            <span class="font-bold">#${i}</span>
-                            <span class="text-[9px] text-slate-600">Vacant</span>
-                        `;
+                        btn.innerHTML = `<span class="font-bold">#${i}</span><span class="text-[9px] text-slate-600">Vacant</span>`;
                         btn.onclick = () => {
                             if (confirm(`Assign vacant Seat #${i} to a new student?`)) {
                                 this.openStudentModal(null, i);
@@ -1038,11 +922,9 @@ const analytics = getAnalytics(app);
                 }
             },
 
-            // EXPENSES RENDER & FINANCE
             renderExpensesTable() {
                 const tbody = document.getElementById('expenses-table-body');
                 tbody.innerHTML = '';
-
                 if (this.state.expenses.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-slate-500">No expense records found.</td></tr>`;
                 } else {
@@ -1057,7 +939,6 @@ const analytics = getAnalytics(app);
                         tbody.appendChild(tr);
                     });
                 }
-
                 this.updateFinanceSummary();
             },
 
@@ -1068,7 +949,6 @@ const analytics = getAnalytics(app);
                     totalCollected += Number(s.paidFees || 0);
                     totalPending += Math.max(0, Number(s.totalFees || 0) - Number(s.paidFees || 0));
                 });
-
                 let totalExpenses = 0;
                 this.state.expenses.forEach(e => {
                     totalExpenses += Number(e.amount || 0);
@@ -1083,30 +963,19 @@ const analytics = getAnalytics(app);
                 e.preventDefault();
                 const title = document.getElementById('exp-title').value.trim();
                 const amount = Number(document.getElementById('exp-amount').value);
-                const newExp = {
-                    title,
-                    amount,
-                    date: new Date().toISOString().split('T')[0]
-                };
+                const newExp = { title, amount, date: new Date().toISOString().split('T')[0] };
 
                 if (db && currentUser) {
                     const expensesCol = collection(db, 'artifacts', appId, 'public', 'data', 'expenses');
                     await addDoc(expensesCol, newExp);
-                } else {
-                    newExp.id = 'exp-' + Date.now();
-                    this.state.expenses.unshift(newExp);
-                    this.renderExpensesTable();
                 }
-
                 document.getElementById('exp-title').value = '';
                 document.getElementById('exp-amount').value = '';
             },
 
-            // STUDENT SAVE / EDIT / DELETE ACTIONS
             openStudentModal(studentId = null, prefilledSeat = null) {
                 document.getElementById('modal-student').classList.remove('hidden');
                 const title = document.getElementById('modal-student-title');
-
                 if (studentId) {
                     title.innerText = "Edit Student Profile";
                     const s = this.state.students.find(item => item.id === studentId);
@@ -1129,7 +998,6 @@ const analytics = getAnalytics(app);
                     document.getElementById('form-stu-pin').value = '1234';
                     document.getElementById('form-stu-total').value = 800;
                     document.getElementById('form-stu-paid').value = 800;
-                    
                     const nextMonth = new Date();
                     nextMonth.setMonth(nextMonth.getMonth() + 1);
                     document.getElementById('form-stu-duedate').value = nextMonth.toISOString().split('T')[0];
@@ -1153,12 +1021,7 @@ const analytics = getAnalytics(app);
 
                 const studentData = {
                     id: existingId || ('TDL-' + Math.floor(100 + Math.random() * 900)),
-                    name,
-                    mobile,
-                    seat,
-                    pin,
-                    totalFees,
-                    paidFees,
+                    name, mobile, seat, pin, totalFees, paidFees,
                     pendingFees: Math.max(0, totalFees - paidFees),
                     dueDate,
                     admissionDate: new Date().toISOString().split('T')[0],
@@ -1168,17 +1031,7 @@ const analytics = getAnalytics(app);
                 if (db && currentUser) {
                     const studentDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', studentData.id);
                     await setDoc(studentDocRef, studentData, { merge: true });
-                } else {
-                    const idx = this.state.students.findIndex(s => s.id === studentData.id);
-                    if (idx >= 0) {
-                        this.state.students[idx] = studentData;
-                    } else {
-                        this.state.students.unshift(studentData);
-                    }
-                    this.renderStudentsTable();
-                    this.renderSeatMap();
                 }
-
                 this.closeStudentModal();
             },
 
@@ -1187,15 +1040,10 @@ const analytics = getAnalytics(app);
                     if (db && currentUser) {
                         const studentDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', studentId);
                         await deleteDoc(studentDocRef);
-                    } else {
-                        this.state.students = this.state.students.filter(s => s.id !== studentId);
-                        this.renderStudentsTable();
-                        this.renderSeatMap();
                     }
                 }
             },
 
-            // WHATSAPP AUTOMATED REMINDER TRIGGER
             sendWhatsAppReminder(mobile, name, pending, dueDate) {
                 const cleanMobile = mobile.replace(/[^0-9]/g, '');
                 const formattedMobile = cleanMobile.length === 10 ? '91' + cleanMobile : cleanMobile;
@@ -1208,7 +1056,6 @@ const analytics = getAnalytics(app);
                 window.open(`https://wa.me/${formattedMobile}?text=${message}`, '_blank');
             },
 
-            // ID CARD MODAL & QR GENERATOR
             openIDCardModal(studentId) {
                 const s = this.state.students.find(item => item.id === studentId);
                 if (!s) return;
@@ -1224,10 +1071,7 @@ const analytics = getAnalytics(app);
                 qrBox.innerHTML = '';
                 new QRCode(qrBox, {
                     text: `TDL-VERIFIED:${s.id}:${s.name}`,
-                    width: 64,
-                    height: 64,
-                    colorDark: "#0f172a",
-                    colorLight: "#ffffff"
+                    width: 64, height: 64, colorDark: "#0f172a", colorLight: "#ffffff"
                 });
 
                 document.getElementById('modal-idcard').classList.remove('hidden');
@@ -1242,32 +1086,23 @@ const analytics = getAnalytics(app);
             }
         };
 
-        // Initialize App & Firebase
         async function initApp() {
-            if (firebaseConfig) {
-                try {
-                    const fbApp = initializeApp(firebaseConfig);
-                    auth = getAuth(fbApp);
-                    db = getFirestore(fbApp);
+            try {
+                const fbApp = initializeApp(firebaseConfig);
+                auth = getAuth(fbApp);
+                db = getFirestore(fbApp);
 
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                    } else {
-                        await signInAnonymously(auth);
+                await signInAnonymously(auth);
+
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                    if (user) {
+                        setupFirestoreSync();
                     }
-
-                    onAuthStateChanged(auth, (user) => {
-                        currentUser = user;
-                        if (user) {
-                            setupFirestoreSync();
-                        }
-                    });
-                } catch (err) {
-                    console.warn("Firebase Auth fallback to local state mode:", err);
-                    updateCloudStatus("Offline / Demo Mode", false);
-                }
-            } else {
-                updateCloudStatus("Demo Mode (No Firebase Config)", false);
+                });
+            } catch (err) {
+                console.warn("Firebase Auth fallback to local state mode:", err);
+                updateCloudStatus("Offline / Demo Mode", false);
             }
 
             app.renderSeatMap();
@@ -1286,44 +1121,28 @@ const analytics = getAnalytics(app);
             }
         }
 
-        // Realtime Firestore Synchronization
         function setupFirestoreSync() {
             if (!db || !currentUser) return;
             updateCloudStatus("Firestore Connected", true);
 
-            // Path for shared public student data
             const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
             onSnapshot(studentsCol, (snapshot) => {
-                if (!snapshot.empty) {
-                    const loaded = [];
-                    snapshot.forEach(docSnap => loaded.push({ id: docSnap.id, ...docSnap.data() }));
-                    app.state.students = loaded;
-                    app.renderStudentsTable();
-                    app.renderSeatMap();
-
-                    // Update active student portal if logged in
-                    if (app.state.activeStudent) {
-                        const updated = app.state.students.find(s => s.id === app.state.activeStudent.id || s.mobile === app.state.activeStudent.mobile);
-                        if (updated) {
-                            app.state.activeStudent = updated;
-                            app.renderStudentPortal();
-                        }
-                    }
-                }
+                const loaded = [];
+                snapshot.forEach(docSnap => loaded.push({ id: docSnap.id, ...docSnap.data() }));
+                app.state.students = loaded;
+                app.renderStudentsTable();
+                app.renderSeatMap();
             }, (error) => console.error("Students sync error:", error));
 
             const expensesCol = collection(db, 'artifacts', appId, 'public', 'data', 'expenses');
             onSnapshot(expensesCol, (snapshot) => {
-                if (!snapshot.empty) {
-                    const loaded = [];
-                    snapshot.forEach(docSnap => loaded.push({ id: docSnap.id, ...docSnap.data() }));
-                    app.state.expenses = loaded;
-                    app.renderExpensesTable();
-                }
+                const loaded = [];
+                snapshot.forEach(docSnap => loaded.push({ id: docSnap.id, ...docSnap.data() }));
+                app.state.expenses = loaded;
+                app.renderExpensesTable();
             }, (error) => console.error("Expenses sync error:", error));
         }
 
-        // Initialize on Load
         window.onload = function() {
             initApp();
         };
