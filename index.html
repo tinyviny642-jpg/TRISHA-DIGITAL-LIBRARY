@@ -217,7 +217,7 @@
                         <span>Access Admin Dashboard</span>
                         <i class="fa-solid fa-shield-halved"></i>
                     </button>
-                    <p class="text-xs text-center text-slate-500 mt-2">Master Admin Passcode: <span class="text-slate-300 font-mono">admin123</span></p>
+                    <p class="text-xs text-center text-slate-500 mt-2">Default Master Passcode: <span class="text-slate-300 font-mono">admin123</span></p>
                 </form>
             </section>
 
@@ -600,7 +600,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
 
         // Aapka official Firebase configuration
@@ -670,10 +670,24 @@
                 }
             },
 
-            handleAdminLogin(e) {
+            async handleAdminLogin(e) {
                 e.preventDefault();
                 const pin = document.getElementById('login-admin-pin').value;
-                if (pin === this.state.adminPasscode) {
+                
+                let activePasscode = this.state.adminPasscode;
+                if (db) {
+                    try {
+                        const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'admin_config');
+                        const docSnap = await getDoc(configDocRef);
+                        if (docSnap.exists() && docSnap.data().passcode) {
+                            activePasscode = docSnap.data().passcode;
+                        }
+                    } catch (err) {
+                        console.warn("Could not fetch admin password from Firestore, using local fallback");
+                    }
+                }
+
+                if (pin === activePasscode) {
                     this.state.authRole = 'admin';
                     this.showPortal('admin');
                 } else {
@@ -733,13 +747,26 @@
                 document.getElementById('modal-admin-pass').classList.add('hidden');
             },
 
-            handleChangeAdminPassword(e) {
+            async handleChangeAdminPassword(e) {
                 e.preventDefault();
                 const curr = document.getElementById('admin-curr-pass').value;
                 const newP = document.getElementById('admin-new-pass').value;
                 const confP = document.getElementById('admin-confirm-pass').value;
 
-                if (curr !== this.state.adminPasscode) {
+                let activePasscode = this.state.adminPasscode;
+                if (db) {
+                    try {
+                        const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'admin_config');
+                        const docSnap = await getDoc(configDocRef);
+                        if (docSnap.exists() && docSnap.data().passcode) {
+                            activePasscode = docSnap.data().passcode;
+                        }
+                    } catch (err) {
+                        console.warn("Could not check current passcode from Firestore");
+                    }
+                }
+
+                if (curr !== activePasscode) {
                     alert("Current admin passcode is incorrect!");
                     return;
                 }
@@ -753,6 +780,11 @@
                 }
 
                 this.state.adminPasscode = newP;
+                if (db && currentUser) {
+                    const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'admin_config');
+                    await setDoc(configDocRef, { passcode: newP }, { merge: true });
+                }
+
                 alert("Admin passcode updated successfully!");
                 this.closeAdminPasswordModal();
             },
