@@ -41,13 +41,13 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- QRCode.js Library for ID Card generation -->
+    <!-- QRCode.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-    <!-- HTML5 QR Code Scanner Library for Aadhaar QR Camera Scanning -->
+    <!-- HTML5 QR Code Scanner Library -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
-    <!-- Tesseract.js Library for ID Card Image OCR Scanning -->
+    <!-- Tesseract.js Library -->
     <script src='https://unpkg.com/tesseract.js@v5.0.5/dist/tesseract.min.js'></script>
 
     <!-- Google Fonts -->
@@ -64,54 +64,31 @@
         }
 
         @media print {
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            body * {
-                visibility: hidden !important;
-            }
-            #modal-idcard, 
-            #printable-area, 
-            #printable-area * {
-                visibility: visible !important;
-            }
+            body { background: white !important; color: black !important; }
+            body * { visibility: hidden !important; }
+            #modal-idcard, #printable-area, #printable-area * { visibility: visible !important; }
             #modal-idcard {
-                position: absolute !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 100% !important;
-                height: auto !important;
-                background: transparent !important;
-                display: flex !important;
-                justify-content: center !important;
-                align-items: flex-start !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                backdrop-filter: none !important;
+                position: absolute !important; left: 0 !important; top: 0 !important;
+                width: 100% !important; height: auto !important; background: transparent !important;
+                display: flex !important; justify-content: center !important; align-items: flex-start !important;
+                padding: 0 !important; margin: 0 !important; backdrop-filter: none !important;
             }
             #idcard-printable-box {
-                box-shadow: none !important;
-                border: 2px solid #000 !important;
-                background: #ffffff !important;
-                color: #000000 !important;
+                box-shadow: none !important; border: 2px solid #000 !important;
+                background: #ffffff !important; color: #000000 !important;
             }
-            .no-print {
-                display: none !important;
-            }
+            .no-print { display: none !important; }
         }
     </style>
 </head>
 <body class="h-full flex flex-col bg-slate-950 text-slate-100 antialiased selection:bg-teal-500 selection:text-white">
 
-    <!-- App Container -->
     <div id="app" class="min-h-screen flex flex-col">
 
         <!-- Header / Navigation Bar -->
         <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 sticky top-0 z-40">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    
                     <div class="flex items-center gap-3 cursor-pointer" onclick="app.navToHome()">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-teal-500/20 border border-teal-400/30">
                             T
@@ -148,7 +125,6 @@
                             <span>Logout</span>
                         </button>
                     </div>
-
                 </div>
             </div>
         </header>
@@ -386,7 +362,7 @@
                                         <th class="p-3 sm:p-4">Father Name & Address</th>
                                         <th class="p-3 sm:p-4">Assigned Seat</th>
                                         <th class="p-3 sm:p-4">Fees Details</th>
-                                        <th class="p-3 sm:p-4">Admission & Due Date</th>
+                                        <th class="p-3 sm:p-4">Admission & Due Date (DD/MM/YYYY)</th>
                                         <th class="p-3 sm:p-4 text-center">Print ID Card</th>
                                         <th class="p-3 sm:p-4 text-right">Actions</th>
                                     </tr>
@@ -502,7 +478,7 @@
         </div>
     </div>
 
-    <!-- MODAL: ADD / EDIT STUDENT WITH AUTO-SCANNER -->
+    <!-- MODAL: ADD / EDIT STUDENT WITH AUTO-SCANNER & AUTO DATE -->
     <div id="modal-student" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative">
             <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
@@ -510,7 +486,7 @@
                 <button onclick="app.closeStudentModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <!-- AUTO SCANNER SUITE FOR ID CARDS -->
+            <!-- AUTO SCANNER SUITE -->
             <div class="mb-4 p-3.5 bg-slate-950 rounded-xl border border-teal-500/30 space-y-3">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -529,13 +505,12 @@
                     </label>
                 </div>
 
-                <!-- Camera QR Display Box -->
                 <div id="aadhaar-reader-box" class="hidden mt-2 p-2 bg-slate-900 rounded-xl border border-slate-800 text-center">
                     <div id="aadhaar-reader" class="w-full max-w-xs mx-auto overflow-hidden rounded-lg"></div>
                     <button type="button" onclick="app.stopAadhaarScanner()" class="mt-2 text-[11px] text-rose-400 hover:underline">Close Camera</button>
                 </div>
 
-                <p id="scan-status" class="text-[10px] text-slate-400 italic">Scan Aadhaar QR via camera or upload ID photo to auto-extract student details.</p>
+                <p id="scan-status" class="text-[10px] text-slate-400 italic">Scan Aadhaar QR via camera or upload ID photo to auto-extract details.</p>
             </div>
 
             <form onsubmit="app.handleSaveStudent(event)" class="space-y-4">
@@ -576,11 +551,11 @@
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Date of Admission</label>
-                        <input type="date" id="form-stu-admission" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                        <label class="block text-xs text-slate-400 mb-1">Date of Admission (DD/MM/YYYY)</label>
+                        <input type="date" id="form-stu-admission" required onchange="app.onAdmissionDateChange()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Next Due Date</label>
+                        <label class="block text-xs text-slate-400 mb-1">Next Due Date (Auto +1 Month)</label>
                         <input type="date" id="form-stu-duedate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
                     </div>
                 </div>
@@ -632,7 +607,7 @@
                         <div><span class="text-slate-400 block">Mobile:</span> <span id="idcard-mobile" class="font-medium">---</span></div>
                         <div><span class="text-slate-400 block">Timings:</span> <span class="text-teal-400 font-medium">8 AM - 8 PM</span></div>
                         <div><span class="text-slate-400 block">Seat No:</span> <span id="idcard-seat" class="font-medium">#12</span></div>
-                        <div><span class="text-slate-400 block">Valid Till:</span> <span id="idcard-valid" class="text-emerald-400 font-medium">N/A</span></div>
+                        <div><span class="text-slate-400 block">Valid Till (DD/MM/YYYY):</span> <span id="idcard-valid" class="text-emerald-400 font-medium">N/A</span></div>
                         <div class="col-span-2"><span class="text-slate-400 block">Address:</span> <span id="idcard-address" class="text-slate-200">---</span></div>
                     </div>
                     <div class="flex flex-col items-center justify-center pt-2 border-t border-slate-800/80">
@@ -683,6 +658,16 @@
             },
 
             activeAuthTab: 'student',
+
+            // Helper to format date YYYY-MM-DD to DD/MM/YYYY for display
+            formatDateDDMMYYYY(dateStr) {
+                if (!dateStr) return 'N/A';
+                const parts = dateStr.split('-');
+                if (parts.length === 3) {
+                    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }
+                return dateStr;
+            },
 
             setAuthTab(tab) {
                 this.activeAuthTab = tab;
@@ -888,8 +873,8 @@
 
                 const pending = Math.max(0, (s.totalFees || 400) - (s.paidFees || 0));
                 document.getElementById('stu-pending').innerText = `₹${pending}`;
-                document.getElementById('stu-due-date').innerText = s.dueDate || 'N/A';
-                document.getElementById('stu-admission').innerText = s.admissionDate || 'N/A';
+                document.getElementById('stu-due-date').innerText = this.formatDateDDMMYYYY(s.dueDate);
+                document.getElementById('stu-admission').innerText = this.formatDateDDMMYYYY(s.admissionDate);
                 document.getElementById('stu-total-fee').innerText = `₹${s.totalFees || 400}`;
                 document.getElementById('stu-paid-fee').innerText = `₹${s.paidFees || 0}`;
                 document.getElementById('stu-balance-fee').innerText = `₹${pending}`;
@@ -903,7 +888,7 @@
                         card.innerHTML = `
                             <div>
                                 <div class="font-semibold text-slate-200">${h.note || 'Fee Payment'}</div>
-                                <div class="text-[10px] text-slate-500">${h.date}</div>
+                                <div class="text-[10px] text-slate-500">${this.formatDateDDMMYYYY(h.date)}</div>
                             </div>
                             <div class="font-bold text-emerald-400">+₹${h.amount}</div>
                         `;
@@ -964,8 +949,8 @@
                             <div class="${pending > 0 ? 'text-rose-400 font-bold' : 'text-slate-400'}">Unpaid: ₹${pending}</div>
                         </td>
                         <td class="p-3 sm:p-4 text-xs font-mono">
-                            <div class="text-slate-300">Adm: ${s.admissionDate || 'N/A'}</div>
-                            <div class="text-teal-400">Due: ${s.dueDate || 'N/A'}</div>
+                            <div class="text-slate-300">Adm: ${this.formatDateDDMMYYYY(s.admissionDate)}</div>
+                            <div class="text-teal-400">Due: ${this.formatDateDDMMYYYY(s.dueDate)}</div>
                         </td>
                         <td class="p-3 sm:p-4 text-center">
                             <button onclick="app.openIDCardModal('${s.id}')" class="px-3 py-1.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/40 text-xs font-semibold transition inline-flex items-center gap-1.5">
@@ -1042,7 +1027,7 @@
                         tr.className = "border-b border-slate-800/40";
                         tr.innerHTML = `
                             <td class="py-2.5 font-medium text-slate-200">${e.title}</td>
-                            <td class="py-2.5 text-slate-400 font-mono">${e.date}</td>
+                            <td class="py-2.5 text-slate-400 font-mono">${this.formatDateDDMMYYYY(e.date)}</td>
                             <td class="py-2.5 text-right font-bold text-rose-400">₹${e.amount}</td>
                         `;
                         tbody.appendChild(tr);
@@ -1089,7 +1074,19 @@
                 document.getElementById('form-stu-unpaid').value = unpaid;
             },
 
-            /* AADHAAR CAMERA QR SCANNER FEATURE */
+            // AUTO NEXT MONTH DUE DATE LOGIC FROM ADMISSION DATE
+            onAdmissionDateChange() {
+                const admDateVal = document.getElementById('form-stu-admission').value;
+                if (!admDateVal) return;
+                
+                const admDate = new Date(admDateVal);
+                admDate.setMonth(admDate.getMonth() + 1); // Add 1 Month
+                
+                const nextMonthStr = admDate.toISOString().split('T')[0];
+                document.getElementById('form-stu-duedate').value = nextMonthStr;
+            },
+
+            /* AADHAAR CAMERA QR SCANNER */
             startAadhaarScanner() {
                 const readerBox = document.getElementById('aadhaar-reader-box');
                 const statusEl = document.getElementById('scan-status');
@@ -1163,7 +1160,7 @@
                 }
             },
 
-            /* OCR FILE UPLOAD SCANNER (Tesseract.js) */
+            /* OCR FILE UPLOAD SCANNER */
             async scanIDCardFile(e) {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -1186,7 +1183,7 @@
 
             parseOCRText(text) {
                 const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                lines.forEach((line, i) => {
+                lines.forEach((line) => {
                     const lower = line.toLowerCase();
                     if ((lower.includes('name') || lower.includes('nam')) && !document.getElementById('form-stu-name').value) {
                         const extractedName = line.replace(/name|nam|[:,\-\.]/gi, '').trim();
@@ -1297,7 +1294,7 @@
                 const formattedMobile = cleanMobile.length === 10 ? '91' + cleanMobile : cleanMobile;
                 const message = encodeURIComponent(
                     `Hello ${name},\n\nThis is an automated reminder from *Trisha Digital Library*.\n\n` +
-                    `Your unpaid fee balance is *₹${pending}* due on *${dueDate}*.\n` +
+                    `Your unpaid fee balance is *₹${pending}* due on *${this.formatDateDDMMYYYY(dueDate)}*.\n` +
                     `Library timing: 8:00 AM to 8:00 PM.\n` +
                     `Please clear your payment to avoid seat cancellation.\n\nThank you!`
                 );
@@ -1315,7 +1312,7 @@
                 document.getElementById('idcard-mobile').innerText = s.mobile;
                 document.getElementById('idcard-address').innerText = s.address || '---';
                 document.getElementById('idcard-seat').innerText = s.seat ? `#${s.seat}` : 'N/A';
-                document.getElementById('idcard-valid').innerText = s.dueDate || 'N/A';
+                document.getElementById('idcard-valid').innerText = this.formatDateDDMMYYYY(s.dueDate) || 'N/A';
 
                 const qrBox = document.getElementById('idcard-qrcode');
                 qrBox.innerHTML = '';
