@@ -591,11 +591,13 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
 
-        // Aapka apna official Firebase Configuration
+        // Aapka official Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDomQsYNh7ATHvC4F9jWWzKkLOTufcD0J8",
             authDomain: "trisha-digital-library.firebaseapp.com",
+            databaseURL: "https://trisha-digital-library-default-rtdb.firebaseio.com",
             projectId: "trisha-digital-library",
             storageBucket: "trisha-digital-library.firebasestorage.app",
             messagingSenderId: "551272591083",
@@ -1093,6 +1095,7 @@
                 const fbApp = initializeApp(firebaseConfig);
                 auth = getAuth(fbApp);
                 db = getFirestore(fbApp);
+                const analytics = getAnalytics(fbApp);
 
                 await signInAnonymously(auth);
 
