@@ -590,16 +590,17 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, collection, onSnapshot, setDoc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // Aapka apna official Firebase Configuration
         const firebaseConfig = {
-          apiKey: "AIzaSyCbb_NbL_H7v2Pq3IZtLCg46YXleesAkN4",
-          authDomain: "trisha-library.firebaseapp.com",
-          projectId: "trisha-library",
-          storageBucket: "trisha-library.firebasestorage.app",
-          messagingSenderId: "908599781452",
-          appId: "1:908599781452:web:28024e427d0d0fae33ece9",
-          measurementId: "G-84ENC56J38"
+            apiKey: "AIzaSyDomQsYNh7ATHvC4F9jWWzKkLOTufcD0J8",
+            authDomain: "trisha-digital-library.firebaseapp.com",
+            projectId: "trisha-digital-library",
+            storageBucket: "trisha-digital-library.firebasestorage.app",
+            messagingSenderId: "551272591083",
+            appId: "1:551272591083:web:1110ed87352f948daf98ae",
+            measurementId: "G-66N07MLM21"
         };
 
         const appId = "trisha-library-app";
@@ -612,8 +613,8 @@
                 adminPasscode: 'admin123',
                 authRole: null,
                 activeStudent: null,
-                students: [], // Demo data removed, connected to real database
-                expenses: []  // Demo data removed, connected to real database
+                students: [],
+                expenses: []
             },
 
             activeAuthTab: 'student',
@@ -835,7 +836,7 @@
                 tbody.innerHTML = '';
 
                 if (list.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">No student records found in database. Add a new student to begin.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">No student records found in database. Click "New Student" to add.</td></tr>`;
                     this.updateFinanceSummary();
                     return;
                 }
@@ -1074,6 +1075,7 @@
                     width: 64, height: 64, colorDark: "#0f172a", colorLight: "#ffffff"
                 });
 
+                document.getElementById('modal-idcard').classList.add('flex');
                 document.getElementById('modal-idcard').classList.remove('hidden');
             },
 
