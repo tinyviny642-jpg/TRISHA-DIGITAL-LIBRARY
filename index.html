@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-slate-900 text-slate-100">
 <head>
-
-<link rel="manifest" href="/manifest.json">
-
+    <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trisha Digital Library - Smart Management System</title>
 
-<!-- PWA & Mobile Meta Tags -->
-<meta name="theme-color" content="#0f172a">
-<meta name="description" content="Trisha Digital Library - Automated Student Records, Seat Mapping & Management Portal">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Trisha Library">
+    <!-- PWA & Mobile Meta Tags -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="description" content="Trisha Digital Library - Automated Student Records, Seat Mapping & Management Portal">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Trisha Library">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -43,8 +41,14 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- QRCode.js library for ID Card generation -->
+    <!-- QRCode.js Library for ID Card generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- HTML5 QR Code Scanner Library for Aadhaar QR Camera Scanning -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <!-- Tesseract.js Library for ID Card Image OCR Scanning -->
+    <script src='https://unpkg.com/tesseract.js@v5.0.5/dist/tesseract.min.js'></script>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -59,7 +63,6 @@
             gap: 8px;
         }
 
-        /* Print Media Styles for ID Card */
         @media print {
             body {
                 background: white !important;
@@ -109,7 +112,6 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     
-                    <!-- Branding -->
                     <div class="flex items-center gap-3 cursor-pointer" onclick="app.navToHome()">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-teal-500/20 border border-teal-400/30">
                             T
@@ -122,15 +124,12 @@
                         </div>
                     </div>
 
-                    <!-- Right Controls / User Info -->
                     <div class="flex items-center gap-3">
-                        <!-- Cloud Status Indicator -->
                         <div id="cloud-status" class="hidden sm:flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300">
                             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" id="status-dot"></span>
                             <span id="status-text">Cloud Sync Ready</span>
                         </div>
 
-                        <!-- Active User Pill -->
                         <div id="user-pill" class="hidden flex items-center gap-2 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg">
                             <i id="user-pill-icon" class="fa-solid fa-user-shield text-teal-400 text-sm"></i>
                             <div class="text-xs leading-tight">
@@ -139,13 +138,11 @@
                             </div>
                         </div>
 
-                        <!-- Change Admin Passcode Quick Action (For Admin) -->
                         <button id="btn-change-admin-pass" onclick="app.openAdminPasswordModal()" class="hidden px-3 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-xs font-semibold transition flex items-center gap-1.5">
                             <i class="fa-solid fa-key"></i>
                             <span>Change Passcode</span>
                         </button>
 
-                        <!-- Logout / Switch Button -->
                         <button id="btn-logout" onclick="app.logout()" class="hidden px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-semibold transition flex items-center gap-1.5">
                             <i class="fa-solid fa-arrow-right-from-bracket"></i>
                             <span>Logout</span>
@@ -156,10 +153,10 @@
             </div>
         </header>
 
-        <!-- Main Dynamic Content Wrapper -->
+        <!-- Main Content Area -->
         <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
 
-            <!-- 1. LOGIN / AUTHENTICATION VIEW -->
+            <!-- 1. LOGIN VIEW -->
             <section id="view-login" class="max-w-md mx-auto my-8 sm:my-16 bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
                 <div class="absolute -top-12 -right-12 w-32 h-32 bg-teal-500/10 rounded-full blur-2xl"></div>
                 <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl"></div>
@@ -172,7 +169,6 @@
                     <p class="text-slate-400 text-sm mt-1">Select your login portal to continue</p>
                 </div>
 
-                <!-- Auth Mode Switcher Tabs -->
                 <div class="grid grid-cols-2 p-1 bg-slate-950 rounded-xl border border-slate-800 mb-6 text-sm font-medium">
                     <button id="tab-btn-student" onclick="app.setAuthTab('student')" class="py-2 rounded-lg text-teal-400 bg-slate-800 shadow transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-user-graduate"></i> Student
@@ -182,7 +178,6 @@
                     </button>
                 </div>
 
-                <!-- STUDENT LOGIN FORM -->
                 <form id="form-student-login" onsubmit="app.handleStudentLogin(event)" class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Student ID or Mobile No</label>
@@ -204,7 +199,6 @@
                     </button>
                 </form>
 
-                <!-- ADMIN LOGIN FORM -->
                 <form id="form-admin-login" onsubmit="app.handleAdminLogin(event)" class="space-y-4 hidden">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Admin Passcode</label>
@@ -234,7 +228,9 @@
                                     <h2 class="text-2xl font-bold text-white" id="stu-name">Student Name</h2>
                                     <span class="bg-teal-500/20 text-teal-400 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-teal-500/30">Active Student</span>
                                 </div>
+                                <p class="text-xs text-slate-300 mt-0.5">S/O: <span class="text-slate-100 font-medium" id="stu-father">---</span></p>
                                 <p class="text-sm text-slate-400 mt-1">ID: <span class="font-mono text-slate-200" id="stu-id">TDL-000</span> | Mobile: <span class="font-mono text-slate-200" id="stu-mobile">---</span></p>
+                                <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-location-dot text-teal-400 mr-1"></i> Address: <span class="text-slate-200" id="stu-address">---</span></p>
                             </div>
                         </div>
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
@@ -261,16 +257,16 @@
                     </div>
 
                     <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                        <div class="text-xs text-slate-400 font-medium">Pending Fees Due</div>
+                        <div class="text-xs text-slate-400 font-medium">Unpaid (Pending) Fees</div>
                         <div class="text-2xl font-bold mt-1 flex items-center gap-2" id="stu-pending-container">
                             <i class="fa-solid fa-indian-rupee-sign text-lg"></i>
                             <span id="stu-pending">₹0</span>
                         </div>
-                        <div class="text-[11px] text-slate-500 mt-1">Due Date: <span class="text-slate-300 font-medium" id="stu-due-date">N/A</span></div>
+                        <div class="text-[11px] text-slate-500 mt-1">Next Due Date: <span class="text-slate-300 font-medium" id="stu-due-date">N/A</span></div>
                     </div>
 
                     <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                        <div class="text-xs text-slate-400 font-medium">Admission Date</div>
+                        <div class="text-xs text-slate-400 font-medium">Date of Admission</div>
                         <div class="text-xl font-bold text-slate-200 mt-1 flex items-center gap-2">
                             <i class="fa-solid fa-calendar-check text-base text-teal-500"></i>
                             <span id="stu-admission">--/--/----</span>
@@ -289,14 +285,14 @@
                             <div class="grid grid-cols-3 gap-4 mb-6 p-4 bg-slate-950 rounded-xl border border-slate-800 text-center">
                                 <div>
                                     <div class="text-xs text-slate-400">Total Fee Package</div>
-                                    <div class="text-lg font-bold text-slate-200 mt-1" id="stu-total-fee">₹0</div>
+                                    <div class="text-lg font-bold text-slate-200 mt-1" id="stu-total-fee">₹400</div>
                                 </div>
                                 <div class="border-x border-slate-800">
-                                    <div class="text-xs text-slate-400">Fees Paid</div>
+                                    <div class="text-xs text-slate-400">Paid Fees</div>
                                     <div class="text-lg font-bold text-emerald-400 mt-1" id="stu-paid-fee">₹0</div>
                                 </div>
                                 <div>
-                                    <div class="text-xs text-slate-400">Remaining Balance</div>
+                                    <div class="text-xs text-slate-400">Unpaid Fees</div>
                                     <div class="text-lg font-bold text-rose-400 mt-1" id="stu-balance-fee">₹0</div>
                                 </div>
                             </div>
@@ -372,7 +368,7 @@
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                         <div class="relative flex-1 max-w-md">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-magnifying-glass"></i></span>
-                            <input type="text" id="student-search-input" onkeyup="app.filterStudents()" placeholder="Search by name, ID, seat or mobile..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-teal-500 transition">
+                            <input type="text" id="student-search-input" onkeyup="app.filterStudents()" placeholder="Search by name, father name, address, seat or mobile..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-teal-500 transition">
                         </div>
                         <div class="flex items-center gap-2">
                             <button onclick="app.openStudentModal()" class="px-4 py-2 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold text-sm rounded-xl shadow-lg shadow-teal-500/20 transition flex items-center gap-2">
@@ -386,10 +382,11 @@
                             <table class="w-full text-left border-collapse text-xs sm:text-sm">
                                 <thead>
                                     <tr class="bg-slate-950/80 text-slate-400 border-b border-slate-800 font-semibold uppercase tracking-wider">
-                                        <th class="p-3 sm:p-4">Student</th>
+                                        <th class="p-3 sm:p-4">Student Details</th>
+                                        <th class="p-3 sm:p-4">Father Name & Address</th>
                                         <th class="p-3 sm:p-4">Assigned Seat</th>
-                                        <th class="p-3 sm:p-4">Fees Status</th>
-                                        <th class="p-3 sm:p-4">Due Date</th>
+                                        <th class="p-3 sm:p-4">Fees Details</th>
+                                        <th class="p-3 sm:p-4">Admission & Due Date</th>
                                         <th class="p-3 sm:p-4 text-center">Print ID Card</th>
                                         <th class="p-3 sm:p-4 text-right">Actions</th>
                                     </tr>
@@ -423,7 +420,7 @@
                             <div class="text-2xl font-bold text-emerald-400 mt-2" id="fin-total-collected">₹0</div>
                         </div>
                         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-                            <div class="text-xs text-slate-400">Pending Fees Collection</div>
+                            <div class="text-xs text-slate-400">Unpaid (Pending) Fees Collection</div>
                             <div class="text-2xl font-bold text-rose-400 mt-2" id="fin-total-pending">₹0</div>
                         </div>
                         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
@@ -470,7 +467,6 @@
             </section>
         </main>
 
-        <!-- FOOTER -->
         <footer class="mt-auto border-t border-slate-900 bg-slate-950/80 py-4 text-center text-xs text-slate-500">
             <p>© 2026 Trisha Digital Library Software. All rights reserved.</p>
         </footer>
@@ -506,49 +502,104 @@
         </div>
     </div>
 
-    <!-- MODAL: ADD / EDIT STUDENT -->
+    <!-- MODAL: ADD / EDIT STUDENT WITH AUTO-SCANNER -->
     <div id="modal-student" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative">
             <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
                 <h3 class="text-lg font-bold text-white" id="modal-student-title">Add New Student</h3>
                 <button onclick="app.closeStudentModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
+
+            <!-- AUTO SCANNER SUITE FOR ID CARDS -->
+            <div class="mb-4 p-3.5 bg-slate-950 rounded-xl border border-teal-500/30 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-qrcode"></i> Auto-Fill Details from ID Card
+                    </span>
+                    <span class="text-[10px] text-slate-400">Aadhaar / PAN / Voter</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <button type="button" onclick="app.startAadhaarScanner()" class="py-2 px-3 bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 border border-teal-500/40 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-camera"></i> Live QR Camera Scan
+                    </button>
+                    <label class="py-2 px-3 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-center">
+                        <i class="fa-solid fa-file-image"></i> Upload ID Image
+                        <input type="file" id="id-card-file" accept="image/*" onchange="app.scanIDCardFile(event)" class="hidden">
+                    </label>
+                </div>
+
+                <!-- Camera QR Display Box -->
+                <div id="aadhaar-reader-box" class="hidden mt-2 p-2 bg-slate-900 rounded-xl border border-slate-800 text-center">
+                    <div id="aadhaar-reader" class="w-full max-w-xs mx-auto overflow-hidden rounded-lg"></div>
+                    <button type="button" onclick="app.stopAadhaarScanner()" class="mt-2 text-[11px] text-rose-400 hover:underline">Close Camera</button>
+                </div>
+
+                <p id="scan-status" class="text-[10px] text-slate-400 italic">Scan Aadhaar QR via camera or upload ID photo to auto-extract student details.</p>
+            </div>
+
             <form onsubmit="app.handleSaveStudent(event)" class="space-y-4">
                 <input type="hidden" id="form-stu-id">
+                
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Full Name</label>
+                        <label class="block text-xs text-slate-400 mb-1">Student Full Name</label>
                         <input type="text" id="form-stu-name" required placeholder="e.g. Rahul Sharma" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
                     </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Father Name</label>
+                        <input type="text" id="form-stu-father" required placeholder="e.g. Shri Rajesh Sharma" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs text-slate-400 mb-1">Mobile Number</label>
                         <input type="tel" id="form-stu-mobile" required placeholder="10-digit number" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
                     </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Full Address</label>
+                        <input type="text" id="form-stu-address" required placeholder="Village/Town, City, PIN" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                    </div>
                 </div>
+
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs text-slate-400 mb-1">Seat Number (1-106)</label>
                         <input type="number" id="form-stu-seat" min="1" max="106" placeholder="e.g. 15" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Initial Student Passcode / PIN</label>
+                        <label class="block text-xs text-slate-400 mb-1">Student Passcode / PIN</label>
                         <input type="text" id="form-stu-pin" required value="1234" placeholder="Set 1st-time passcode" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm font-mono text-white focus:outline-none focus:border-teal-500">
                     </div>
                 </div>
-                <div class="grid grid-cols-3 gap-3">
+
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Total Fee (₹)</label>
-                        <input type="number" id="form-stu-total" required placeholder="800" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                        <label class="block text-xs text-slate-400 mb-1">Date of Admission</label>
+                        <input type="date" id="form-stu-admission" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Paid Fee (₹)</label>
-                        <input type="number" id="form-stu-paid" required placeholder="800" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Due Date</label>
+                        <label class="block text-xs text-slate-400 mb-1">Next Due Date</label>
                         <input type="date" id="form-stu-duedate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
                     </div>
                 </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Total Fee (₹)</label>
+                        <input type="number" id="form-stu-total" required value="400" placeholder="400" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500" oninput="app.calculateUnpaidFee()">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Paid Fee (₹)</label>
+                        <input type="number" id="form-stu-paid" required value="400" placeholder="400" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500" oninput="app.calculateUnpaidFee()">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Unpaid Fee</label>
+                        <input type="number" id="form-stu-unpaid" readonly value="0" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm font-bold text-rose-400 focus:outline-none cursor-not-allowed">
+                    </div>
+                </div>
+
                 <div class="flex justify-end gap-2 pt-3 border-t border-slate-800">
                     <button type="button" onclick="app.closeStudentModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm font-medium hover:bg-slate-700">Cancel</button>
                     <button type="submit" class="px-5 py-2 bg-teal-500 text-white rounded-xl text-sm font-semibold hover:bg-teal-600 shadow-lg shadow-teal-500/20">Save Student Data</button>
@@ -575,12 +626,14 @@
                     </div>
                     <div class="w-16 h-16 rounded-full bg-teal-500/20 border-2 border-teal-400 mx-auto mb-2 flex items-center justify-center text-teal-300 text-2xl font-bold uppercase" id="idcard-avatar">S</div>
                     <h4 id="idcard-name" class="font-bold text-base">Student Name</h4>
-                    <p id="idcard-id" class="text-xs text-teal-400 font-mono font-semibold">ID: TDL-101</p>
+                    <p id="idcard-father-name" class="text-xs text-slate-300">S/O: ---</p>
+                    <p id="idcard-id" class="text-xs text-teal-400 font-mono font-semibold mt-1">ID: TDL-101</p>
                     <div class="grid grid-cols-2 gap-2 text-left bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 my-3 text-[11px]">
                         <div><span class="text-slate-400 block">Mobile:</span> <span id="idcard-mobile" class="font-medium">---</span></div>
                         <div><span class="text-slate-400 block">Timings:</span> <span class="text-teal-400 font-medium">8 AM - 8 PM</span></div>
                         <div><span class="text-slate-400 block">Seat No:</span> <span id="idcard-seat" class="font-medium">#12</span></div>
                         <div><span class="text-slate-400 block">Valid Till:</span> <span id="idcard-valid" class="text-emerald-400 font-medium">N/A</span></div>
+                        <div class="col-span-2"><span class="text-slate-400 block">Address:</span> <span id="idcard-address" class="text-slate-200">---</span></div>
                     </div>
                     <div class="flex flex-col items-center justify-center pt-2 border-t border-slate-800/80">
                         <div id="idcard-qrcode" class="p-1.5 bg-white rounded-lg inline-block"></div>
@@ -603,7 +656,6 @@
         import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
 
-        // Aapka official Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDomQsYNh7ATHvC4F9jWWzKkLOTufcD0J8",
             authDomain: "trisha-digital-library.firebaseapp.com",
@@ -619,6 +671,7 @@
         let db = null;
         let auth = null;
         let currentUser = null;
+        let html5QrCodeScanner = null;
 
         window.app = {
             state: {
@@ -683,7 +736,7 @@
                             activePasscode = docSnap.data().passcode;
                         }
                     } catch (err) {
-                        console.warn("Could not fetch admin password from Firestore, using local fallback");
+                        console.warn("Using local fallback passcode");
                     }
                 }
 
@@ -762,7 +815,7 @@
                             activePasscode = docSnap.data().passcode;
                         }
                     } catch (err) {
-                        console.warn("Could not check current passcode from Firestore");
+                        console.warn("Could not check current passcode");
                     }
                 }
 
@@ -826,16 +879,18 @@
                 if (!s) return;
 
                 document.getElementById('stu-name').innerText = s.name;
+                document.getElementById('stu-father').innerText = s.fatherName || '---';
                 document.getElementById('stu-avatar').innerText = s.name.charAt(0);
                 document.getElementById('stu-id').innerText = s.id;
                 document.getElementById('stu-mobile').innerText = s.mobile;
+                document.getElementById('stu-address').innerText = s.address || '---';
                 document.getElementById('stu-seat').innerText = s.seat ? `Seat #${s.seat}` : 'Not Assigned';
 
-                const pending = (s.totalFees || 0) - (s.paidFees || 0);
+                const pending = Math.max(0, (s.totalFees || 400) - (s.paidFees || 0));
                 document.getElementById('stu-pending').innerText = `₹${pending}`;
                 document.getElementById('stu-due-date').innerText = s.dueDate || 'N/A';
                 document.getElementById('stu-admission').innerText = s.admissionDate || 'N/A';
-                document.getElementById('stu-total-fee').innerText = `₹${s.totalFees || 0}`;
+                document.getElementById('stu-total-fee').innerText = `₹${s.totalFees || 400}`;
                 document.getElementById('stu-paid-fee').innerText = `₹${s.paidFees || 0}`;
                 document.getElementById('stu-balance-fee').innerText = `₹${pending}`;
 
@@ -880,13 +935,13 @@
                 tbody.innerHTML = '';
 
                 if (list.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">No student records found in database. Click "New Student" to add.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-slate-500">No student records found. Click "New Student" to add.</td></tr>`;
                     this.updateFinanceSummary();
                     return;
                 }
 
                 list.forEach(s => {
-                    const pending = (s.totalFees || 0) - (s.paidFees || 0);
+                    const pending = Math.max(0, (s.totalFees || 400) - (s.paidFees || 0));
                     const tr = document.createElement('tr');
                     tr.className = "hover:bg-slate-800/50 transition";
                     tr.innerHTML = `
@@ -894,20 +949,27 @@
                             <div class="font-semibold text-white">${s.name}</div>
                             <div class="text-[11px] text-slate-400 font-mono">ID: ${s.id} | ${s.mobile}</div>
                         </td>
+                        <td class="p-3 sm:p-4 text-xs">
+                            <div class="text-slate-200 font-medium"><i class="fa-solid fa-user-tie text-slate-400 mr-1"></i> ${s.fatherName || 'N/A'}</div>
+                            <div class="text-[11px] text-slate-400 truncate max-w-[150px]"><i class="fa-solid fa-location-dot text-slate-500 mr-1"></i> ${s.address || 'N/A'}</div>
+                        </td>
                         <td class="p-3 sm:p-4">
                             <span class="px-2.5 py-1 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/30 font-semibold">
                                 Seat #${s.seat || 'Unassigned'}
                             </span>
                         </td>
-                        <td class="p-3 sm:p-4">
-                            <div class="font-semibold ${pending > 0 ? 'text-rose-400' : 'text-emerald-400'}">
-                                Paid: ₹${s.paidFees} / ₹${s.totalFees}
-                            </div>
+                        <td class="p-3 sm:p-4 text-xs">
+                            <div class="font-semibold text-slate-200">Total: ₹${s.totalFees || 400}</div>
+                            <div class="text-emerald-400">Paid: ₹${s.paidFees || 0}</div>
+                            <div class="${pending > 0 ? 'text-rose-400 font-bold' : 'text-slate-400'}">Unpaid: ₹${pending}</div>
                         </td>
-                        <td class="p-3 sm:p-4 text-slate-300 font-mono">${s.dueDate || 'N/A'}</td>
+                        <td class="p-3 sm:p-4 text-xs font-mono">
+                            <div class="text-slate-300">Adm: ${s.admissionDate || 'N/A'}</div>
+                            <div class="text-teal-400">Due: ${s.dueDate || 'N/A'}</div>
+                        </td>
                         <td class="p-3 sm:p-4 text-center">
                             <button onclick="app.openIDCardModal('${s.id}')" class="px-3 py-1.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/40 text-xs font-semibold transition inline-flex items-center gap-1.5">
-                                <i class="fa-solid fa-print"></i> Print ID Card
+                                <i class="fa-solid fa-print"></i> Print ID
                             </button>
                         </td>
                         <td class="p-3 sm:p-4 text-right space-x-1">
@@ -932,6 +994,8 @@
                 const query = document.getElementById('student-search-input').value.toLowerCase();
                 const filtered = this.state.students.filter(s => 
                     s.name.toLowerCase().includes(query) ||
+                    (s.fatherName && s.fatherName.toLowerCase().includes(query)) ||
+                    (s.address && s.address.toLowerCase().includes(query)) ||
                     s.id.toLowerCase().includes(query) ||
                     s.mobile.includes(query) ||
                     (s.seat && s.seat.toString() === query)
@@ -992,7 +1056,7 @@
                 let totalPending = 0;
                 this.state.students.forEach(s => {
                     totalCollected += Number(s.paidFees || 0);
-                    totalPending += Math.max(0, Number(s.totalFees || 0) - Number(s.paidFees || 0));
+                    totalPending += Math.max(0, Number(s.totalFees || 400) - Number(s.paidFees || 0));
                 });
                 let totalExpenses = 0;
                 this.state.expenses.forEach(e => {
@@ -1018,38 +1082,174 @@
                 document.getElementById('exp-amount').value = '';
             },
 
+            calculateUnpaidFee() {
+                const total = Number(document.getElementById('form-stu-total').value) || 0;
+                const paid = Number(document.getElementById('form-stu-paid').value) || 0;
+                const unpaid = Math.max(0, total - paid);
+                document.getElementById('form-stu-unpaid').value = unpaid;
+            },
+
+            /* AADHAAR CAMERA QR SCANNER FEATURE */
+            startAadhaarScanner() {
+                const readerBox = document.getElementById('aadhaar-reader-box');
+                const statusEl = document.getElementById('scan-status');
+                readerBox.classList.remove('hidden');
+                statusEl.innerText = "Align Aadhaar QR code within camera frame...";
+                statusEl.className = "text-[10px] text-amber-400 italic animate-pulse";
+
+                if (!html5QrCodeScanner) {
+                    html5QrCodeScanner = new Html5Qrcode("aadhaar-reader");
+                }
+
+                html5QrCodeScanner.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 220, height: 220 } },
+                    (decodedText) => {
+                        this.parseAadhaarData(decodedText);
+                        this.stopAadhaarScanner();
+                    },
+                    (err) => {}
+                ).catch(err => {
+                    statusEl.innerText = "Camera access error. Upload ID image instead.";
+                    statusEl.className = "text-[10px] text-rose-400 italic";
+                });
+            },
+
+            stopAadhaarScanner() {
+                if (html5QrCodeScanner) {
+                    html5QrCodeScanner.stop().then(() => {
+                        document.getElementById('aadhaar-reader-box').classList.add('hidden');
+                    }).catch(e => console.error(e));
+                }
+            },
+
+            parseAadhaarData(text) {
+                const statusEl = document.getElementById('scan-status');
+                try {
+                    let name = "", father = "", address = "";
+                    if (text.includes("<PrintLetterBarcodeData") || text.includes("<?xml")) {
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(text, "text/xml");
+                        const node = xmlDoc.getElementsByTagName("PrintLetterBarcodeData")[0];
+                        if (node) {
+                            name = node.getAttribute("name") || "";
+                            father = node.getAttribute("co") || node.getAttribute("gname") || "";
+                            father = father.replace(/S\/O:|D\/O:|W\/O:|C\/O:/gi, '').trim();
+                            const house = node.getAttribute("house") || "";
+                            const vtc = node.getAttribute("vtc") || node.getAttribute("po") || "";
+                            const dist = node.getAttribute("dist") || "";
+                            const state = node.getAttribute("state") || "";
+                            const pc = node.getAttribute("pc") || "";
+                            address = `${house ? house + ', ' : ''}${vtc}, ${dist}, ${state} - ${pc}`;
+                        }
+                    } else if (text.includes("||") || text.includes(",")) {
+                        const parts = text.split(/[\|,]+/);
+                        if (parts.length > 2) {
+                            name = parts[0].trim();
+                            father = parts[1].trim();
+                            address = parts.slice(2).join(", ").trim();
+                        }
+                    }
+
+                    if (name) document.getElementById('form-stu-name').value = name;
+                    if (father) document.getElementById('form-stu-father').value = father;
+                    if (address) document.getElementById('form-stu-address').value = address;
+
+                    statusEl.innerText = "Aadhaar QR scanned & details filled successfully!";
+                    statusEl.className = "text-[10px] text-emerald-400 font-bold";
+                } catch (e) {
+                    statusEl.innerText = "QR scanned, please double check details.";
+                    statusEl.className = "text-[10px] text-amber-400";
+                }
+            },
+
+            /* OCR FILE UPLOAD SCANNER (Tesseract.js) */
+            async scanIDCardFile(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const statusEl = document.getElementById('scan-status');
+                statusEl.innerText = "Processing ID card image with OCR scan... Please wait.";
+                statusEl.className = "text-[10px] text-amber-400 italic animate-pulse";
+
+                try {
+                    const { data: { text } } = await Tesseract.recognize(file, 'eng+hin');
+                    this.parseOCRText(text);
+                    statusEl.innerText = "ID card read complete! Check auto-filled details.";
+                    statusEl.className = "text-[10px] text-emerald-400 font-bold";
+                } catch (err) {
+                    console.error("OCR Scan Error:", err);
+                    statusEl.innerText = "Could not read text clearly. Please enter manually.";
+                    statusEl.className = "text-[10px] text-rose-400";
+                }
+            },
+
+            parseOCRText(text) {
+                const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                lines.forEach((line, i) => {
+                    const lower = line.toLowerCase();
+                    if ((lower.includes('name') || lower.includes('nam')) && !document.getElementById('form-stu-name').value) {
+                        const extractedName = line.replace(/name|nam|[:,\-\.]/gi, '').trim();
+                        if (extractedName) document.getElementById('form-stu-name').value = extractedName;
+                    }
+                    if (lower.includes('father') || lower.includes('s/o') || lower.includes('d/o') || lower.includes('w/o')) {
+                        const extractedFather = line.replace(/father|s\/o|d\/o|w\/o|[:,\-\.]/gi, '').trim();
+                        if (extractedFather) document.getElementById('form-stu-father').value = extractedFather;
+                    }
+                    if (lower.includes('address') || lower.includes('patta')) {
+                        const extractedAddress = line.replace(/address|patta|[:,\-\.]/gi, '').trim();
+                        if (extractedAddress) document.getElementById('form-stu-address').value = extractedAddress;
+                    }
+                });
+            },
+
             openStudentModal(studentId = null, prefilledSeat = null) {
                 document.getElementById('modal-student').classList.remove('hidden');
                 const title = document.getElementById('modal-student-title');
+                const statusEl = document.getElementById('scan-status');
+                statusEl.innerText = "Scan Aadhaar QR via camera or upload ID photo to auto-extract student details.";
+                statusEl.className = "text-[10px] text-slate-400 italic";
+
+                const todayStr = new Date().toISOString().split('T')[0];
+                const nextMonth = new Date();
+                nextMonth.setMonth(nextMonth.getMonth() + 1);
+                const dueStr = nextMonth.toISOString().split('T')[0];
+
                 if (studentId) {
                     title.innerText = "Edit Student Profile";
                     const s = this.state.students.find(item => item.id === studentId);
                     if (s) {
                         document.getElementById('form-stu-id').value = s.id;
                         document.getElementById('form-stu-name').value = s.name;
+                        document.getElementById('form-stu-father').value = s.fatherName || '';
                         document.getElementById('form-stu-mobile').value = s.mobile;
+                        document.getElementById('form-stu-address').value = s.address || '';
                         document.getElementById('form-stu-seat').value = s.seat || '';
                         document.getElementById('form-stu-pin').value = s.pin || '1234';
-                        document.getElementById('form-stu-total').value = s.totalFees;
-                        document.getElementById('form-stu-paid').value = s.paidFees;
-                        document.getElementById('form-stu-duedate').value = s.dueDate;
+                        document.getElementById('form-stu-total').value = s.totalFees || 400;
+                        document.getElementById('form-stu-paid').value = s.paidFees || 0;
+                        document.getElementById('form-stu-admission').value = s.admissionDate || todayStr;
+                        document.getElementById('form-stu-duedate').value = s.dueDate || dueStr;
                     }
                 } else {
                     title.innerText = "Add New Student";
                     document.getElementById('form-stu-id').value = '';
                     document.getElementById('form-stu-name').value = '';
+                    document.getElementById('form-stu-father').value = '';
                     document.getElementById('form-stu-mobile').value = '';
+                    document.getElementById('form-stu-address').value = '';
                     document.getElementById('form-stu-seat').value = prefilledSeat || '';
                     document.getElementById('form-stu-pin').value = '1234';
-                    document.getElementById('form-stu-total').value = 800;
-                    document.getElementById('form-stu-paid').value = 800;
-                    const nextMonth = new Date();
-                    nextMonth.setMonth(nextMonth.getMonth() + 1);
-                    document.getElementById('form-stu-duedate').value = nextMonth.toISOString().split('T')[0];
+                    document.getElementById('form-stu-total').value = 400;
+                    document.getElementById('form-stu-paid').value = 400;
+                    document.getElementById('form-stu-admission').value = todayStr;
+                    document.getElementById('form-stu-duedate').value = dueStr;
                 }
+                this.calculateUnpaidFee();
             },
 
             closeStudentModal() {
+                this.stopAadhaarScanner();
                 document.getElementById('modal-student').classList.add('hidden');
             },
 
@@ -1057,20 +1257,23 @@
                 e.preventDefault();
                 const existingId = document.getElementById('form-stu-id').value;
                 const name = document.getElementById('form-stu-name').value.trim();
+                const fatherName = document.getElementById('form-stu-father').value.trim();
                 const mobile = document.getElementById('form-stu-mobile').value.trim();
+                const address = document.getElementById('form-stu-address').value.trim();
                 const seat = Number(document.getElementById('form-stu-seat').value) || null;
                 const pin = document.getElementById('form-stu-pin').value.trim();
-                const totalFees = Number(document.getElementById('form-stu-total').value);
-                const paidFees = Number(document.getElementById('form-stu-paid').value);
+                const totalFees = Number(document.getElementById('form-stu-total').value) || 400;
+                const paidFees = Number(document.getElementById('form-stu-paid').value) || 0;
+                const admissionDate = document.getElementById('form-stu-admission').value;
                 const dueDate = document.getElementById('form-stu-duedate').value;
 
                 const studentData = {
                     id: existingId || ('TDL-' + Math.floor(100 + Math.random() * 900)),
-                    name, mobile, seat, pin, totalFees, paidFees,
+                    name, fatherName, mobile, address, seat, pin, totalFees, paidFees,
                     pendingFees: Math.max(0, totalFees - paidFees),
+                    admissionDate,
                     dueDate,
-                    admissionDate: new Date().toISOString().split('T')[0],
-                    history: [{ amount: paidFees, date: new Date().toISOString().split('T')[0], note: 'Fee Payment' }]
+                    history: [{ amount: paidFees, date: admissionDate, note: 'Fee Payment' }]
                 };
 
                 if (db && currentUser) {
@@ -1094,7 +1297,7 @@
                 const formattedMobile = cleanMobile.length === 10 ? '91' + cleanMobile : cleanMobile;
                 const message = encodeURIComponent(
                     `Hello ${name},\n\nThis is an automated reminder from *Trisha Digital Library*.\n\n` +
-                    `Your pending fee balance is *₹${pending}* due on *${dueDate}*.\n` +
+                    `Your unpaid fee balance is *₹${pending}* due on *${dueDate}*.\n` +
                     `Library timing: 8:00 AM to 8:00 PM.\n` +
                     `Please clear your payment to avoid seat cancellation.\n\nThank you!`
                 );
@@ -1106,9 +1309,11 @@
                 if (!s) return;
 
                 document.getElementById('idcard-name').innerText = s.name;
+                document.getElementById('idcard-father-name').innerText = `S/O: ${s.fatherName || '---'}`;
                 document.getElementById('idcard-avatar').innerText = s.name.charAt(0);
                 document.getElementById('idcard-id').innerText = `ID: ${s.id}`;
                 document.getElementById('idcard-mobile').innerText = s.mobile;
+                document.getElementById('idcard-address').innerText = s.address || '---';
                 document.getElementById('idcard-seat').innerText = s.seat ? `#${s.seat}` : 'N/A';
                 document.getElementById('idcard-valid').innerText = s.dueDate || 'N/A';
 
