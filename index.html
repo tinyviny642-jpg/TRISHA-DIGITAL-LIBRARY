@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="hi" class="h-full bg-slate-950 text-slate-100">
+<html lang="hi" class="h-full bg-slate-950 text-slate-100 selection:bg-teal-500 selection:text-white">
 <head>
     <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Trisha Digital Library - Enterprise Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Trisha Digital Library Portal</title>
 
     <!-- Mobile App (PWA) Meta Tags -->
     <meta name="theme-color" content="#0f172a">
-    <meta name="description" content="Trisha Digital Library - Fully Automated Library Management Application">
+    <meta name="description" content="Trisha Digital Library Management Portal">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Trisha Library">
@@ -23,12 +23,8 @@
                     colors: {
                         brand: {
                             50: '#f0fdfa',
-                            100: '#ccfbf1',
                             500: '#14b8a6',
                             600: '#0d9488',
-                            700: '#0f766e',
-                            800: '#115e59',
-                            900: '#134e4a',
                             gold: '#f59e0b',
                             indigo: '#6366f1'
                         }
@@ -48,12 +44,12 @@
     <script src='https://unpkg.com/tesseract.js@v5.0.5/dist/tesseract.min.js'></script>
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .seat-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
             gap: 8px;
         }
 
@@ -70,67 +66,56 @@
         }
     </style>
 </head>
-<body class="h-full flex flex-col bg-slate-950 text-slate-100 antialiased selection:bg-teal-500 selection:text-white">
+<body class="h-full flex flex-col bg-slate-950 text-slate-100 antialiased pb-16 sm:pb-0">
 
     <div id="app" class="min-h-screen flex flex-col">
 
-        <!-- Header -->
-        <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 sticky top-0 z-40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-                    <div class="flex items-center gap-3 cursor-pointer" onclick="app.navToHome()">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 via-indigo-600 to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-teal-500/20 border border-teal-400/30">
-                            T
-                        </div>
-                        <div>
-                            <h1 class="font-bold text-lg text-white tracking-wide leading-none flex items-center gap-2">
-                                TRISHA <span class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded border border-amber-500/30 font-extrabold">PREMIUM VIP</span>
-                            </h1>
-                            <p class="text-[11px] text-slate-400 font-medium">Digital Library Management Portal</p>
-                        </div>
+        <!-- Mobile-Optimized Header -->
+        <header class="bg-slate-900/95 backdrop-blur border-b border-slate-800 sticky top-0 z-40 px-4 py-3">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-2.5 cursor-pointer" onclick="app.navToHome()">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-500 via-indigo-600 to-amber-500 flex items-center justify-center text-white font-black text-lg shadow-md shadow-teal-500/20 border border-teal-400/30">
+                        T
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-base text-white tracking-wide leading-none flex items-center gap-1.5">
+                            TRISHA <span class="text-[10px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded border border-amber-500/30 font-bold">DIGITAL LIBRARY</span>
+                        </h1>
+                        <p class="text-[10px] text-slate-400 font-medium">Smart Mobile Portal</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <div id="user-pill" class="hidden flex items-center gap-1.5 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-lg">
+                        <i id="user-pill-icon" class="fa-solid fa-user-shield text-teal-400 text-xs"></i>
+                        <span id="user-pill-name" class="text-xs font-semibold text-slate-200">Admin</span>
                     </div>
 
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        <div id="cloud-status" class="hidden sm:flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" id="status-dot"></span>
-                            <span id="status-text">Cloud Live Sync</span>
-                        </div>
-
-                        <div id="user-pill" class="hidden flex items-center gap-2 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg">
-                            <i id="user-pill-icon" class="fa-solid fa-user-shield text-teal-400 text-sm"></i>
-                            <div class="text-xs leading-tight">
-                                <div id="user-pill-name" class="font-semibold text-slate-200">Admin</div>
-                                <div id="user-pill-role" class="text-[10px] text-teal-400 uppercase tracking-wider font-bold">Management</div>
-                            </div>
-                        </div>
-
-                        <button id="btn-logout" onclick="app.logout()" class="hidden px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-semibold transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-power-off"></i>
-                            <span class="hidden sm:inline">Logout</span>
-                        </button>
-                    </div>
+                    <button id="btn-logout" onclick="app.logout()" class="hidden p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-semibold transition">
+                        <i class="fa-solid fa-power-off"></i>
+                    </button>
                 </div>
             </div>
         </header>
 
         <!-- Main Content Area -->
-        <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+        <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6">
 
             <!-- 1. LOGIN VIEW -->
-            <section id="view-login" class="max-w-md mx-auto my-6 sm:my-12 bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+            <section id="view-login" class="max-w-md mx-auto my-4 sm:my-12 bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl relative overflow-hidden">
                 <div class="text-center mb-6 relative">
                     <div class="inline-flex p-3 rounded-2xl bg-teal-500/10 text-teal-400 mb-2 border border-teal-500/20">
-                        <i class="fa-solid fa-shield-halved text-3xl"></i>
+                        <i class="fa-solid fa-shield-halved text-2xl"></i>
                     </div>
-                    <h2 class="text-2xl font-bold text-white">Trisha Library Access</h2>
-                    <p class="text-slate-400 text-xs mt-1">Biometric Fingerprint & Passcode Authentication</p>
+                    <h2 class="text-xl font-bold text-white">Trisha Library Portal</h2>
+                    <p class="text-slate-400 text-xs mt-1">Select your access portal to continue</p>
                 </div>
 
-                <div class="grid grid-cols-2 p-1 bg-slate-950 rounded-xl border border-slate-800 mb-6 text-sm font-medium">
-                    <button id="tab-btn-student" onclick="app.setAuthTab('student')" class="py-2 rounded-lg text-teal-400 bg-slate-800 shadow transition flex items-center justify-center gap-2">
+                <div class="grid grid-cols-2 p-1 bg-slate-950 rounded-xl border border-slate-800 mb-6 text-xs font-medium">
+                    <button id="tab-btn-student" onclick="app.setAuthTab('student')" class="py-2 rounded-lg text-teal-400 bg-slate-800 shadow transition flex items-center justify-center gap-1.5">
                         <i class="fa-solid fa-user-graduate"></i> Student
                     </button>
-                    <button id="tab-btn-admin" onclick="app.setAuthTab('admin')" class="py-2 rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-2">
+                    <button id="tab-btn-admin" onclick="app.setAuthTab('admin')" class="py-2 rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
                         <i class="fa-solid fa-user-shield"></i> Admin
                     </button>
                 </div>
@@ -139,283 +124,193 @@
                 <form id="form-student-login" onsubmit="app.handleStudentLogin(event)" class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Student ID or Mobile No</label>
-                        <input type="text" id="login-student-id" required placeholder="e.g. TDL-101 or 9876543210" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-teal-500">
+                        <input type="text" id="login-student-id" required placeholder="e.g. TDL-101 or Mobile No" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-teal-500">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Passcode / PIN</label>
-                        <input type="password" id="login-student-pin" required placeholder="Default: 1234" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-teal-500">
+                        <input type="password" id="login-student-pin" required placeholder="Default: 1234" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-teal-500">
                     </div>
-                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold rounded-xl shadow-lg shadow-teal-500/20 transition flex items-center justify-center gap-2">
+                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 text-white font-semibold rounded-xl shadow-lg shadow-teal-500/20 transition flex items-center justify-center gap-2 text-sm">
                         <span>Student Login</span> <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </form>
 
-                <!-- Admin Login Form -->
+                <!-- Admin Login Form (STRICT MASTER PASSCODE PROMPT) -->
                 <form id="form-admin-login" onsubmit="app.handleAdminLogin(event)" class="space-y-4 hidden">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Admin Passcode</label>
-                        <input type="password" id="login-admin-pin" required placeholder="Enter master passcode" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Master Admin Passcode</label>
+                        <input type="password" id="login-admin-pin" required placeholder="Enter passcode (Default: admin123)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
 
-                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/20 transition flex items-center justify-center gap-2">
-                        <span>Master Access Login</span> <i class="fa-solid fa-lock"></i>
+                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/20 transition flex items-center justify-center gap-2 text-sm">
+                        <span>Access Admin Dashboard</span> <i class="fa-solid fa-lock"></i>
                     </button>
-
-                    <!-- Native Mobile Biometric Fingerprint Button -->
-                    <button type="button" onclick="app.handleBiometricAuth()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 rounded-xl font-semibold text-xs transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-fingerprint text-lg text-amber-400"></i>
-                        <span>Fingerprint Mobile Unlock</span>
-                    </button>
+                    <p class="text-[11px] text-center text-slate-500">Default Passcode: <span class="text-slate-300 font-mono">admin123</span></p>
                 </form>
             </section>
 
             <!-- 2. STUDENT PORTAL -->
-            <section id="view-student-portal" class="hidden space-y-6">
-                <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/40 border border-teal-500/30 rounded-2xl p-6">
+            <section id="view-student-portal" class="hidden space-y-4">
+                <!-- PENDING FEE WARNING ALERT BANNER -->
+                <div id="stu-warning-banner" class="hidden bg-rose-500/15 border border-rose-500/50 rounded-2xl p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-lg font-bold shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation animate-pulse"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-rose-400 text-sm">⚠️ बकाया फीस चेतावनी!</h3>
+                            <p class="text-xs text-rose-300 mt-0.5" id="stu-warning-text">आपकी फीस बकाया है। कृपया जल्द भुगतान करें।</p>
+                        </div>
+                    </div>
+                    <a id="stu-banner-pay-btn" href="#" target="_blank" class="w-full sm:w-auto px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-md shrink-0">
+                        <i class="fa-solid fa-wallet"></i> Pay Now (₹<span id="banner-due-amount">0</span>)
+                    </a>
+                </div>
+
+                <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/40 border border-teal-500/30 rounded-2xl p-4 sm:p-6">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div class="flex items-center gap-4">
-                            <img id="stu-photo-img" src="" class="w-16 h-16 rounded-2xl border-2 border-teal-400 object-cover bg-slate-950 hidden" alt="Student">
-                            <div id="stu-avatar" class="w-16 h-16 rounded-2xl bg-teal-500/20 border border-teal-500/40 flex items-center justify-center text-teal-300 text-2xl font-bold uppercase">S</div>
+                        <div class="flex items-center gap-3">
+                            <img id="stu-photo-img" src="" class="w-14 h-14 rounded-2xl border-2 border-teal-400 object-cover bg-slate-950 hidden" alt="Student">
+                            <div id="stu-avatar" class="w-14 h-14 rounded-2xl bg-teal-500/20 border border-teal-500/40 flex items-center justify-center text-teal-300 text-xl font-bold uppercase">S</div>
                             <div>
-                                <h2 class="text-2xl font-bold text-white flex items-center gap-2" id="stu-name">Student Name</h2>
-                                <p class="text-xs text-slate-300 mt-0.5">S/O: <span class="text-slate-100 font-medium" id="stu-father">---</span></p>
-                                <p class="text-xs text-slate-400 mt-1">ID: <span class="font-mono text-slate-200" id="stu-id">TDL-000</span> | Mobile: <span class="font-mono text-slate-200" id="stu-mobile">---</span></p>
+                                <h2 class="text-lg font-bold text-white" id="stu-name">Student Name</h2>
+                                <p class="text-xs text-slate-300">S/O: <span class="text-slate-100 font-medium" id="stu-father">---</span></p>
+                                <p class="text-xs text-slate-400">ID: <span class="font-mono text-slate-200" id="stu-id">TDL-000</span> | Mobile: <span class="font-mono text-slate-200" id="stu-mobile">---</span></p>
                             </div>
                         </div>
-                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
-                            <button onclick="app.openIDCardModal(app.state.activeStudent.id)" class="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-xs transition flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-id-badge"></i> <span>Premium ID Card</span>
+                        <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
+                            <button onclick="app.openIDCardModal(app.state.activeStudent.id)" class="px-3 py-2 rounded-xl bg-teal-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-id-badge"></i> <span>ID Card</span>
                             </button>
-                            <button onclick="app.openReceiptModal(app.state.activeStudent.id)" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs transition flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-receipt"></i> <span>Fee Receipt</span>
+                            <button onclick="app.openReceiptModal(app.state.activeStudent.id)" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-receipt"></i> <span>Receipt</span>
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                        <div class="text-xs text-slate-400">Assigned Seat</div>
-                        <div class="text-2xl font-bold text-teal-400 mt-1" id="stu-seat">Seat --</div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
+                        <div class="text-[10px] text-slate-400">Assigned Seat</div>
+                        <div class="text-base font-bold text-teal-400 mt-0.5" id="stu-seat">Seat --</div>
                     </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                        <div class="text-xs text-slate-400">Pending Dues</div>
-                        <div class="text-2xl font-bold text-rose-400 mt-1" id="stu-pending">₹0</div>
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
+                        <div class="text-[10px] text-slate-400">Pending Dues</div>
+                        <div class="text-base font-bold text-rose-400 mt-0.5" id="stu-pending">₹0</div>
                     </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                        <div class="text-xs text-slate-400">Date of Admission</div>
-                        <div class="text-lg font-bold text-slate-200 mt-1" id="stu-admission">--/--/----</div>
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
+                        <div class="text-[10px] text-slate-400">Admission</div>
+                        <div class="text-xs font-bold text-slate-200 mt-1" id="stu-admission">--/--/----</div>
                     </div>
                 </div>
 
-                <!-- Online UPI Payment Direct Option -->
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                    <h3 class="text-base font-bold text-white mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-qrcode text-amber-400"></i> Online Fee Payment (UPI / PhonePe / Paytm / GPay)
+                <!-- Direct Mobile UPI Payment Block -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                    <h3 class="text-xs font-bold text-white mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-qrcode text-amber-400"></i> Online UPI Fee Payment
                     </h3>
-                    <div class="flex flex-col sm:flex-row items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 gap-4">
-                        <div>
-                            <div class="text-xs text-slate-400">Scan & Pay Balance Fee Directly</div>
-                            <div class="text-lg font-bold text-emerald-400 mt-0.5" id="pay-due-text">₹0 Pending</div>
-                        </div>
-                        <a id="stu-upi-pay-btn" href="#" target="_blank" class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-wallet"></i> Pay Now via PhonePe/UPI
+                    <div class="flex flex-col gap-2">
+                        <div class="text-[11px] text-slate-400">Pay Dues to: <span class="text-teal-300 font-mono">8172819119-4@ybl</span></div>
+                        <a id="stu-upi-pay-btn" href="#" target="_blank" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+                            <i class="fa-solid fa-wallet"></i> Pay via PhonePe / GPay / Paytm
                         </a>
                     </div>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                    <h3 class="text-lg font-bold text-white mb-4">12-Month Fee Checklist Status</h3>
-                    <div id="stu-monthly-status-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                    <h3 class="text-sm font-bold text-white mb-3">12-Month Fee Tracker</h3>
+                    <div id="stu-monthly-status-grid" class="grid grid-cols-2 gap-2"></div>
                 </div>
             </section>
 
-            <!-- 3. ADMIN PORTAL -->
-            <section id="view-admin-portal" class="hidden space-y-6">
-                <div class="flex items-center gap-2 border-b border-slate-800 pb-2 overflow-x-auto no-scrollbar text-sm font-medium">
-                    <button id="admin-tab-students" onclick="app.setAdminTab('students')" class="px-4 py-2 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 whitespace-nowrap flex items-center gap-2">
-                        <i class="fa-solid fa-users"></i> Reserved Students
+            <!-- 3. ADMIN PORTAL (NATIVE ANDROID MOBILE NAVIGATION & LAYOUT) -->
+            <section id="view-admin-portal" class="hidden space-y-4">
+                <!-- Mobile Bottom/Top Tab Bar -->
+                <div class="flex items-center gap-1 border-b border-slate-800 pb-2 overflow-x-auto no-scrollbar text-xs font-medium">
+                    <button id="admin-tab-students" onclick="app.setAdminTab('students')" class="px-3 py-2 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 whitespace-nowrap">
+                        <i class="fa-solid fa-users mr-1"></i> Reserved
                     </button>
-                    <button id="admin-tab-unreserved" onclick="app.setAdminTab('unreserved')" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex items-center gap-2">
-                        <i class="fa-solid fa-user-slash text-amber-400"></i> Unreserved Students
+                    <button id="admin-tab-unreserved" onclick="app.setAdminTab('unreserved')" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white whitespace-nowrap">
+                        <i class="fa-solid fa-user-slash mr-1 text-amber-400"></i> Unreserved
                     </button>
-                    <button id="admin-tab-pending" onclick="app.setAdminTab('pending')" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex items-center gap-2">
-                        <i class="fa-solid fa-file-invoice-dollar text-rose-400"></i> Pending Dues List
+                    <button id="admin-tab-pending" onclick="app.setAdminTab('pending')" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white whitespace-nowrap">
+                        <i class="fa-solid fa-file-invoice-dollar mr-1 text-rose-400"></i> Dues
                     </button>
-                    <button id="admin-tab-waiting" onclick="app.setAdminTab('waiting')" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex items-center gap-2">
-                        <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Waiting List / Queue
+                    <button id="admin-tab-waiting" onclick="app.setAdminTab('waiting')" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white whitespace-nowrap">
+                        <i class="fa-solid fa-clock-rotate-left mr-1 text-amber-400"></i> Queue
                     </button>
-                    <button id="admin-tab-seats" onclick="app.setAdminTab('seats')" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex items-center gap-2">
-                        <i class="fa-solid fa-border-all"></i> 106-Seat Layout
+                    <button id="admin-tab-seats" onclick="app.setAdminTab('seats')" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white whitespace-nowrap">
+                        <i class="fa-solid fa-border-all mr-1"></i> Seats Map
                     </button>
-                    <button id="admin-tab-reports" onclick="app.setAdminTab('reports')" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-indigo-400"></i> Advanced Reports
+                    <button id="admin-tab-reports" onclick="app.setAdminTab('reports')" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white whitespace-nowrap">
+                        <i class="fa-solid fa-chart-line mr-1 text-indigo-400"></i> Reports
                     </button>
                 </div>
 
                 <!-- ADMIN SECTION 1: RESERVED STUDENTS -->
-                <div id="admin-sec-students" class="space-y-6">
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-                        <div class="relative flex-1 max-w-md">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-magnifying-glass"></i></span>
-                            <input type="text" id="student-search-input" onkeyup="app.filterStudents()" placeholder="Search student name, seat, mobile..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-teal-500">
-                        </div>
-                        <button onclick="app.openStudentModal()" class="px-4 py-2 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 text-white font-semibold text-sm rounded-xl shadow-lg shadow-teal-500/20 flex items-center gap-2 justify-center">
-                            <i class="fa-solid fa-plus"></i> New Reserved Student
+                <div id="admin-sec-students" class="space-y-4">
+                    <div class="flex flex-col gap-2">
+                        <input type="text" id="student-search-input" onkeyup="app.filterStudents()" placeholder="Search name, seat, mobile..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-teal-500">
+                        <button onclick="app.openStudentModal()" class="w-full py-2.5 bg-teal-500 hover:bg-teal-600 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 shadow-md">
+                            <i class="fa-solid fa-plus"></i> Add New Reserved Student
                         </button>
                     </div>
 
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
-                                <thead>
-                                    <tr class="bg-slate-950/80 text-slate-400 border-b border-slate-800 uppercase">
-                                        <th class="p-3">Student</th>
-                                        <th class="p-3">Father & Address</th>
-                                        <th class="p-3">Seat</th>
-                                        <th class="p-3">12-Month Status</th>
-                                        <th class="p-3">Due Date</th>
-                                        <th class="p-3 text-center">Receipt & ID</th>
-                                        <th class="p-3 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="students-table-body" class="divide-y divide-slate-800"></tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <div id="students-mobile-cards" class="space-y-2.5"></div>
                 </div>
 
-                <!-- ADMIN SECTION 2: UNRESERVED STUDENTS SECTION -->
-                <div id="admin-sec-unreserved" class="hidden space-y-6">
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-                            <div>
-                                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                    <i class="fa-solid fa-user-slash text-amber-400"></i> Unreserved Students (General / Flexible Seats)
-                                </h3>
-                                <p class="text-xs text-slate-400 mt-0.5">Students who study without fixed seat allocations</p>
-                            </div>
-                            <button onclick="app.openStudentModal(null, null, true)" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl flex items-center gap-2">
-                                <i class="fa-solid fa-plus"></i> Add Unreserved Student
-                            </button>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs sm:text-sm">
-                                <thead>
-                                    <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 uppercase">
-                                        <th class="p-3">Student Info</th>
-                                        <th class="p-3">Mobile</th>
-                                        <th class="p-3">Fee Status</th>
-                                        <th class="p-3 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="unreserved-table-body" class="divide-y divide-slate-800/60"></tbody>
-                            </table>
-                        </div>
+                <!-- ADMIN SECTION 2: UNRESERVED STUDENTS -->
+                <div id="admin-sec-unreserved" class="hidden space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-bold text-white uppercase tracking-wider">Unreserved (Flexible)</h3>
+                        <button onclick="app.openStudentModal(null, null, true)" class="px-3 py-1.5 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl">
+                            <i class="fa-solid fa-plus"></i> Add Unreserved
+                        </button>
                     </div>
+                    <div id="unreserved-mobile-cards" class="space-y-2.5"></div>
                 </div>
 
                 <!-- ADMIN SECTION 3: PENDING DUES LIST -->
-                <div id="admin-sec-pending" class="hidden space-y-6">
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-file-circle-exclamation text-rose-400"></i> Automatic Fee Reminders & Pending Dues
-                            </h3>
-                            <span class="text-xs bg-rose-500/10 text-rose-400 px-3 py-1 rounded-full border border-rose-500/20 font-semibold" id="pending-count-badge">0 Pending</span>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs sm:text-sm">
-                                <thead>
-                                    <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 uppercase">
-                                        <th class="p-3">Student Name</th>
-                                        <th class="p-3">Mobile</th>
-                                        <th class="p-3">Seat</th>
-                                        <th class="p-3">Unpaid Months</th>
-                                        <th class="p-3">Total Due</th>
-                                        <th class="p-3 text-right">Auto WhatsApp API</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="pending-dues-table-body" class="divide-y divide-slate-800/60"></tbody>
-                            </table>
-                        </div>
+                <div id="admin-sec-pending" class="hidden space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-bold text-white uppercase tracking-wider">Pending Dues Summary</h3>
+                        <span class="text-xs bg-rose-500/10 text-rose-400 px-2 py-0.5 rounded border border-rose-500/20 font-bold" id="pending-count-badge">0 Pending</span>
                     </div>
+                    <div id="pending-mobile-cards" class="space-y-2.5"></div>
                 </div>
 
                 <!-- ADMIN SECTION 4: WAITING LIST / QUEUE -->
-                <div id="admin-sec-waiting" class="hidden space-y-6">
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                            <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
-                                <i class="fa-solid fa-user-plus text-amber-400"></i> Add Student to Queue
-                            </h3>
-                            <form onsubmit="app.handleAddWaitingStudent(event)" class="space-y-4">
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">Student Name</label>
-                                    <input type="text" id="wait-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">Father Name</label>
-                                    <input type="text" id="wait-father" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">Mobile Number</label>
-                                    <input type="tel" id="wait-mobile" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">Address</label>
-                                    <input type="text" id="wait-address" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
-                                </div>
-                                <button type="submit" class="w-full py-2.5 bg-amber-500 text-slate-950 font-bold rounded-xl text-sm transition">
-                                    Add to Queue
-                                </button>
-                            </form>
-                        </div>
-
-                        <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                            <h3 class="text-base font-bold text-white mb-4">Waiting Queue List (Date Order)</h3>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left text-xs sm:text-sm">
-                                    <thead>
-                                        <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 uppercase">
-                                            <th class="p-3">Q#</th>
-                                            <th class="p-3">Student Info</th>
-                                            <th class="p-3">Queue Date</th>
-                                            <th class="p-3 text-right">Auto Fill & Allocate</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="waiting-list-table-body" class="divide-y divide-slate-800/60"></tbody>
-                                </table>
-                            </div>
-                        </div>
+                <div id="admin-sec-waiting" class="hidden space-y-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                        <h3 class="text-xs font-bold text-white mb-3">Add to Waiting Queue</h3>
+                        <form onsubmit="app.handleAddWaitingStudent(event)" class="space-y-2.5">
+                            <input type="text" id="wait-name" required placeholder="Student Name" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+                            <input type="text" id="wait-father" required placeholder="Father Name" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+                            <input type="tel" id="wait-mobile" required placeholder="Mobile Number" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+                            <input type="text" id="wait-address" required placeholder="Address" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+                            <button type="submit" class="w-full py-2 bg-amber-500 text-slate-950 font-bold rounded-xl text-xs">Add to Queue</button>
+                        </form>
                     </div>
+
+                    <div id="waiting-mobile-cards" class="space-y-2"></div>
                 </div>
 
-                <!-- ADMIN SECTION 5: 106-SEAT VISUAL MAP -->
-                <div id="admin-sec-seats" class="hidden space-y-6">
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                            <i class="fa-solid fa-chair text-teal-400"></i> Interactive 106-Seat Layout
-                        </h3>
-                        <div id="seat-map-grid" class="seat-grid max-h-[550px] overflow-y-auto p-2 bg-slate-950 rounded-xl border border-slate-800"></div>
-                    </div>
+                <!-- ADMIN SECTION 5: SEAT MAP -->
+                <div id="admin-sec-seats" class="hidden space-y-3">
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">Interactive 106-Seat Layout</h3>
+                    <div id="seat-map-grid" class="seat-grid max-h-[480px] overflow-y-auto p-2 bg-slate-950 rounded-xl border border-slate-800"></div>
                 </div>
 
-                <!-- ADMIN SECTION 6: ADVANCED MONTHLY/YEARLY REPORTS -->
-                <div id="admin-sec-reports" class="hidden space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-                            <div class="text-xs text-slate-400">Total Revenue Collected</div>
-                            <div class="text-2xl font-bold text-emerald-400 mt-2" id="report-collected">₹0</div>
+                <!-- ADMIN SECTION 6: REPORTS -->
+                <div id="admin-sec-reports" class="hidden space-y-3">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3">
+                            <div class="text-[10px] text-slate-400">Total Collected</div>
+                            <div class="text-base font-bold text-emerald-400 mt-1" id="report-collected">₹0</div>
                         </div>
-                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-                            <div class="text-xs text-slate-400">Total Unpaid Balance Dues</div>
-                            <div class="text-2xl font-bold text-rose-400 mt-2" id="report-pending">₹0</div>
-                        </div>
-                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-                            <div class="text-xs text-slate-400">Active Seat Occupancy</div>
-                            <div class="text-2xl font-bold text-teal-400 mt-2" id="report-occupancy">0 / 106 Seats</div>
+                        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3">
+                            <div class="text-[10px] text-slate-400">Total Pending Dues</div>
+                            <div class="text-base font-bold text-rose-400 mt-1" id="report-pending">₹0</div>
                         </div>
                     </div>
                 </div>
@@ -424,106 +319,101 @@
     </div>
 
     <!-- MODAL: ADD / EDIT STUDENT MODAL -->
-    <div id="modal-student" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative">
-            <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
-                <h3 class="text-lg font-bold text-white" id="modal-student-title">Add New Student</h3>
+    <div id="modal-student" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-4 shadow-2xl relative">
+            <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+                <h3 class="text-sm font-bold text-white" id="modal-student-title">Add Student Profile</h3>
                 <button onclick="app.closeStudentModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <!-- Auto Scanner Suite -->
-            <div class="mb-4 p-3 bg-slate-950 rounded-xl border border-teal-500/30 space-y-2">
-                <div class="text-xs font-bold text-teal-400 uppercase tracking-wider"><i class="fa-solid fa-qrcode mr-1"></i> Auto-Fill Details from ID Card</div>
+            <!-- Enhanced Scanner Suite -->
+            <div class="mb-3 p-2.5 bg-slate-950 rounded-xl border border-teal-500/30 space-y-2">
+                <div class="text-[11px] font-bold text-teal-400 uppercase tracking-wider"><i class="fa-solid fa-qrcode mr-1"></i> Auto-Fill Details from ID Card</div>
                 <div class="grid grid-cols-2 gap-2">
-                    <button type="button" onclick="app.startAadhaarScanner()" class="py-2 bg-teal-500/20 text-teal-300 border border-teal-500/40 rounded-xl text-xs font-semibold">Live Camera Scan</button>
-                    <label class="py-2 bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 rounded-xl text-xs font-semibold text-center cursor-pointer">
-                        Upload ID Image
+                    <button type="button" onclick="app.startAadhaarScanner()" class="py-1.5 bg-teal-500/20 text-teal-300 border border-teal-500/40 rounded-lg text-xs font-semibold">Live Camera Scan</button>
+                    <label class="py-1.5 bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 rounded-lg text-xs font-semibold text-center cursor-pointer">
+                        Upload Image
                         <input type="file" id="id-card-file" accept="image/*" onchange="app.scanIDCardFile(event)" class="hidden">
                     </label>
                 </div>
                 <div id="aadhaar-reader-box" class="hidden mt-2 p-2 bg-slate-900 rounded-xl text-center">
                     <div id="aadhaar-reader" class="w-full max-w-xs mx-auto"></div>
-                    <button type="button" onclick="app.stopAadhaarScanner()" class="mt-2 text-[11px] text-rose-400">Close Camera</button>
+                    <button type="button" onclick="app.stopAadhaarScanner()" class="mt-1.5 text-[11px] text-rose-400">Close Camera</button>
                 </div>
             </div>
 
-            <form onsubmit="app.handleSaveStudent(event)" class="space-y-4">
+            <form onsubmit="app.handleSaveStudent(event)" class="space-y-3">
                 <input type="hidden" id="form-stu-id">
                 
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Student Full Name</label>
-                        <input type="text" id="form-stu-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
+                        <label class="block text-[11px] text-slate-400 mb-1">Student Name</label>
+                        <input type="text" id="form-stu-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Father Name</label>
-                        <input type="text" id="form-stu-father" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Mobile Number</label>
-                        <input type="tel" id="form-stu-mobile" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Full Address</label>
-                        <input type="text" id="form-stu-address" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
+                        <label class="block text-[11px] text-slate-400 mb-1">Father Name</label>
+                        <input type="text" id="form-stu-father" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Seat Number (1-106, Leave empty for Unreserved)</label>
-                        <input type="number" id="form-stu-seat" min="1" max="106" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
+                        <label class="block text-[11px] text-slate-400 mb-1">Mobile</label>
+                        <input type="tel" id="form-stu-mobile" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Passcode / PIN</label>
-                        <input type="text" id="form-stu-pin" required value="1234" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm font-mono text-white">
+                        <label class="block text-[11px] text-slate-400 mb-1">Address</label>
+                        <input type="text" id="form-stu-address" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">Student Photo URL / Data (Optional)</label>
-                    <input type="text" id="form-stu-photo" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Date of Admission</label>
-                        <input type="date" id="form-stu-admission" required onchange="app.generate12MonthChecklist()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
+                        <label class="block text-[11px] text-slate-400 mb-1">Seat (Leave empty for Unreserved)</label>
+                        <input type="number" id="form-stu-seat" min="1" max="106" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Next Due Date</label>
-                        <input type="date" id="form-stu-duedate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
+                        <label class="block text-[11px] text-slate-400 mb-1">Passcode / PIN</label>
+                        <input type="text" id="form-stu-pin" required value="1234" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs font-mono text-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] text-slate-400 mb-1">Admission Date</label>
+                        <input type="date" id="form-stu-admission" required onchange="app.generate12MonthChecklist()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-400 mb-1">Next Due Date</label>
+                        <input type="date" id="form-stu-duedate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
                     </div>
                 </div>
 
                 <!-- 12-MONTH CHECKLIST -->
-                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                    <label class="block text-xs font-bold text-teal-400 uppercase tracking-wider mb-2">12-Month Fee Checklist (₹400/Month)</label>
-                    <div id="month-checklist-grid" class="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto p-1 bg-slate-900 rounded-lg"></div>
+                <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                    <label class="block text-[11px] font-bold text-teal-400 uppercase mb-1.5">12-Month Fee Checklist (₹400/mo)</label>
+                    <div id="month-checklist-grid" class="grid grid-cols-3 gap-1.5 max-h-36 overflow-y-auto p-1 bg-slate-900 rounded-lg"></div>
                 </div>
 
                 <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
-                    <button type="button" onclick="app.closeStudentModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-medium">Cancel</button>
-                    <button type="submit" class="px-5 py-2 bg-teal-500 text-white rounded-xl text-xs font-semibold">Save Student</button>
+                    <button type="button" onclick="app.closeStudentModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-xl text-xs font-medium">Cancel</button>
+                    <button type="submit" class="px-4 py-1.5 bg-teal-500 text-white rounded-xl text-xs font-semibold">Save Profile</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL: PREMIUM ID CARD & RECEIPT DISPLAY -->
-    <div id="modal-printable" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
-            <div class="flex items-center justify-between mb-4 no-print">
-                <h3 class="text-sm font-bold text-white uppercase" id="print-modal-title">Document View</h3>
+    <!-- MODAL: PRINTABLE ID CARD & RECEIPT DISPLAY -->
+    <div id="modal-printable" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-5 shadow-2xl relative">
+            <div class="flex items-center justify-between mb-3 no-print">
+                <h3 class="text-xs font-bold text-white uppercase" id="print-modal-title">Document View</h3>
                 <button onclick="app.closePrintableModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
             <div id="printable-area"></div>
 
-            <div class="mt-4 flex gap-2 no-print">
+            <div class="mt-3 flex gap-2 no-print">
                 <button onclick="window.print()" class="w-full py-2 bg-amber-500 text-slate-950 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
                     <i class="fa-solid fa-print"></i> Print Document
                 </button>
@@ -535,7 +425,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDomQsYNh7ATHvC4F9jWWzKkLOTufcD0J8",
@@ -559,8 +449,7 @@
                 authRole: null,
                 activeStudent: null,
                 students: [],
-                waitingQueue: [],
-                expenses: []
+                waitingQueue: []
             },
 
             formatDateDDMMYYYY(dateStr) {
@@ -599,22 +488,7 @@
                     this.state.authRole = 'admin';
                     this.showPortal('admin');
                 } else {
-                    alert("Incorrect Master Passcode!");
-                }
-            },
-
-            // WebAuthn Native Biometric Fingerprint Login for Android Mobile
-            async handleBiometricAuth() {
-                if (window.PublicKeyCredential) {
-                    try {
-                        alert("Fingerprint Sensor Activated. Confirming Admin Identity...");
-                        this.state.authRole = 'admin';
-                        this.showPortal('admin');
-                    } catch (err) {
-                        alert("Biometric Fingerprint Authentication Failed!");
-                    }
-                } else {
-                    alert("Biometric Sensor not supported on this device browser. Use Passcode.");
+                    alert("Incorrect Master Passcode! (Default: admin123)");
                 }
             },
 
@@ -668,7 +542,7 @@
                 months12.forEach((mObj, idx) => {
                     const isChecked = existingPaidMonths.includes(mObj.key) || (existingPaidMonths.length === 0 && idx === 0);
                     const item = document.createElement('label');
-                    item.className = "flex items-center justify-between p-1.5 rounded bg-slate-950 border border-slate-800 text-xs cursor-pointer";
+                    item.className = "flex items-center justify-between p-1.5 rounded bg-slate-950 border border-slate-800 text-[10px] cursor-pointer";
                     item.innerHTML = `
                         <span>${mObj.key}</span>
                         <input type="checkbox" value="${mObj.key}" ${isChecked ? 'checked' : ''} onchange="app.recalculate12MonthFees()" class="chk-12month text-teal-500">
@@ -701,13 +575,6 @@
                 document.getElementById('stu-mobile').innerText = s.mobile;
                 document.getElementById('stu-seat').innerText = s.seat ? `Seat #${s.seat}` : 'Unreserved';
 
-                if (s.photo) {
-                    const img = document.getElementById('stu-photo-img');
-                    img.src = s.photo;
-                    img.classList.remove('hidden');
-                    document.getElementById('stu-avatar').classList.add('hidden');
-                }
-
                 const months12 = this.generate12MonthsList(s.admissionDate);
                 const paidMonths = s.paidMonths || [];
                 const currDate = new Date();
@@ -721,18 +588,25 @@
                 const pending = unpaidPastCount * 400;
                 document.getElementById('stu-pending').innerText = `₹${pending}`;
                 document.getElementById('stu-admission').innerText = this.formatDateDDMMYYYY(s.admissionDate);
-                document.getElementById('pay-due-text').innerText = `₹${pending} Unpaid Balance`;
 
-                // UPI Payment Link
-                const upiUrl = `upi://pay?pa=8299566368@ybl&pn=TrishaLibrary&am=${pending}&cu=INR`;
-                document.getElementById('stu-upi-pay-btn').href = upiUrl;
+                const upiLink = `upi://pay?pa=8172819119-4@ybl&pn=TrishaLibrary&am=${pending}&cu=INR`;
+                document.getElementById('stu-upi-pay-btn').href = upiLink;
+
+                const warningBanner = document.getElementById('stu-warning-banner');
+                if (pending > 0) {
+                    warningBanner.classList.remove('hidden');
+                    document.getElementById('banner-due-amount').innerText = pending;
+                    document.getElementById('stu-banner-pay-btn').href = upiLink;
+                } else {
+                    warningBanner.classList.add('hidden');
+                }
 
                 const grid = document.getElementById('stu-monthly-status-grid');
                 grid.innerHTML = '';
                 months12.forEach(mObj => {
                     const isPaid = paidMonths.includes(mObj.key);
                     const badge = document.createElement('div');
-                    badge.className = `p-2.5 rounded-xl border flex items-center justify-between text-xs font-semibold ${isPaid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-rose-500/10 border-rose-500/30 text-rose-400'}`;
+                    badge.className = `p-2 rounded-xl border flex items-center justify-between text-xs font-semibold ${isPaid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-rose-500/10 border-rose-500/30 text-rose-400'}`;
                     badge.innerHTML = `<span>${mObj.key}</span> <span>${isPaid ? 'Paid' : 'Due'}</span>`;
                     grid.appendChild(badge);
                 });
@@ -746,57 +620,65 @@
 
             renderStudentsTable(filtered = null) {
                 const list = (filtered || this.state.students).filter(s => s.seat);
-                const tbody = document.getElementById('students-table-body');
-                tbody.innerHTML = '';
+                const cardsContainer = document.getElementById('students-mobile-cards');
+                cardsContainer.innerHTML = '';
 
                 list.forEach(s => {
-                    const months12 = this.generate12MonthsList(s.admissionDate);
                     const paidMonths = s.paidMonths || [];
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-800/40 border-b border-slate-800/50";
-                    tr.innerHTML = `
-                        <td class="p-3"><div class="font-bold text-white">${s.name}</div><div class="text-[10px] text-slate-400">ID: ${s.id} | ${s.mobile}</div></td>
-                        <td class="p-3 text-xs">${s.fatherName}<br><span class="text-slate-500">${s.address}</span></td>
-                        <td class="p-3"><span class="px-2 py-0.5 rounded bg-teal-500/10 text-teal-400 border border-teal-500/30 font-bold">#${s.seat}</span></td>
-                        <td class="p-3 text-xs"><span class="text-emerald-400">Paid: ${paidMonths.length}/12</span></td>
-                        <td class="p-3 text-xs font-mono">${this.formatDateDDMMYYYY(s.dueDate)}</td>
-                        <td class="p-3 text-center space-x-1">
-                            <button onclick="app.openIDCardModal('${s.id}')" class="px-2 py-1 bg-indigo-600/20 text-indigo-300 rounded border border-indigo-500/30 text-[11px]">ID Card</button>
-                            <button onclick="app.openReceiptModal('${s.id}')" class="px-2 py-1 bg-amber-500/20 text-amber-300 rounded border border-amber-500/30 text-[11px]">Receipt</button>
-                        </td>
-                        <td class="p-3 text-right space-x-1">
-                            <button onclick="app.openStudentModal('${s.id}')" class="p-1.5 text-teal-400"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="app.deleteStudent('${s.id}')" class="p-1.5 text-rose-400"><i class="fa-solid fa-trash"></i></button>
-                        </td>
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2";
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="font-bold text-white text-sm">${s.name}</div>
+                                <div class="text-[10px] text-slate-400">ID: ${s.id} | S/O: ${s.fatherName}</div>
+                            </div>
+                            <span class="px-2 py-0.5 rounded bg-teal-500/10 text-teal-400 border border-teal-500/30 text-xs font-bold">#${s.seat}</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-300 border-t border-slate-800/80 pt-2">
+                            <span>Mobile: ${s.mobile}</span>
+                            <span class="text-emerald-400 font-semibold">Paid: ${paidMonths.length}/12</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-1">
+                            <div class="space-x-1">
+                                <button onclick="app.openIDCardModal('${s.id}')" class="px-2 py-1 bg-indigo-600/20 text-indigo-300 rounded border border-indigo-500/30 text-[10px]">ID Card</button>
+                                <button onclick="app.openReceiptModal('${s.id}')" class="px-2 py-1 bg-amber-500/20 text-amber-300 rounded border border-amber-500/30 text-[10px]">Receipt</button>
+                            </div>
+                            <div class="space-x-1">
+                                <button onclick="app.openStudentModal('${s.id}')" class="p-1.5 text-teal-400"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="app.deleteStudent('${s.id}')" class="p-1.5 text-rose-400"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
                     `;
-                    tbody.appendChild(tr);
+                    cardsContainer.appendChild(card);
                 });
             },
 
             renderUnreservedTable() {
                 const list = this.state.students.filter(s => !s.seat);
-                const tbody = document.getElementById('unreserved-table-body');
-                tbody.innerHTML = '';
+                const cardsContainer = document.getElementById('unreserved-mobile-cards');
+                cardsContainer.innerHTML = '';
 
                 list.forEach(s => {
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-800/40 border-b border-slate-800/50";
-                    tr.innerHTML = `
-                        <td class="p-3"><div class="font-bold text-white">${s.name}</div><div class="text-[10px] text-slate-400">S/O: ${s.fatherName}</div></td>
-                        <td class="p-3 font-mono text-xs text-slate-300">${s.mobile}</td>
-                        <td class="p-3 text-xs"><span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30">Unreserved Flexible</span></td>
-                        <td class="p-3 text-right space-x-1">
-                            <button onclick="app.openStudentModal('${s.id}')" class="p-1.5 text-teal-400"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="app.deleteStudent('${s.id}')" class="p-1.5 text-rose-400"><i class="fa-solid fa-trash"></i></button>
-                        </td>
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center justify-between";
+                    card.innerHTML = `
+                        <div>
+                            <div class="font-bold text-white text-xs">${s.name}</div>
+                            <div class="text-[10px] text-slate-400">S/O: ${s.fatherName} | ${s.mobile}</div>
+                        </div>
+                        <div class="space-x-1">
+                            <button onclick="app.openStudentModal('${s.id}')" class="p-1 text-teal-400"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="app.deleteStudent('${s.id}')" class="p-1 text-rose-400"><i class="fa-solid fa-trash"></i></button>
+                        </div>
                     `;
-                    tbody.appendChild(tr);
+                    cardsContainer.appendChild(card);
                 });
             },
 
             renderPendingDuesTable() {
-                const tbody = document.getElementById('pending-dues-table-body');
-                tbody.innerHTML = '';
+                const cardsContainer = document.getElementById('pending-mobile-cards');
+                cardsContainer.innerHTML = '';
                 let count = 0;
 
                 this.state.students.forEach(s => {
@@ -807,49 +689,50 @@
                     const unpaidPastMonths = months12.filter(mObj => {
                         const isPast = (mObj.year < currDate.getFullYear()) || (mObj.year === currDate.getFullYear() && mObj.monthIdx <= currDate.getMonth());
                         return isPast && !paidMonths.includes(mObj.key);
-                    }).map(m => m.key);
+                    });
 
                     const pendingAmount = unpaidPastMonths.length * 400;
 
                     if (pendingAmount > 0) {
                         count++;
-                        const tr = document.createElement('tr');
-                        tr.className = "hover:bg-slate-800/40 border-b border-slate-800/50";
-                        tr.innerHTML = `
-                            <td class="p-3 font-bold text-white">${s.name}</td>
-                            <td class="p-3 text-slate-300 font-mono">${s.mobile}</td>
-                            <td class="p-3 text-teal-400 font-bold">#${s.seat || 'Unreserved'}</td>
-                            <td class="p-3 text-rose-400 font-medium">${unpaidPastMonths.join(', ')}</td>
-                            <td class="p-3 text-rose-400 font-bold">₹${pendingAmount}</td>
-                            <td class="p-3 text-right">
-                                <button onclick="app.sendWhatsAppReminder('${s.mobile}', '${s.name}', ${pendingAmount}, '${s.dueDate}')" class="px-3 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-semibold">
+                        const card = document.createElement('div');
+                        card.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2";
+                        card.innerHTML = `
+                            <div class="flex items-center justify-between">
+                                <div class="font-bold text-white text-xs">${s.name} (#${s.seat || 'Unreserved'})</div>
+                                <div class="text-rose-400 font-bold text-xs">₹${pendingAmount}</div>
+                            </div>
+                            <div class="flex items-center justify-between border-t border-slate-800/80 pt-2 text-[10px]">
+                                <span class="text-slate-400">${s.mobile}</span>
+                                <button onclick="app.sendWhatsAppReminder('${s.mobile}', '${s.name}', ${pendingAmount}, '${s.dueDate}')" class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg font-semibold">
                                     <i class="fa-brands fa-whatsapp"></i> WhatsApp API
                                 </button>
-                            </td>
+                            </div>
                         `;
-                        tbody.appendChild(tr);
+                        cardsContainer.appendChild(card);
                     }
                 });
                 document.getElementById('pending-count-badge').innerText = `${count} Pending`;
             },
 
             renderWaitingListTable() {
-                const tbody = document.getElementById('waiting-list-table-body');
-                tbody.innerHTML = '';
+                const cardsContainer = document.getElementById('waiting-mobile-cards');
+                cardsContainer.innerHTML = '';
 
                 this.state.waitingQueue.forEach((item, idx) => {
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-800/40 border-b border-slate-800/50";
-                    tr.innerHTML = `
-                        <td class="p-3 font-bold text-amber-400">#${idx + 1}</td>
-                        <td class="p-3"><div class="font-bold text-white">${item.name}</div><div class="text-xs text-slate-400">S/O: ${item.fatherName} | ${item.mobile}</div></td>
-                        <td class="p-3 font-mono text-xs text-slate-400">${this.formatDateDDMMYYYY(item.requestDate)}</td>
-                        <td class="p-3 text-right">
-                            <button onclick="app.autoFillFromQueue('${item.id}')" class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/40 rounded-xl text-xs font-bold">Auto-Fill & Allocate</button>
-                            <button onclick="app.deleteWaitingStudent('${item.id}')" class="p-1 text-rose-400 ml-1"><i class="fa-solid fa-trash"></i></button>
-                        </td>
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center justify-between";
+                    card.innerHTML = `
+                        <div>
+                            <div class="font-bold text-amber-400 text-xs">#${idx + 1} ${item.name}</div>
+                            <div class="text-[10px] text-slate-400">${item.mobile}</div>
+                        </div>
+                        <div class="space-x-1">
+                            <button onclick="app.autoFillFromQueue('${item.id}')" class="px-2 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/40 rounded-lg text-[10px] font-bold">Auto Fill</button>
+                            <button onclick="app.deleteWaitingStudent('${item.id}')" class="p-1 text-rose-400"><i class="fa-solid fa-trash"></i></button>
+                        </div>
                     `;
-                    tbody.appendChild(tr);
+                    cardsContainer.appendChild(card);
                 });
             },
 
@@ -899,8 +782,8 @@
                 for (let i = 1; i <= 106; i++) {
                     const occ = map[i];
                     const btn = document.createElement('button');
-                    btn.className = occ ? "h-14 rounded-xl bg-teal-500/20 border border-teal-500/50 text-teal-300 p-1 text-xs font-medium" : "h-14 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 p-1 text-xs font-medium";
-                    btn.innerHTML = `<span class="font-bold">#${i}</span><br><span class="text-[9px]">${occ ? occ.name.split(' ')[0] : 'Vacant'}</span>`;
+                    btn.className = occ ? "h-12 rounded-xl bg-teal-500/20 border border-teal-500/50 text-teal-300 p-1 text-[10px] font-medium" : "h-12 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 p-1 text-[10px] font-medium";
+                    btn.innerHTML = `<span class="font-bold">#${i}</span><br><span class="text-[8px] truncate">${occ ? occ.name.split(' ')[0] : 'Vacant'}</span>`;
                     grid.appendChild(btn);
                 }
             },
@@ -919,7 +802,6 @@
                         document.getElementById('form-stu-address').value = s.address || '';
                         document.getElementById('form-stu-seat').value = s.seat || '';
                         document.getElementById('form-stu-pin').value = s.pin || '1234';
-                        document.getElementById('form-stu-photo').value = s.photo || '';
                         document.getElementById('form-stu-admission').value = s.admissionDate || todayStr;
                         this.generate12MonthChecklist(s.paidMonths || []);
                     }
@@ -931,7 +813,6 @@
                     document.getElementById('form-stu-address').value = '';
                     document.getElementById('form-stu-seat').value = isUnreserved ? '' : (prefilledSeat || '');
                     document.getElementById('form-stu-pin').value = '1234';
-                    document.getElementById('form-stu-photo').value = '';
                     document.getElementById('form-stu-admission').value = todayStr;
                     this.generate12MonthChecklist([]);
                 }
@@ -955,7 +836,6 @@
                     address: document.getElementById('form-stu-address').value.trim(),
                     seat: Number(document.getElementById('form-stu-seat').value) || null,
                     pin: document.getElementById('form-stu-pin').value.trim(),
-                    photo: document.getElementById('form-stu-photo').value.trim(),
                     admissionDate: document.getElementById('form-stu-admission').value,
                     dueDate: document.getElementById('form-stu-duedate').value,
                     paidMonths: paidMonths
@@ -978,7 +858,7 @@
             sendWhatsAppReminder(mobile, name, pending, dueDate) {
                 const clean = mobile.replace(/[^0-9]/g, '');
                 const num = clean.length === 10 ? '91' + clean : clean;
-                const msg = encodeURIComponent(`Dear ${name},\nYour Trisha Library Fee balance is ₹${pending} due on ${this.formatDateDDMMYYYY(dueDate)}.\nPay online via UPI Link: upi://pay?pa=8299566368@ybl&am=${pending}\nThank you!`);
+                const msg = encodeURIComponent(`Dear ${name},\nYour Trisha Library Fee balance is ₹${pending} due on ${this.formatDateDDMMYYYY(dueDate)}.\nPay online via UPI: upi://pay?pa=8172819119-4@ybl&am=${pending}\nThank you!`);
                 window.open(`https://wa.me/${num}?text=${msg}`, '_blank');
             },
 
@@ -986,27 +866,27 @@
                 const s = this.state.students.find(item => item.id === studentId);
                 if (!s) return;
 
-                document.getElementById('print-modal-title').innerText = "Premium ID Card";
+                document.getElementById('print-modal-title').innerText = "Member ID Card";
                 const area = document.getElementById('printable-area');
                 area.innerHTML = `
-                    <div class="bg-slate-950 border-2 border-amber-500/50 rounded-2xl p-5 text-center shadow-2xl relative overflow-hidden">
-                        <div class="flex items-center justify-center gap-2 mb-2">
-                            <div class="w-7 h-7 rounded bg-amber-500 font-bold text-slate-950 flex items-center justify-center">T</div>
-                            <div class="text-left"><div class="font-bold text-xs tracking-wide">TRISHA DIGITAL LIBRARY</div><div class="text-[8px] text-amber-400">OFFICIAL MEMBER CARD</div></div>
+                    <div class="bg-slate-950 border-2 border-amber-500/50 rounded-2xl p-4 text-center shadow-2xl relative">
+                        <div class="flex items-center justify-center gap-1.5 mb-2">
+                            <div class="w-6 h-6 rounded bg-amber-500 font-bold text-slate-950 flex items-center justify-center text-xs">T</div>
+                            <div class="text-left"><div class="font-bold text-[11px] tracking-wide">TRISHA DIGITAL LIBRARY</div><div class="text-[8px] text-amber-400">OFFICIAL MEMBER CARD</div></div>
                         </div>
-                        ${s.photo ? `<img src="${s.photo}" class="w-16 h-16 rounded-full border-2 border-amber-400 mx-auto my-2 object-cover">` : `<div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-amber-400 mx-auto my-2 flex items-center justify-center font-bold text-2xl text-amber-400">${s.name.charAt(0)}</div>`}
-                        <h4 class="font-bold text-sm text-white">${s.name}</h4>
-                        <p class="text-[10px] text-slate-400">S/O: ${s.fatherName}</p>
-                        <p class="text-xs text-amber-400 font-mono font-bold mt-1">ID: ${s.id}</p>
-                        <div class="grid grid-cols-2 gap-2 text-left bg-slate-900 p-2 rounded-lg my-2 text-[10px]">
+                        <div class="w-14 h-14 rounded-full bg-slate-800 border-2 border-amber-400 mx-auto my-2 flex items-center justify-center font-bold text-xl text-amber-400">${s.name.charAt(0)}</div>
+                        <h4 class="font-bold text-xs text-white">${s.name}</h4>
+                        <p class="text-[9px] text-slate-400">S/O: ${s.fatherName}</p>
+                        <p class="text-xs text-amber-400 font-mono font-bold mt-0.5">ID: ${s.id}</p>
+                        <div class="grid grid-cols-2 gap-1 text-left bg-slate-900 p-2 rounded-lg my-2 text-[9px]">
                             <div>Mobile: <span class="text-slate-200">${s.mobile}</span></div>
                             <div>Seat: <span class="text-amber-400 font-bold">#${s.seat || 'Unreserved'}</span></div>
                         </div>
-                        <div id="card-qr-container" class="flex justify-center p-1 bg-white rounded my-2"></div>
+                        <div id="card-qr-container" class="flex justify-center p-1 bg-white rounded my-1"></div>
                     </div>
                 `;
 
-                new QRCode(document.getElementById('card-qr-container'), { text: `TDL:${s.id}`, width: 60, height: 60 });
+                new QRCode(document.getElementById('card-qr-container'), { text: `TDL:${s.id}`, width: 55, height: 55 });
                 document.getElementById('modal-printable').classList.remove('hidden');
             },
 
@@ -1014,27 +894,24 @@
                 const s = this.state.students.find(item => item.id === studentId);
                 if (!s) return;
 
-                document.getElementById('print-modal-title').innerText = "Official Fee Receipt";
+                document.getElementById('print-modal-title').innerText = "Official Receipt";
                 const area = document.getElementById('printable-area');
                 const paidCount = (s.paidMonths || []).length;
 
                 area.innerHTML = `
-                    <div class="bg-slate-950 border-2 border-teal-500/50 rounded-2xl p-5 text-left shadow-2xl relative">
-                        <div class="text-center border-b border-slate-800 pb-3 mb-3">
-                            <h3 class="font-bold text-sm text-teal-400">TRISHA DIGITAL LIBRARY</h3>
-                            <p class="text-[10px] text-slate-400">Official Payment Invoice & Receipt</p>
+                    <div class="bg-slate-950 border-2 border-teal-500/50 rounded-2xl p-4 text-left shadow-2xl">
+                        <div class="text-center border-b border-slate-800 pb-2 mb-2">
+                            <h3 class="font-bold text-xs text-teal-400">TRISHA DIGITAL LIBRARY</h3>
+                            <p class="text-[9px] text-slate-400">Payment Receipt</p>
                         </div>
-                        <div class="text-xs space-y-1 text-slate-300">
-                            <div>Receipt No: <span class="font-mono text-white">REC-${Math.floor(1000+Math.random()*9000)}</span></div>
-                            <div>Student Name: <span class="font-bold text-white">${s.name}</span> (${s.id})</div>
-                            <div>Admission Date: <span>${this.formatDateDDMMYYYY(s.admissionDate)}</span></div>
-                            <div>Seat Assigned: <span class="text-teal-400 font-bold">#${s.seat || 'Unreserved'}</span></div>
+                        <div class="text-[11px] space-y-0.5 text-slate-300">
+                            <div>Student: <span class="font-bold text-white">${s.name}</span> (${s.id})</div>
+                            <div>Seat: <span class="text-teal-400 font-bold">#${s.seat || 'Unreserved'}</span></div>
                         </div>
-                        <div class="my-3 p-2 bg-slate-900 rounded border border-slate-800 text-xs">
-                            <div class="flex justify-between py-1"><span>Total Months Paid:</span><span class="font-bold text-emerald-400">${paidCount} Months</span></div>
-                            <div class="flex justify-between py-1 border-t border-slate-800 font-bold text-sm"><span>Amount Paid:</span><span class="text-emerald-400">₹${paidCount * 400}</span></div>
+                        <div class="my-2 p-2 bg-slate-900 rounded border border-slate-800 text-[11px]">
+                            <div class="flex justify-between py-0.5"><span>Paid Months:</span><span class="font-bold text-emerald-400">${paidCount} Months</span></div>
+                            <div class="flex justify-between py-0.5 border-t border-slate-800 font-bold"><span>Total Paid:</span><span class="text-emerald-400">₹${paidCount * 400}</span></div>
                         </div>
-                        <div class="text-[9px] text-center text-slate-500 mt-4 border-t border-slate-800/80 pt-2">Authorized Digital Signature Stamp - Trisha Digital Library</div>
                     </div>
                 `;
                 document.getElementById('modal-printable').classList.remove('hidden');
@@ -1057,7 +934,7 @@
                     if (user) setupFirestoreSync();
                 });
             } catch (err) {
-                console.warn("Offline Demo Mode");
+                console.warn("Offline Mode");
             }
         }
 
