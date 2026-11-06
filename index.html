@@ -135,7 +135,7 @@
                     </button>
                 </form>
 
-                <!-- Admin Login Form (STRICT MASTER PASSCODE PROMPT) -->
+                <!-- Admin Login Form -->
                 <form id="form-admin-login" onsubmit="app.handleAdminLogin(event)" class="space-y-4 hidden">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Master Admin Passcode</label>
@@ -159,12 +159,9 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-rose-400 text-sm">⚠️ बकाया फीस चेतावनी!</h3>
-                            <p class="text-xs text-rose-300 mt-0.5" id="stu-warning-text">आपकी फीस बकाया है। कृपया जल्द भुगतान करें।</p>
+                            <p class="text-xs text-rose-300 mt-0.5" id="stu-warning-text">आपकी फीस बकाया है। कृपया नीचे दिए गए QR Code को स्कैन करके भुगतान करें।</p>
                         </div>
                     </div>
-                    <a id="stu-banner-pay-btn" href="#" target="_blank" class="w-full sm:w-auto px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-md shrink-0">
-                        <i class="fa-solid fa-wallet"></i> Pay Now (₹<span id="banner-due-amount">0</span>)
-                    </a>
                 </div>
 
                 <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/40 border border-teal-500/30 rounded-2xl p-4 sm:p-6">
@@ -204,17 +201,17 @@
                     </div>
                 </div>
 
-                <!-- Direct Mobile UPI Payment Block -->
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-                    <h3 class="text-xs font-bold text-white mb-2 flex items-center gap-1.5">
-                        <i class="fa-solid fa-qrcode text-amber-400"></i> Online UPI Fee Payment
+                <!-- QR CODE PAYMENT SECTION (PhonePe QR Integrated) -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center">
+                    <h3 class="text-xs font-bold text-white mb-2 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-qrcode text-amber-400"></i> Scan & Pay via PhonePe / UPI QR Code
                     </h3>
-                    <div class="flex flex-col gap-2">
-                        <div class="text-[11px] text-slate-400">Pay Dues to: <span class="text-teal-300 font-mono">8172819119-4@ybl</span></div>
-                        <a id="stu-upi-pay-btn" href="#" target="_blank" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
-                            <i class="fa-solid fa-wallet"></i> Pay via PhonePe / GPay / Paytm
-                        </a>
+                    <p class="text-[11px] text-slate-400 mb-3">अपने किसी भी UPI App (PhonePe, GPay, Paytm) से नीचे दिए गए QR Code को स्कैन करके भुगतान करें[cite: 1]:</p>
+                    <div class="inline-block p-3 bg-white rounded-2xl shadow-xl">
+                        <!-- User's PhonePe QR Image -->
+                        <img src="https://i.ibb.co/3ykB83gL/WhatsApp-Image-2026-11-06-at-11-01-05-PM.jpg" alt="Trisha Digital Library QR Code" class="w-48 h-48 object-contain mx-auto">
                     </div>
+                    <div class="text-[10px] text-slate-400 mt-2 font-mono">TRISHA DIGITAL LIBRARY | Terminal 1-Q114710260[cite: 1]</div>
                 </div>
 
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
@@ -223,9 +220,8 @@
                 </div>
             </section>
 
-            <!-- 3. ADMIN PORTAL (NATIVE ANDROID MOBILE NAVIGATION & LAYOUT) -->
+            <!-- 3. ADMIN PORTAL -->
             <section id="view-admin-portal" class="hidden space-y-4">
-                <!-- Mobile Bottom/Top Tab Bar -->
                 <div class="flex items-center gap-1 border-b border-slate-800 pb-2 overflow-x-auto no-scrollbar text-xs font-medium">
                     <button id="admin-tab-students" onclick="app.setAdminTab('students')" class="px-3 py-2 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 whitespace-nowrap">
                         <i class="fa-solid fa-users mr-1"></i> Reserved
@@ -589,14 +585,9 @@
                 document.getElementById('stu-pending').innerText = `₹${pending}`;
                 document.getElementById('stu-admission').innerText = this.formatDateDDMMYYYY(s.admissionDate);
 
-                const upiLink = `upi://pay?pa=8172819119-4@ybl&pn=TrishaLibrary&am=${pending}&cu=INR`;
-                document.getElementById('stu-upi-pay-btn').href = upiLink;
-
                 const warningBanner = document.getElementById('stu-warning-banner');
                 if (pending > 0) {
                     warningBanner.classList.remove('hidden');
-                    document.getElementById('banner-due-amount').innerText = pending;
-                    document.getElementById('stu-banner-pay-btn').href = upiLink;
                 } else {
                     warningBanner.classList.add('hidden');
                 }
@@ -858,7 +849,7 @@
             sendWhatsAppReminder(mobile, name, pending, dueDate) {
                 const clean = mobile.replace(/[^0-9]/g, '');
                 const num = clean.length === 10 ? '91' + clean : clean;
-                const msg = encodeURIComponent(`Dear ${name},\nYour Trisha Library Fee balance is ₹${pending} due on ${this.formatDateDDMMYYYY(dueDate)}.\nPay online via UPI: upi://pay?pa=8172819119-4@ybl&am=${pending}\nThank you!`);
+                const msg = encodeURIComponent(`Dear ${name},\nYour Trisha Library Fee balance is ₹${pending} due on ${this.formatDateDDMMYYYY(dueDate)}.\nPlease check your student portal for the QR Code to pay securely.\nThank you!`);
                 window.open(`https://wa.me/${num}?text=${msg}`, '_blank');
             },
 
