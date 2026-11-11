@@ -1,957 +1,552 @@
 <!DOCTYPE html>
-<html lang="hi" class="h-full bg-slate-950 text-slate-100 selection:bg-teal-500 selection:text-white">
+<html lang="hi">
 <head>
-    <link rel="manifest" href="/manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Trisha Digital Library Portal</title>
-
-    <!-- Mobile App (PWA) Meta Tags -->
-    <meta name="theme-color" content="#0f172a">
-    <meta name="description" content="Trisha Digital Library Management Portal">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Trisha Library">
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0fdfa',
-                            500: '#14b8a6',
-                            600: '#0d9488',
-                            gold: '#f59e0b',
-                            indigo: '#6366f1'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <!-- Font Awesome Icons & Google Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Third Party Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <script src='https://unpkg.com/tesseract.js@v5.0.5/dist/tesseract.min.js'></script>
-
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .seat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-            gap: 8px;
-        }
-
-        @media print {
-            body { background: white !important; color: black !important; }
-            body * { visibility: hidden !important; }
-            #printable-area, #printable-area * { visibility: visible !important; }
-            #printable-area {
-                position: absolute !important; left: 0 !important; top: 0 !important;
-                width: 100% !important; background: transparent !important;
-                padding: 0 !important; margin: 0 !important;
-            }
-            .no-print { display: none !important; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Trisha Digital Library</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0f172a">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0f1d;--bg2:#0e1527;--card:#121b30;--bd:#223050;--tx:#eef1f7;--mu:#8d9ab5;--ac:#d9a441;--ac2:#3ecf9a;--rd:#ff6b6b;--gn:#3ecf9a;--am:#d9a441;--on:#1a1300}
+html.light{--bg:#f2f4f9;--bg2:#e8ecf4;--card:#fff;--bd:#d5dbe8;--tx:#10172a;--mu:#5d6a86;--ac:#b27a16;--ac2:#0f9d70;--rd:#d63b3b;--gn:#0f9d70;--am:#b27a16;--on:#fff}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(900px 420px at 90% -10%,#d9a4411c,transparent),var(--bg);color:var(--tx);min-height:100vh}
+h1,.big,.logo{font-family:"Fraunces",Georgia,serif}
+header{display:flex;gap:10px;align-items:center;padding:12px 20px;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:5}
+header h1{margin:0;font-size:19px;font-weight:700;flex:1;letter-spacing:.2px}
+header h1 span{display:block;font-family:"Manrope",sans-serif;font-size:11px;font-weight:600;color:var(--mu);letter-spacing:.6px}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#f0c566,#b47d1c);color:#1a1300;display:grid;place-items:center;font-size:22px;font-weight:700;box-shadow:0 6px 18px -6px #d9a441aa}
+main{max-width:1240px;margin:auto;padding:20px 16px 60px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:18px;margin-bottom:16px;box-shadow:0 14px 34px -22px #000c}
+.hero{background:linear-gradient(135deg,var(--bg2),var(--card) 65%);border-color:color-mix(in srgb,var(--ac) 45%,var(--bd))}
+.login{max-width:400px;margin:48px auto;padding:26px}
+.brand{text-align:center;margin:6px 0 18px}.brand .logo{margin:0 auto 10px;width:54px;height:54px;font-size:30px}
+.brand b{font-family:"Fraunces",serif;font-size:22px;display:block}
+.b{background:var(--ac);color:var(--on);border:0;border-radius:11px;padding:9px 14px;cursor:pointer;font-family:inherit;font-weight:700;font-size:13px;transition:transform .12s,filter .12s}
+a.b{text-decoration:none;display:inline-block}
+.b:hover{filter:brightness(1.08)}.b:active{transform:scale(.97)}
+.b.o{background:transparent;color:var(--tx);border:1px solid var(--bd)}.b.o:hover{border-color:var(--ac);filter:none}
+.b.r{background:var(--rd);color:#fff}.b.a{background:var(--ac2);color:#05261b}
+input,select,textarea{width:100%;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:11px;padding:10px 12px;font-family:inherit;font-size:14px}
+input:focus,select:focus,textarea:focus{outline:2px solid color-mix(in srgb,var(--ac) 55%,transparent);border-color:var(--ac)}
+label{font-size:12px;font-weight:600;color:var(--mu);display:block;margin:10px 0 4px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:11px 10px;text-align:left;border-bottom:1px solid var(--bd);vertical-align:middle}
+th{color:var(--mu);font-size:11px;font-weight:700;letter-spacing:.4px;white-space:nowrap}
+tbody tr:hover{background:color-mix(in srgb,var(--ac) 6%,transparent)}
+.who{display:flex;gap:10px;align-items:center}
+.av{width:36px;height:36px;border-radius:50%;flex:none;display:grid;place-items:center;font-style:normal;font-weight:800;color:var(--ac);background:color-mix(in srgb,var(--ac) 16%,transparent);border:1px solid color-mix(in srgb,var(--ac) 40%,transparent)}
+.g{display:grid;gap:12px}.g3{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.kpi{margin-bottom:16px}.kpi .c{margin:0}.kpi .big{font-size:28px;margin-top:2px}
+.seats{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}
+.seat{height:58px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--mu);font-family:inherit;font-size:11px;cursor:pointer;transition:transform .12s}
+.seat:hover{transform:translateY(-2px);border-color:var(--ac)}
+.seat.on{background:color-mix(in srgb,var(--ac2) 14%,transparent);border-color:var(--ac2);color:var(--ac2)}
+.hide{display:none!important}
+.tabs{display:flex;gap:4px;overflow-x:auto;padding:5px;background:var(--card);border:1px solid var(--bd);border-radius:16px;margin-bottom:16px;scrollbar-width:none}
+.tab{display:flex;align-items:center;gap:7px;white-space:nowrap;padding:10px 15px;border:0;border-radius:12px;background:transparent;color:var(--mu);font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.tab:hover{color:var(--tx)}.tab.on{background:var(--ac);color:var(--on)}
+.badge{background:var(--rd);color:#fff;border-radius:99px;font-size:11px;padding:1px 8px}
+.tab.on .badge{background:var(--on);color:var(--ac)}
+.m{position:fixed;inset:0;background:#000b;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:12px;z-index:20}
+.m>div{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:18px;max-width:480px;width:100%;max-height:90vh;overflow:auto}
+.pd{color:var(--gn)}.dd{color:var(--rd)}.mu{color:var(--mu);font-size:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.big{font-size:24px;font-weight:700}
+.sc{overflow-x:auto}
+.quote{flex:2;text-align:center;font-family:"Fraunces",Georgia,serif;font-size:20px;font-weight:700;color:var(--ac);padding:0 14px;line-height:1.35}
+@media(max-width:700px){header{flex-wrap:wrap}.quote{order:5;flex-basis:100%;padding:0;font-size:17px}}
+@media(max-width:600px){main{padding:12px 10px 50px}.tab{padding:9px 12px}}
+@media print{body *{visibility:hidden}#pa,#pa *{visibility:visible;color:#000!important;background:#fff!important}#pa{position:absolute;left:0;top:0;width:100%}}
+</style>
 </head>
-<body class="h-full flex flex-col bg-slate-950 text-slate-100 antialiased pb-16 sm:pb-0">
+<body>
+<header>
+  <div class="logo">T</div>
+  <h1>Trisha<span>DIGITAL LIBRARY</span></h1>
+  <div id="quote" class="quote hide"></div>
+  <button class="b o" id="bl" onclick="app.lang()">हि / EN</button>
+  <button class="b o" id="bt" onclick="app.theme()">◐</button>
+  <button class="b r hide" id="out" onclick="app.logout()"><span data-t="logout">Logout</span></button>
+</header>
+<main>
 
-    <div id="app" class="min-h-screen flex flex-col">
+<!-- LOGIN -->
+<section id="v-login" class="c hide login">
+  <div class="row" style="margin-bottom:8px">
+    <button class="b" id="lt-s" onclick="app.loginTab('s')">Student</button>
+    <button class="b o" id="lt-a" onclick="app.loginTab('a')">Admin</button>
+  </div>
+  <div class="brand"><div class="logo">T</div><b>Trisha Digital Library</b><span class="mu">Sign in to continue</span></div>
+  <form onsubmit="app.login(event)">
+    <label id="l-id">Mobile number</label><input id="li" required autocomplete="off">
+    <label id="l-pw">PIN</label><input id="lp" type="password" required autocomplete="new-password">
+    <p id="le" class="dd"></p>
+    <button class="b" style="width:100%" data-t="login">Login</button>
+  </form>
+</section>
 
-        <!-- Mobile-Optimized Header -->
-        <header class="bg-slate-900/95 backdrop-blur border-b border-slate-800 sticky top-0 z-40 px-4 py-3">
-            <div class="max-w-7xl mx-auto flex items-center justify-between">
-                <div class="flex items-center gap-2.5 cursor-pointer" onclick="app.navToHome()">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-500 via-indigo-600 to-amber-500 flex items-center justify-center text-white font-black text-lg shadow-md shadow-teal-500/20 border border-teal-400/30">
-                        T
-                    </div>
-                    <div>
-                        <h1 class="font-extrabold text-base text-white tracking-wide leading-none flex items-center gap-1.5">
-                            TRISHA <span class="text-[10px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded border border-amber-500/30 font-bold">DIGITAL LIBRARY</span>
-                        </h1>
-                        <p class="text-[10px] text-slate-400 font-medium">Smart Mobile Portal</p>
-                    </div>
-                </div>
+<!-- STUDENT -->
+<section id="v-stu" class="hide"><div id="stu"></div></section>
 
-                <div class="flex items-center gap-2">
-                    <div id="user-pill" class="hidden flex items-center gap-1.5 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-lg">
-                        <i id="user-pill-icon" class="fa-solid fa-user-shield text-teal-400 text-xs"></i>
-                        <span id="user-pill-name" class="text-xs font-semibold text-slate-200">Admin</span>
-                    </div>
+<!-- ADMIN -->
+<section id="v-adm" class="hide">
+  <div id="kpi" class="g g3 kpi"></div>
+  <div class="tabs">
+    <button class="tab on" id="t-students" onclick="app.tab('students')"><span>👥</span><span data-t="stu"></span></button>
+    <button class="tab" id="t-unres" onclick="app.tab('unres')"><span>🪑</span><span data-t="unres"></span></button>
+    <button class="tab" id="t-pending" onclick="app.tab('pending')"><span>⏳</span><span data-t="pend2"></span><b class="badge" id="pcnt">0</b></button>
+    <button class="tab" id="t-seats" onclick="app.tab('seats')"><span>💺</span><span data-t="seats"></span></button>
+    <button class="tab" id="t-payments" onclick="app.tab('payments')"><span>🧾</span><span data-t="pay"></span></button>
+    <button class="tab" id="t-queue" onclick="app.tab('queue')"><span>🕒</span><span data-t="queue"></span></button>
+    <button class="tab" id="t-notices" onclick="app.tab('notices')"><span>📢</span><span data-t="notice"></span></button>
+    <button class="tab" id="t-jobs" onclick="app.tab('jobs')"><span>💼</span><span data-t="jobs"></span></button>
+    <button class="tab" id="t-left" onclick="app.tab('left')"><span>🚪</span><span data-t="left"></span></button>
+    <button class="tab" id="t-reports" onclick="app.tab('reports')"><span>📊</span><span data-t="rep"></span></button>
+  </div>
 
-                    <button id="btn-logout" onclick="app.logout()" class="hidden p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-semibold transition">
-                        <i class="fa-solid fa-power-off"></i>
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Content Area -->
-        <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6">
-
-            <!-- 1. LOGIN VIEW -->
-            <section id="view-login" class="max-w-md mx-auto my-4 sm:my-12 bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl relative overflow-hidden">
-                <div class="text-center mb-6 relative">
-                    <div class="inline-flex p-3 rounded-2xl bg-teal-500/10 text-teal-400 mb-2 border border-teal-500/20">
-                        <i class="fa-solid fa-shield-halved text-2xl"></i>
-                    </div>
-                    <h2 class="text-xl font-bold text-white">Trisha Library Portal</h2>
-                    <p class="text-slate-400 text-xs mt-1">Select your access portal to continue</p>
-                </div>
-
-                <div class="grid grid-cols-2 p-1 bg-slate-950 rounded-xl border border-slate-800 mb-6 text-xs font-medium">
-                    <button id="tab-btn-student" onclick="app.setAuthTab('student')" class="py-2 rounded-lg text-teal-400 bg-slate-800 shadow transition flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-user-graduate"></i> Student
-                    </button>
-                    <button id="tab-btn-admin" onclick="app.setAuthTab('admin')" class="py-2 rounded-lg text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-user-shield"></i> Admin
-                    </button>
-                </div>
-
-                <!-- Student Login Form -->
-                <form id="form-student-login" onsubmit="app.handleStudentLogin(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Student ID or Mobile No</label>
-                        <input type="text" id="login-student-id" required placeholder="e.g. TDL-101 or Mobile No" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-teal-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Passcode / PIN</label>
-                        <input type="password" id="login-student-pin" required placeholder="Default: 1234" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-teal-500">
-                    </div>
-                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 text-white font-semibold rounded-xl shadow-lg shadow-teal-500/20 transition flex items-center justify-center gap-2 text-sm">
-                        <span>Student Login</span> <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </form>
-
-                <!-- Admin Login Form -->
-                <form id="form-admin-login" onsubmit="app.handleAdminLogin(event)" class="space-y-4 hidden">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Master Admin Passcode</label>
-                        <input type="password" id="login-admin-pin" required placeholder="Enter passcode (Default: admin123)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
-                    </div>
-
-                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/20 transition flex items-center justify-center gap-2 text-sm">
-                        <span>Access Admin Dashboard</span> <i class="fa-solid fa-lock"></i>
-                    </button>
-                    <p class="text-[11px] text-center text-slate-500">Default Passcode: <span class="text-slate-300 font-mono">admin123</span></p>
-                </form>
-            </section>
-
-            <!-- 2. STUDENT PORTAL -->
-            <section id="view-student-portal" class="hidden space-y-4">
-                <!-- PENDING FEE WARNING ALERT BANNER -->
-                <div id="stu-warning-banner" class="hidden bg-rose-500/15 border border-rose-500/50 rounded-2xl p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-lg font-bold shrink-0">
-                            <i class="fa-solid fa-triangle-exclamation animate-pulse"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-rose-400 text-sm">⚠️ बकाया फीस चेतावनी!</h3>
-                            <p class="text-xs text-rose-300 mt-0.5" id="stu-warning-text">आपकी फीस बकाया है। कृपया नीचे दिए गए QR Code को स्कैन करके भुगतान करें।</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/40 border border-teal-500/30 rounded-2xl p-4 sm:p-6">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div class="flex items-center gap-3">
-                            <div id="stu-photo-container" class="w-14 h-14 rounded-2xl border-2 border-teal-400 overflow-hidden bg-slate-950 flex items-center justify-center text-teal-300 text-xl font-bold uppercase">
-                                <span id="stu-initial">S</span>
-                            </div>
-                            <div>
-                                <h2 class="text-lg font-bold text-white" id="stu-name">Student Name</h2>
-                                <p class="text-xs text-slate-300">S/O: <span class="text-slate-100 font-medium" id="stu-father">---</span></p>
-                                <p class="text-xs text-slate-400">ID: <span class="font-mono text-slate-200" id="stu-id">TDL-000</span> | Mobile: <span class="font-mono text-slate-200" id="stu-mobile">---</span></p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
-                            <button onclick="app.openIDCardModal(app.state.activeStudent.id)" class="px-3 py-2 rounded-xl bg-teal-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-id-badge"></i> <span>ID Card</span>
-                            </button>
-                            <button onclick="app.openReceiptModal(app.state.activeStudent.id)" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-receipt"></i> <span>Receipt</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
-                        <div class="text-[10px] text-slate-400">Assigned Seat</div>
-                        <div class="text-base font-bold text-teal-400 mt-0.5" id="stu-seat">Seat --</div>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
-                        <div class="text-[10px] text-slate-400">Pending Dues</div>
-                        <div class="text-base font-bold text-rose-400 mt-0.5" id="stu-pending">₹0</div>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
-                        <div class="text-[10px] text-slate-400">Admission</div>
-                        <div class="text-xs font-bold text-slate-200 mt-1" id="stu-admission">--/--/----</div>
-                    </div>
-                </div>
-
-                <!-- DYNAMIC SECURE QR CODE PAYMENT SECTION (Canvas Generated, Never Fails) -->
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center">
-                    <h3 class="text-xs font-bold text-white mb-2 flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-qrcode text-amber-400"></i> Scan & Pay via PhonePe / UPI QR Code
-                    </h3>
-                    <p class="text-[11px] text-slate-400 mb-3">अपने किसी भी UPI App (PhonePe, GPay, Paytm) से नीचे दिए गए QR Code को स्कैन करें:</p>
-                    
-                    <div class="inline-block p-4 bg-white rounded-2xl shadow-xl">
-                        <!-- Auto-Generated Secure QR Container -->
-                        <div id="student-payment-qrcode" class="flex justify-center items-center"></div>
-                    </div>
-
-                    <div class="mt-3 text-xs font-bold text-emerald-400">TRISHA DIGITAL LIBRARY</div>
-                    <div class="text-[10px] text-slate-400 font-mono mt-0.5">Terminal 1-Q114710260</div>
-                </div>
-
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-                    <h3 class="text-sm font-bold text-white mb-3">12-Month Fee Tracker</h3>
-                    <div id="stu-monthly-status-grid" class="grid grid-cols-2 gap-2"></div>
-                </div>
-            </section>
-
-            <!-- 3. ADMIN PORTAL -->
-            <section id="view-admin-portal" class="hidden space-y-4">
-                <div class="flex items-center gap-1 border-b border-slate-800 pb-2 overflow-x-auto no-scrollbar text-xs font-medium">
-                    <button id="admin-tab-students" onclick="app.setAdminTab('students')" class="px-3 py-2 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 whitespace-nowrap">
-                        <i class="fa-solid fa-users mr-1"></i> Reserved
-                    </button>
-                    <button id="admin-tab-unreserved" onclick="app.setAdminTab('unreserved')" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white whitespace-nowrap">
-                        <i class="fa-solid fa-user-slash mr-1 text-amber-400"></i> Unreserved
-                    </button>
-                    <button id="admin-tab-pending" onclick="app.setAdminTab('pending')" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white whitespace-nowrap">
-                        <i class="fa-solid fa-file-invoice-dollar mr-1 text-rose-400"></i> Dues
-                    </button>
-                    <button id="admin-tab-waiting" onclick="app.setAdminTab('waiting')" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white whitespace-nowrap">
-                        <i class="fa-solid fa-clock-rotate-left mr-1 text-amber-400"></i> Queue
-                    </button>
-                    <button id="admin-tab-seats" onclick="app.setAdminTab('seats')" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white whitespace-nowrap">
-                        <i class="fa-solid fa-border-all mr-1"></i> Seats Map
-                    </button>
-                    <button id="admin-tab-reports" onclick="app.setAdminTab('reports')" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white whitespace-nowrap">
-                        <i class="fa-solid fa-chart-line mr-1 text-indigo-400"></i> Reports
-                    </button>
-                </div>
-
-                <!-- ADMIN SECTION 1: RESERVED STUDENTS -->
-                <div id="admin-sec-students" class="space-y-4">
-                    <div class="flex flex-col gap-2">
-                        <input type="text" id="student-search-input" onkeyup="app.filterStudents()" placeholder="Search name, seat, mobile..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-teal-500">
-                        <button onclick="app.openStudentModal()" class="w-full py-2.5 bg-teal-500 hover:bg-teal-600 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 shadow-md">
-                            <i class="fa-solid fa-plus"></i> Add New Reserved Student
-                        </button>
-                    </div>
-
-                    <div id="students-mobile-cards" class="space-y-2.5"></div>
-                </div>
-
-                <!-- ADMIN SECTION 2: UNRESERVED STUDENTS -->
-                <div id="admin-sec-unreserved" class="hidden space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xs font-bold text-white uppercase tracking-wider">Unreserved (Flexible)</h3>
-                        <button onclick="app.openStudentModal(null, null, true)" class="px-3 py-1.5 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl">
-                            <i class="fa-solid fa-plus"></i> Add Unreserved
-                        </button>
-                    </div>
-                    <div id="unreserved-mobile-cards" class="space-y-2.5"></div>
-                </div>
-
-                <!-- ADMIN SECTION 3: PENDING DUES LIST -->
-                <div id="admin-sec-pending" class="hidden space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xs font-bold text-white uppercase tracking-wider">Pending Dues Summary</h3>
-                        <span class="text-xs bg-rose-500/10 text-rose-400 px-2 py-0.5 rounded border border-rose-500/20 font-bold" id="pending-count-badge">0 Pending</span>
-                    </div>
-                    <div id="pending-mobile-cards" class="space-y-2.5"></div>
-                </div>
-
-                <!-- ADMIN SECTION 4: WAITING LIST / QUEUE -->
-                <div id="admin-sec-waiting" class="hidden space-y-4">
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-                        <h3 class="text-xs font-bold text-white mb-3">Add to Waiting Queue</h3>
-                        <form onsubmit="app.handleAddWaitingStudent(event)" class="space-y-2.5">
-                            <input type="text" id="wait-name" required placeholder="Student Name" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
-                            <input type="text" id="wait-father" required placeholder="Father Name" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
-                            <input type="tel" id="wait-mobile" required placeholder="Mobile Number" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
-                            <input type="text" id="wait-address" required placeholder="Address" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
-                            <button type="submit" class="w-full py-2 bg-amber-500 text-slate-950 font-bold rounded-xl text-xs">Add to Queue</button>
-                        </form>
-                    </div>
-
-                    <div id="waiting-mobile-cards" class="space-y-2"></div>
-                </div>
-
-                <!-- ADMIN SECTION 5: SEAT MAP -->
-                <div id="admin-sec-seats" class="hidden space-y-3">
-                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">Interactive 106-Seat Layout</h3>
-                    <div id="seat-map-grid" class="seat-grid max-h-[480px] overflow-y-auto p-2 bg-slate-950 rounded-xl border border-slate-800"></div>
-                </div>
-
-                <!-- ADMIN SECTION 6: REPORTS -->
-                <div id="admin-sec-reports" class="hidden space-y-3">
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3">
-                            <div class="text-[10px] text-slate-400">Total Collected</div>
-                            <div class="text-base font-bold text-emerald-400 mt-1" id="report-collected">₹0</div>
-                        </div>
-                        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3">
-                            <div class="text-[10px] text-slate-400">Total Pending Dues</div>
-                            <div class="text-base font-bold text-rose-400 mt-1" id="report-pending">₹0</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
+  <div id="s-students">
+    <div class="row" style="margin-bottom:10px">
+      <input id="q" placeholder="Search…" oninput="app.render()" style="max-width:280px">
+      <select id="flt" onchange="app.render()" style="max-width:180px">
+        <option value="all">Active</option><option value="due">Dues pending</option>
+        
+      </select>
+      <button class="b" onclick="app.openStudent()">+ New</button>
     </div>
+    <div class="c sc"><table><thead><tr><th>Student</th><th>Father / Address</th><th>Seat</th><th>Status</th><th>Actions</th></tr></thead><tbody id="tb"></tbody></table></div>
+  </div>
 
-    <!-- MODAL: ADD / EDIT STUDENT MODAL -->
-    <div id="modal-student" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-4 shadow-2xl relative">
-            <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
-                <h3 class="text-sm font-bold text-white" id="modal-student-title">Add Student Profile</h3>
-                <button onclick="app.closeStudentModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
+  <div id="s-unres" class="hide"><div class="c sc"><div class="row" style="margin-bottom:12px"><b style="flex:1;font-size:15px">Unreserved students <span class="mu">(flexible seat)</span></b><button class="b" onclick="app.openStudent()">+ Add unreserved</button></div><table><thead><tr><th>Student</th><th>Father / Address</th><th>Fee status</th><th></th></tr></thead><tbody id="ub"></tbody></table></div></div>
 
-            <form onsubmit="app.handleSaveStudent(event)" class="space-y-3">
-                <input type="hidden" id="form-stu-id">
-                
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-slate-400 mb-1">Student Name</label>
-                        <input type="text" id="form-stu-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-slate-400 mb-1">Father Name</label>
-                        <input type="text" id="form-stu-father" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
-                    </div>
-                </div>
+  <div id="s-jobs" class="hide g g3"><form class="c" onsubmit="app.addJob(event)"><label>Job title</label><input id="jt" required><label>Last date</label><input id="jd" type="date"><label>Link (https://…)</label><input id="jl" type="url" required placeholder="https://"><br><br><button class="b">Add job</button></form><div class="c" style="grid-column:span 2" id="jlst"></div></div>
 
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-slate-400 mb-1">Mobile</label>
-                        <input type="tel" id="form-stu-mobile" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-slate-400 mb-1">Address</label>
-                        <input type="text" id="form-stu-address" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
-                    </div>
-                </div>
+  <div id="s-left" class="hide"><div class="c sc"><div class="row" style="margin-bottom:12px"><b style="flex:1;font-size:15px">Left students <span class="mu">(records are kept)</span></b></div><table><thead><tr><th>Student</th><th>Father / Address</th><th>Left on</th><th>Fees</th><th></th></tr></thead><tbody id="lb"></tbody></table></div></div>
 
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-slate-400 mb-1">Seat (Leave empty for Unreserved)</label>
-                        <input type="number" id="form-stu-seat" min="1" max="106" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-slate-400 mb-1">Passcode / PIN</label>
-                        <input type="text" id="form-stu-pin" required value="1234" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs font-mono text-white">
-                    </div>
-                </div>
+  <div id="s-pending" class="hide"><div class="c sc"><div class="row" style="margin-bottom:12px"><b style="flex:1;font-size:15px" id="pn-sum"></b><button class="b o" onclick="app.exportDues()">Export CSV</button><button class="b o" onclick="app.dueReport()">Print / PDF</button></div><table><thead><tr><th>Student</th><th>Seat</th><th>Unpaid months</th><th>Amount</th><th></th></tr></thead><tbody id="pnb"></tbody></table></div></div>
 
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[11px] text-slate-400 mb-1">Admission Date</label>
-                        <input type="date" id="form-stu-admission" required onchange="app.generate12MonthChecklist()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-slate-400 mb-1">Next Due Date</label>
-                        <input type="date" id="form-stu-duedate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
-                    </div>
-                </div>
+  <div id="s-seats" class="hide"><div class="c"><p class="mu">Vacant seat = assign student. Occupied seat = move to another seat.</p><div id="sg" class="g seats"></div></div></div>
 
-                <!-- 12-MONTH CHECKLIST -->
-                <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
-                    <label class="block text-[11px] font-bold text-teal-400 uppercase mb-1.5">12-Month Fee Checklist (₹400/mo)</label>
-                    <div id="month-checklist-grid" class="grid grid-cols-3 gap-1.5 max-h-36 overflow-y-auto p-1 bg-slate-900 rounded-lg"></div>
-                </div>
+  <div id="s-payments" class="hide"><div class="c sc"><div class="row" style="margin-bottom:8px"><button class="b o" onclick="app.exportPay()">Export CSV</button></div><table><thead><tr><th>Receipt</th><th>Date</th><th>Student</th><th>Months</th><th>Amount</th><th>Mode</th><th></th></tr></thead><tbody id="pb"></tbody></table></div></div>
 
-                <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
-                    <button type="button" onclick="app.closeStudentModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-xl text-xs font-medium">Cancel</button>
-                    <button type="submit" class="px-4 py-1.5 bg-teal-500 text-white rounded-xl text-xs font-semibold">Save Profile</button>
-                </div>
-            </form>
-        </div>
+  <div id="s-queue" class="hide g g3">
+    <form class="c" onsubmit="app.addQueue(event)">
+      <label>Name</label><input id="wn" required><label>Father name</label><input id="wf" required>
+      <label>Mobile</label><input id="wm" type="tel" required><label>Address</label><input id="wa" required>
+      <br><br><button class="b a">Add to queue</button>
+    </form>
+    <div class="c sc" style="grid-column:span 2"><table><tbody id="qb"></tbody></table></div>
+  </div>
+
+  <div id="s-notices" class="hide g g3">
+    <form class="c" onsubmit="app.addNotice(event)">
+      <label>Title</label><input id="nt" required><label>Message</label><textarea id="nm" rows="4" required></textarea>
+      <br><br><button class="b">Publish</button>
+    </form>
+    <div class="c" style="grid-column:span 2" id="nl"></div>
+  </div>
+
+  <div id="s-reports" class="hide">
+    <div class="g g3">
+      <div class="c"><div class="mu">Collected</div><div class="big pd" id="r1"></div></div>
+      <div class="c"><div class="mu">Pending</div><div class="big dd" id="r2"></div></div>
+      <div class="c"><div class="mu">Occupancy</div><div class="big" id="r3"></div></div>
+      <div class="c"><div class="mu">This month</div><div class="big" id="r4"></div></div>
     </div>
-
-    <!-- MODAL: PRINTABLE ID CARD & RECEIPT DISPLAY -->
-    <div id="modal-printable" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-5 shadow-2xl relative">
-            <div class="flex items-center justify-between mb-3 no-print">
-                <h3 class="text-xs font-bold text-white uppercase" id="print-modal-title">Document View</h3>
-                <button onclick="app.closePrintableModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            
-            <div id="printable-area"></div>
-
-            <div class="mt-3 flex gap-2 no-print">
-                <button onclick="window.print()" class="w-full py-2 bg-amber-500 text-slate-950 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-print"></i> Print Document
-                </button>
-            </div>
-        </div>
+    <div class="c row">
+      <button class="b o" onclick="app.exportStudents()">Students CSV</button>
+      <button class="b o" onclick="app.exportDues()">Dues CSV</button>
+      <button class="b o" onclick="app.dueReport()">Dues report (Print / PDF)</button>
+      <button class="b a" onclick="app.backup()">Backup JSON</button>
+      <label class="b r" style="margin:0;color:#fff">Restore JSON<input type="file" accept=".json" class="hide" onchange="app.restore(event)"></label>
     </div>
-
-    <!-- APP CORE JAVASCRIPT -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDomQsYNh7ATHvC4F9jWWzKkLOTufcD0J8",
-            authDomain: "trisha-digital-library.firebaseapp.com",
-            databaseURL: "https://trisha-digital-library-default-rtdb.firebaseio.com",
-            projectId: "trisha-digital-library",
-            storageBucket: "trisha-digital-library.firebasestorage.app",
-            messagingSenderId: "551272591083",
-            appId: "1:551272591083:web:1110ed87352f948daf98ae"
-        };
-
-        const appId = "trisha-library-app";
-        let db = null;
-        let auth = null;
-        let currentUser = null;
-
-        window.app = {
-            state: {
-                adminPasscode: 'admin123',
-                authRole: null,
-                activeStudent: null,
-                students: [],
-                waitingQueue: []
-            },
-
-            formatDateDDMMYYYY(dateStr) {
-                if (!dateStr) return 'N/A';
-                const parts = dateStr.split('-');
-                return parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : dateStr;
-            },
-
-            setAuthTab(tab) {
-                document.getElementById('form-student-login').classList.toggle('hidden', tab !== 'student');
-                document.getElementById('form-admin-login').classList.toggle('hidden', tab !== 'admin');
-            },
-
-            handleStudentLogin(e) {
-                e.preventDefault();
-                const inputId = document.getElementById('login-student-id').value.trim();
-                const inputPin = document.getElementById('login-student-pin').value.trim();
-
-                const student = this.state.students.find(s => 
-                    (s.id.toLowerCase() === inputId.toLowerCase() || s.mobile === inputId) && s.pin === inputPin
-                );
-
-                if (student) {
-                    this.state.authRole = 'student';
-                    this.state.activeStudent = student;
-                    this.showPortal('student');
-                } else {
-                    alert("Invalid Student Credentials!");
-                }
-            },
-
-            handleAdminLogin(e) {
-                e.preventDefault();
-                const pin = document.getElementById('login-admin-pin').value;
-                if (pin === this.state.adminPasscode) {
-                    this.state.authRole = 'admin';
-                    this.showPortal('admin');
-                } else {
-                    alert("Incorrect Master Passcode! (Default: admin123)");
-                }
-            },
-
-            showPortal(role) {
-                document.getElementById('view-login').classList.add('hidden');
-                document.getElementById('btn-logout').classList.remove('hidden');
-                document.getElementById('user-pill').classList.remove('hidden');
-
-                if (role === 'student') {
-                    document.getElementById('view-student-portal').classList.remove('hidden');
-                    document.getElementById('view-admin-portal').classList.add('hidden');
-                    this.renderStudentPortal();
-                } else {
-                    document.getElementById('view-admin-portal').classList.remove('hidden');
-                    document.getElementById('view-student-portal').classList.add('hidden');
-                    this.renderStudentsTable();
-                    this.renderUnreservedTable();
-                    this.renderPendingDuesTable();
-                    this.renderWaitingListTable();
-                    this.renderSeatMap();
-                }
-            },
-
-            logout() {
-                location.reload();
-            },
-
-            generate12MonthsList(admDateStr) {
-                if (!admDateStr) return [];
-                const admDate = new Date(admDateStr);
-                let year = admDate.getFullYear();
-                let monthIdx = admDate.getMonth();
-                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                const list = [];
-
-                for (let i = 0; i < 12; i++) {
-                    list.push({ key: `${monthNames[monthIdx]} ${year}`, year, monthIdx });
-                    monthIdx++;
-                    if (monthIdx > 11) { monthIdx = 0; year++; }
-                }
-                return list;
-            },
-
-            generate12MonthChecklist(existingPaidMonths = []) {
-                const admDateStr = document.getElementById('form-stu-admission').value;
-                const grid = document.getElementById('month-checklist-grid');
-                grid.innerHTML = '';
-                if (!admDateStr) return;
-
-                const months12 = this.generate12MonthsList(admDateStr);
-                months12.forEach((mObj, idx) => {
-                    const isChecked = existingPaidMonths.includes(mObj.key) || (existingPaidMonths.length === 0 && idx === 0);
-                    const item = document.createElement('label');
-                    item.className = "flex items-center justify-between p-1.5 rounded bg-slate-950 border border-slate-800 text-[10px] cursor-pointer";
-                    item.innerHTML = `
-                        <span>${mObj.key}</span>
-                        <input type="checkbox" value="${mObj.key}" ${isChecked ? 'checked' : ''} onchange="app.recalculate12MonthFees()" class="chk-12month text-teal-500">
-                    `;
-                    grid.appendChild(item);
-                });
-                this.recalculate12MonthFees();
-            },
-
-            recalculate12MonthFees() {
-                const checkboxes = document.querySelectorAll('.chk-12month');
-                let paidCount = 0;
-                checkboxes.forEach(chk => { if (chk.checked) paidCount++; });
-
-                const admDateStr = document.getElementById('form-stu-admission').value;
-                if (admDateStr) {
-                    const nextDue = new Date(admDateStr);
-                    nextDue.setMonth(nextDue.getMonth() + paidCount);
-                    document.getElementById('form-stu-duedate').value = nextDue.toISOString().split('T')[0];
-                }
-            },
-
-            renderStudentPortal() {
-                const s = this.state.activeStudent;
-                if (!s) return;
-
-                document.getElementById('stu-name').innerText = s.name;
-                document.getElementById('stu-father').innerText = s.fatherName || '---';
-                document.getElementById('stu-id').innerText = s.id;
-                document.getElementById('stu-mobile').innerText = s.mobile;
-                document.getElementById('stu-seat').innerText = s.seat ? `Seat #${s.seat}` : 'Unreserved';
-                document.getElementById('stu-initial').innerText = s.name ? s.name.charAt(0).toUpperCase() : 'S';
-
-                const months12 = this.generate12MonthsList(s.admissionDate);
-                const paidMonths = s.paidMonths || [];
-                const currDate = new Date();
-                let unpaidPastCount = 0;
-
-                months12.forEach(mObj => {
-                    const isPast = (mObj.year < currDate.getFullYear()) || (mObj.year === currDate.getFullYear() && mObj.monthIdx <= currDate.getMonth());
-                    if (isPast && !paidMonths.includes(mObj.key)) unpaidPastCount++;
-                });
-
-                const pending = unpaidPastCount * 400;
-                document.getElementById('stu-pending').innerText = `₹${pending}`;
-                document.getElementById('stu-admission').innerText = this.formatDateDDMMYYYY(s.admissionDate);
-
-                const warningBanner = document.getElementById('stu-warning-banner');
-                if (pending > 0) {
-                    warningBanner.classList.remove('hidden');
-                } else {
-                    warningBanner.classList.add('hidden');
-                }
-
-                // Auto-Generate Secure Payment QR Code on Student Portal
-                const qrContainer = document.getElementById('student-payment-qrcode');
-                qrContainer.innerHTML = '';
-                const paymentUpiString = `upi://pay?pa=8172819119-4@ybl&pn=TrishaDigitalLibrary&am=${pending}&cu=INR`;
-                new QRCode(qrContainer, {
-                    text: paymentUpiString,
-                    width: 170,
-                    height: 170,
-                    colorDark: "#0f172a",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-
-                const grid = document.getElementById('stu-monthly-status-grid');
-                grid.innerHTML = '';
-                months12.forEach(mObj => {
-                    const isPaid = paidMonths.includes(mObj.key);
-                    const badge = document.createElement('div');
-                    badge.className = `p-2 rounded-xl border flex items-center justify-between text-xs font-semibold ${isPaid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-rose-500/10 border-rose-500/30 text-rose-400'}`;
-                    badge.innerHTML = `<span>${mObj.key}</span> <span>${isPaid ? 'Paid' : 'Due'}</span>`;
-                    grid.appendChild(badge);
-                });
-            },
-
-            setAdminTab(tab) {
-                ['students', 'unreserved', 'pending', 'waiting', 'seats', 'reports'].forEach(t => {
-                    document.getElementById(`admin-sec-${t}`).classList.toggle('hidden', t !== tab);
-                });
-            },
-
-            renderStudentsTable(filtered = null) {
-                const list = (filtered || this.state.students).filter(s => s.seat);
-                const cardsContainer = document.getElementById('students-mobile-cards');
-                cardsContainer.innerHTML = '';
-
-                list.forEach(s => {
-                    const paidMonths = s.paidMonths || [];
-                    const card = document.createElement('div');
-                    card.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2";
-                    card.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <div class="font-bold text-white text-sm">${s.name}</div>
-                                <div class="text-[10px] text-slate-400">ID: ${s.id} | S/O: ${s.fatherName}</div>
-                            </div>
-                            <span class="px-2 py-0.5 rounded bg-teal-500/10 text-teal-400 border border-teal-500/30 text-xs font-bold">#${s.seat}</span>
-                        </div>
-                        <div class="flex items-center justify-between text-[11px] text-slate-300 border-t border-slate-800/80 pt-2">
-                            <span>Mobile: ${s.mobile}</span>
-                            <span class="text-emerald-400 font-semibold">Paid: ${paidMonths.length}/12</span>
-                        </div>
-                        <div class="flex items-center justify-between pt-1">
-                            <div class="space-x-1">
-                                <button onclick="app.openIDCardModal('${s.id}')" class="px-2 py-1 bg-indigo-600/20 text-indigo-300 rounded border border-indigo-500/30 text-[10px]">ID Card</button>
-                                <button onclick="app.openReceiptModal('${s.id}')" class="px-2 py-1 bg-amber-500/20 text-amber-300 rounded border border-amber-500/30 text-[10px]">Receipt</button>
-                            </div>
-                            <div class="space-x-1">
-                                <button onclick="app.openStudentModal('${s.id}')" class="p-1.5 text-teal-400"><i class="fa-solid fa-pen-to-square"></i></button>
-                                <button onclick="app.deleteStudent('${s.id}')" class="p-1.5 text-rose-400"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    `;
-                    cardsContainer.appendChild(card);
-                });
-            },
-
-            renderUnreservedTable() {
-                const list = this.state.students.filter(s => !s.seat);
-                const cardsContainer = document.getElementById('unreserved-mobile-cards');
-                cardsContainer.innerHTML = '';
-
-                list.forEach(s => {
-                    const card = document.createElement('div');
-                    card.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center justify-between";
-                    card.innerHTML = `
-                        <div>
-                            <div class="font-bold text-white text-xs">${s.name}</div>
-                            <div class="text-[10px] text-slate-400">S/O: ${s.fatherName} | ${s.mobile}</div>
-                        </div>
-                        <div class="space-x-1">
-                            <button onclick="app.openStudentModal('${s.id}')" class="p-1 text-teal-400"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="app.deleteStudent('${s.id}')" class="p-1 text-rose-400"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    `;
-                    cardsContainer.appendChild(card);
-                });
-            },
-
-            renderPendingDuesTable() {
-                const cardsContainer = document.getElementById('pending-mobile-cards');
-                cardsContainer.innerHTML = '';
-                let count = 0;
-
-                this.state.students.forEach(s => {
-                    const months12 = this.generate12MonthsList(s.admissionDate);
-                    const paidMonths = s.paidMonths || [];
-                    const currDate = new Date();
-
-                    const unpaidPastMonths = months12.filter(mObj => {
-                        const isPast = (mObj.year < currDate.getFullYear()) || (mObj.year === currDate.getFullYear() && mObj.monthIdx <= currDate.getMonth());
-                        return isPast && !paidMonths.includes(mObj.key);
-                    });
-
-                    const pendingAmount = unpaidPastMonths.length * 400;
-
-                    if (pendingAmount > 0) {
-                        count++;
-                        const card = document.createElement('div');
-                        card.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2";
-                        card.innerHTML = `
-                            <div class="flex items-center justify-between">
-                                <div class="font-bold text-white text-xs">${s.name} (#${s.seat || 'Unreserved'})</div>
-                                <div class="text-rose-400 font-bold text-xs">₹${pendingAmount}</div>
-                            </div>
-                            <div class="flex items-center justify-between border-t border-slate-800/80 pt-2 text-[10px]">
-                                <span class="text-slate-400">${s.mobile}</span>
-                                <button onclick="app.sendWhatsAppReminder('${s.mobile}', '${s.name}', ${pendingAmount}, '${s.dueDate}')" class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg font-semibold">
-                                    <i class="fa-brands fa-whatsapp"></i> WhatsApp API
-                                </button>
-                            </div>
-                        `;
-                        cardsContainer.appendChild(card);
-                    }
-                });
-                document.getElementById('pending-count-badge').innerText = `${count} Pending`;
-            },
-
-            renderWaitingListTable() {
-                const cardsContainer = document.getElementById('waiting-mobile-cards');
-                cardsContainer.innerHTML = '';
-
-                this.state.waitingQueue.forEach((item, idx) => {
-                    const card = document.createElement('div');
-                    card.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center justify-between";
-                    card.innerHTML = `
-                        <div>
-                            <div class="font-bold text-amber-400 text-xs">#${idx + 1} ${item.name}</div>
-                            <div class="text-[10px] text-slate-400">${item.mobile}</div>
-                        </div>
-                        <div class="space-x-1">
-                            <button onclick="app.autoFillFromQueue('${item.id}')" class="px-2 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/40 rounded-lg text-[10px] font-bold">Auto Fill</button>
-                            <button onclick="app.deleteWaitingStudent('${item.id}')" class="p-1 text-rose-400"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    `;
-                    cardsContainer.appendChild(card);
-                });
-            },
-
-            async handleAddWaitingStudent(e) {
-                e.preventDefault();
-                const waitData = {
-                    id: 'WQ-' + Math.floor(1000 + Math.random() * 9000),
-                    name: document.getElementById('wait-name').value,
-                    fatherName: document.getElementById('wait-father').value,
-                    mobile: document.getElementById('wait-mobile').value,
-                    address: document.getElementById('wait-address').value,
-                    requestDate: new Date().toISOString().split('T')[0]
-                };
-
-                if (db && currentUser) {
-                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'waitingQueue'), waitData);
-                }
-                e.target.reset();
-            },
-
-            autoFillFromQueue(queueId) {
-                const item = this.state.waitingQueue.find(w => w.id === queueId);
-                if (!item) return;
-
-                this.openStudentModal();
-                document.getElementById('form-stu-name').value = item.name;
-                document.getElementById('form-stu-father').value = item.fatherName;
-                document.getElementById('form-stu-mobile').value = item.mobile;
-                document.getElementById('form-stu-address').value = item.address;
-                this.deleteWaitingStudent(queueId, false);
-            },
-
-            async deleteWaitingStudent(queueId, confirmAsk = true) {
-                if (!confirmAsk || confirm("Remove from Queue?")) {
-                    if (db && currentUser) {
-                        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'waitingQueue', queueId));
-                    }
-                }
-            },
-
-            renderSeatMap() {
-                const grid = document.getElementById('seat-map-grid');
-                grid.innerHTML = '';
-                const map = {};
-                this.state.students.forEach(s => { if (s.seat) map[s.seat] = s; });
-
-                for (let i = 1; i <= 106; i++) {
-                    const occ = map[i];
-                    const btn = document.createElement('button');
-                    btn.className = occ ? "h-12 rounded-xl bg-teal-500/20 border border-teal-500/50 text-teal-300 p-1 text-[10px] font-medium" : "h-12 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 p-1 text-[10px] font-medium";
-                    btn.innerHTML = `<span class="font-bold">#${i}</span><br><span class="text-[8px] truncate">${occ ? occ.name.split(' ')[0] : 'Vacant'}</span>`;
-                    grid.appendChild(btn);
-                }
-            },
-
-            openStudentModal(studentId = null, prefilledSeat = null, isUnreserved = false) {
-                document.getElementById('modal-student').classList.remove('hidden');
-                const todayStr = new Date().toISOString().split('T')[0];
-
-                if (studentId) {
-                    const s = this.state.students.find(item => item.id === studentId);
-                    if (s) {
-                        document.getElementById('form-stu-id').value = s.id;
-                        document.getElementById('form-stu-name').value = s.name;
-                        document.getElementById('form-stu-father').value = s.fatherName || '';
-                        document.getElementById('form-stu-mobile').value = s.mobile;
-                        document.getElementById('form-stu-address').value = s.address || '';
-                        document.getElementById('form-stu-seat').value = s.seat || '';
-                        document.getElementById('form-stu-pin').value = s.pin || '1234';
-                        document.getElementById('form-stu-admission').value = s.admissionDate || todayStr;
-                        this.generate12MonthChecklist(s.paidMonths || []);
-                    }
-                } else {
-                    document.getElementById('form-stu-id').value = '';
-                    document.getElementById('form-stu-name').value = '';
-                    document.getElementById('form-stu-father').value = '';
-                    document.getElementById('form-stu-mobile').value = '';
-                    document.getElementById('form-stu-address').value = '';
-                    document.getElementById('form-stu-seat').value = isUnreserved ? '' : (prefilledSeat || '');
-                    document.getElementById('form-stu-pin').value = '1234';
-                    document.getElementById('form-stu-admission').value = todayStr;
-                    this.generate12MonthChecklist([]);
-                }
-            },
-
-            closeStudentModal() {
-                document.getElementById('modal-student').classList.add('hidden');
-            },
-
-            async handleSaveStudent(e) {
-                e.preventDefault();
-                const existingId = document.getElementById('form-stu-id').value;
-                const paidMonths = [];
-                document.querySelectorAll('.chk-12month').forEach(chk => { if (chk.checked) paidMonths.push(chk.value); });
-
-                const studentData = {
-                    id: existingId || ('TDL-' + Math.floor(100 + Math.random() * 900)),
-                    name: document.getElementById('form-stu-name').value.trim(),
-                    fatherName: document.getElementById('form-stu-father').value.trim(),
-                    mobile: document.getElementById('form-stu-mobile').value.trim(),
-                    address: document.getElementById('form-stu-address').value.trim(),
-                    seat: Number(document.getElementById('form-stu-seat').value) || null,
-                    pin: document.getElementById('form-stu-pin').value.trim(),
-                    admissionDate: document.getElementById('form-stu-admission').value,
-                    dueDate: document.getElementById('form-stu-duedate').value,
-                    paidMonths: paidMonths
-                };
-
-                if (db && currentUser) {
-                    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', studentData.id), studentData, { merge: true });
-                }
-                this.closeStudentModal();
-            },
-
-            async deleteStudent(studentId) {
-                if (confirm(`Delete student ${studentId}?`)) {
-                    if (db && currentUser) {
-                        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', studentId));
-                    }
-                }
-            },
-
-            sendWhatsAppReminder(mobile, name, pending, dueDate) {
-                const clean = mobile.replace(/[^0-9]/g, '');
-                const num = clean.length === 10 ? '91' + clean : clean;
-                const msg = encodeURIComponent(`Dear ${name},\nYour Trisha Library Fee balance is ₹${pending} due on ${this.formatDateDDMMYYYY(dueDate)}.\nPlease check your student portal for the secure QR Code to pay.\nThank you!`);
-                window.open(`https://wa.me/${num}?text=${msg}`, '_blank');
-            },
-
-            openIDCardModal(studentId) {
-                const s = this.state.students.find(item => item.id === studentId);
-                if (!s) return;
-
-                document.getElementById('print-modal-title').innerText = "Member ID Card";
-                const area = document.getElementById('printable-area');
-                area.innerHTML = `
-                    <div class="bg-slate-950 border-2 border-amber-500/50 rounded-2xl p-4 text-center shadow-2xl relative">
-                        <div class="flex items-center justify-center gap-1.5 mb-2">
-                            <div class="w-6 h-6 rounded bg-amber-500 font-bold text-slate-950 flex items-center justify-center text-xs">T</div>
-                            <div class="text-left"><div class="font-bold text-[11px] tracking-wide">TRISHA DIGITAL LIBRARY</div><div class="text-[8px] text-amber-400">OFFICIAL MEMBER CARD</div></div>
-                        </div>
-                        <div class="w-14 h-14 rounded-full bg-slate-800 border-2 border-amber-400 mx-auto my-2 flex items-center justify-center font-bold text-xl text-amber-400">${s.name.charAt(0)}</div>
-                        <h4 class="font-bold text-xs text-white">${s.name}</h4>
-                        <p class="text-[9px] text-slate-400">S/O: ${s.fatherName}</p>
-                        <p class="text-xs text-amber-400 font-mono font-bold mt-0.5">ID: ${s.id}</p>
-                        <div class="grid grid-cols-2 gap-1 text-left bg-slate-900 p-2 rounded-lg my-2 text-[9px]">
-                            <div>Mobile: <span class="text-slate-200">${s.mobile}</span></div>
-                            <div>Seat: <span class="text-amber-400 font-bold">#${s.seat || 'Unreserved'}</span></div>
-                        </div>
-                        <div id="card-qr-container" class="flex justify-center p-1 bg-white rounded my-1"></div>
-                    </div>
-                `;
-
-                new QRCode(document.getElementById('card-qr-container'), { text: `TDL:${s.id}`, width: 55, height: 55 });
-                document.getElementById('modal-printable').classList.remove('hidden');
-            },
-
-            openReceiptModal(studentId) {
-                const s = this.state.students.find(item => item.id === studentId);
-                if (!s) return;
-
-                document.getElementById('print-modal-title').innerText = "Official Receipt";
-                const area = document.getElementById('printable-area');
-                const paidCount = (s.paidMonths || []).length;
-
-                area.innerHTML = `
-                    <div class="bg-slate-950 border-2 border-teal-500/50 rounded-2xl p-4 text-left shadow-2xl">
-                        <div class="text-center border-b border-slate-800 pb-2 mb-2">
-                            <h3 class="font-bold text-xs text-teal-400">TRISHA DIGITAL LIBRARY</h3>
-                            <p class="text-[9px] text-slate-400">Payment Receipt</p>
-                        </div>
-                        <div class="text-[11px] space-y-0.5 text-slate-300">
-                            <div>Student: <span class="font-bold text-white">${s.name}</span> (${s.id})</div>
-                            <div>Seat: <span class="text-teal-400 font-bold">#${s.seat || 'Unreserved'}</span></div>
-                        </div>
-                        <div class="my-2 p-2 bg-slate-900 rounded border border-slate-800 text-[11px]">
-                            <div class="flex justify-between py-0.5"><span>Paid Months:</span><span class="font-bold text-emerald-400">${paidCount} Months</span></div>
-                            <div class="flex justify-between py-0.5 border-t border-slate-800 font-bold"><span>Total Paid:</span><span class="text-emerald-400">₹${paidCount * 400}</span></div>
-                        </div>
-                    </div>
-                `;
-                document.getElementById('modal-printable').classList.remove('hidden');
-            },
-
-            closePrintableModal() {
-                document.getElementById('modal-printable').classList.add('hidden');
-            }
-        };
-
-        async function initApp() {
-            try {
-                const fbApp = initializeApp(firebaseConfig);
-                auth = getAuth(fbApp);
-                db = getFirestore(fbApp);
-                await signInAnonymously(auth);
-
-                onAuthStateChanged(auth, (user) => {
-                    currentUser = user;
-                    if (user) setupFirestoreSync();
-                });
-            } catch (err) {
-                console.warn("Offline Mode");
-            }
-        }
-
-        function setupFirestoreSync() {
-            if (!db || !currentUser) return;
-
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'students'), (snapshot) => {
-                const loaded = [];
-                snapshot.forEach(docSnap => loaded.push({ id: docSnap.id, ...docSnap.data() }));
-                app.state.students = loaded;
-                app.renderStudentsTable();
-                app.renderUnreservedTable();
-                app.renderPendingDuesTable();
-                app.renderSeatMap();
-            });
-
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'waitingQueue'), (snapshot) => {
-                const loaded = [];
-                snapshot.forEach(docSnap => loaded.push({ id: docSnap.id, ...docSnap.data() }));
-                app.state.waitingQueue = loaded;
-                app.renderWaitingListTable();
-            });
-        }
-
-        window.onload = initApp;
-    </script>
+  </div>
+</section>
+</main>
+
+<!-- STUDENT FORM -->
+<div id="m-s" class="m hide"><div>
+  <div class="row"><b id="ms-t" style="flex:1">Student</b><button class="b o" onclick="app.closeStudent()">✕</button></div>
+  <div class="c" style="margin-top:10px">
+    <div class="mu">Auto-fill from ID card</div>
+    <div class="row"><button type="button" class="b o" onclick="app.scanStart()">Camera</button>
+      <label class="b o" style="margin:0;color:var(--tx)">Upload image<input type="file" accept="image/*" class="hide" onchange="app.scanFile(event)"></label></div>
+    <div id="rd" class="hide"><div id="reader"></div><button type="button" class="b o" onclick="app.scanStop()">Close camera</button></div>
+  </div>
+  <form onsubmit="app.saveStudent(event)">
+    <input type="hidden" id="f-id">
+    <label>Full name</label><input id="f-n" required>
+    <label>Father name</label><input id="f-f" required>
+    <label>Mobile (10 digits)</label><input id="f-m" required pattern="[6-9][0-9]{9}" inputmode="numeric">
+    <label>Address</label><input id="f-a" required>
+    <label>Seat (1-106, empty = unreserved)</label><input id="f-s" type="number" min="1" max="106">
+    <label>Admission date</label><input id="f-d" type="date" required>
+    <div id="pinw"><label>Login PIN (min 6 characters)</label><input id="f-p" minlength="6"></div>
+    <br><div class="row" style="justify-content:flex-end"><button type="button" class="b o" onclick="app.closeStudent()" data-t="cancel">Cancel</button><button class="b" data-t="save">Save</button></div>
+  </form>
+</div></div>
+
+<!-- RESERVE SEAT -->
+<div id="m-r" class="m hide"><div><b id="mr-t"></b><input type="hidden" id="rs-id"><label>Choose a vacant seat</label><select id="rs-seat"></select><p class="mu">The seat is reserved for this student once you confirm.</p><div class="row" style="justify-content:flex-end"><button class="b o" onclick="app.closeReserve()">Cancel</button><button class="b" onclick="app.confirmReserve()">Confirm reserved seat</button></div></div></div>
+
+<!-- COLLECT FEE -->
+<div id="m-c" class="m hide"><div>
+  <b id="mc-t"></b><input type="hidden" id="pay-id">
+  <div id="mc-l" class="g" style="margin:10px 0"></div>
+  <label>Mode</label><select id="pay-mode"><option>Cash</option><option>UPI</option><option>Other</option></select>
+  <br><div class="row" style="justify-content:flex-end"><button class="b o" onclick="app.closeCollect()" data-t="cancel">Cancel</button><button class="b" onclick="app.pay()">Receive & generate receipt</button></div>
+</div></div>
+
+<!-- PRINTABLE -->
+<div id="m-p" class="m hide"><div style="max-width:380px">
+  <div class="row"><b id="pt" style="flex:1"></b><button class="b o" onclick="app.closeModal()">✕</button></div>
+  <div id="pa" style="margin:12px 0"></div>
+  <button class="b a" style="width:100%" onclick="window.print()">Print / Save as PDF</button>
+</div></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import {getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import {getFirestore,collection,doc,onSnapshot,setDoc,addDoc,updateDoc,deleteDoc,getDoc,query,where,writeBatch,runTransaction} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+const cfg={apiKey:"AIzaSyDomQsYNh7ATHvC4F9jWWzKkLOTufcD0J8",authDomain:"trisha-digital-library.firebaseapp.com",projectId:"trisha-digital-library",storageBucket:"trisha-digital-library.firebasestorage.app",messagingSenderId:"551272591083",appId:"1:551272591083:web:1110ed87352f948daf98ae"};
+const FEE=400,SEATS=106,UPI="8172819119-4@ybl";
+const fb=initializeApp(cfg),auth=getAuth(fb),db=getFirestore(fb);
+const secAuth=getAuth(initializeApp(cfg,"sec")); // creates student logins without logging admin out
+
+/* ---------- helpers ---------- */
+const $=i=>document.getElementById(i);
+const HQ="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js",TJ="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.5/dist/tesseract.min.js";
+const loadJs=u=>new Promise((ok,no)=>{if(document.querySelector(`script[src="${u}"]`))return ok();const s=document.createElement("script");s.src=u;s.onload=ok;s.onerror=no;document.head.appendChild(s)});
+window.addEventListener("unhandledrejection",ev=>{if(ev.reason?.code=="permission-denied")alert("Permission denied. Publish the latest firestore.rules in Firebase Console (Firestore > Rules).")});
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today=()=>new Date().toISOString().slice(0,10);
+const fmt=d=>{if(!d)return"-";const p=d.split("-");return p.length==3?`${p[2]}/${p[1]}/${p[0]}`:d};
+const mail=m=>`${m}@tdl.student`;
+const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const nk=k=>{const m=/^(\w{3}) (\d{4})$/.exec(k);return m?`${m[2]}-${String(MN.indexOf(m[1])+1).padStart(2,"0")}`:k}; // old "Jan 2025" -> "2025-01"
+const paidOf=s=>(s.paidMonths||[]).map(nk);
+const monthsFrom=(adm,extra=0)=>{if(!adm)return[];let[y,m]=adm.split("-").map(Number);m--;const n=new Date(),lim=n.getFullYear()*12+n.getMonth()+extra,r=[];while(y*12+m<=lim){r.push(`${y}-${String(m+1).padStart(2,"0")}`);if(++m>11){m=0;y++}}return r};
+const dues=s=>{if(s.status=="left")return[];const p=paidOf(s);return monthsFrom(s.admissionDate).filter(k=>!p.includes(k))};
+const lbl=k=>{const[y,m]=k.split("-");return`${MN[m-1]} ${y}`};
+const csv=r=>"\ufeff"+r.map(x=>x.map(c=>{c=String(c??"");if(/^[=+\-@]/.test(c))c="'"+c;return`"${c.replace(/"/g,'""')}"`}).join(",")).join("\n");
+const dl=(n,t,ty="text/csv")=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:ty}));a.download=n;a.click()};
+const next=k=>runTransaction(db,async t=>{const r=doc(db,"meta","counters"),d=await t.get(r),n=((d.exists()?d.data()[k]:0)||0)+1;t.set(r,{[k]:n},{merge:true});return n});
+
+const L={
+ hi:{stu:"विद्यार्थी",pend2:"बकाया फीस",unres:"बिना सीट",left:"छोड़ चुके",jobs:"नौकरियाँ",seats:"सीट मैप",pay:"भुगतान",queue:"वेटिंग",notice:"सूचना",rep:"रिपोर्ट",logout:"लॉगआउट",login:"लॉगिन",save:"सेव करें",cancel:"रद्द",collect:"फीस लें",due:"बकाया",paid:"जमा",seat:"सीट",notices:"सूचनाएँ",hist:"भुगतान इतिहास",pend:"कुल बकाया",adm:"प्रवेश तिथि"},
+ en:{stu:"Students",pend2:"Pending fees",unres:"Unreserved",left:"Left students",jobs:"Latest jobs",seats:"Seat map",pay:"Payments",queue:"Waiting list",notice:"Notices",rep:"Reports",logout:"Logout",login:"Login",save:"Save",cancel:"Cancel",collect:"Collect fee",due:"Due",paid:"Paid",seat:"Seat",notices:"Notices",hist:"Payment history",pend:"Total due",adm:"Admission date"}
+};
+let lang=localStorage.lang||"hi";const t=k=>L[lang][k]||k;
+const applyLang=()=>document.querySelectorAll("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));
+if(localStorage.theme=="light")document.documentElement.classList.add("light");
+
+/* ---------- state ---------- */
+const Q=["जो मेहनत से डरता है, वह मंज़िल से दूर रहता है।", "छोटे-छोटे प्रयास ही बड़ी सफलता की नींव हैं।", "आज का पढ़ा हुआ कल का भविष्य बनाता है।", "असफलता सीख है, अंत नहीं।", "समय का सदुपयोग ही सफलता की पहली सीढ़ी है।", "जहाँ चाह, वहाँ राह।", "अनुशासन ही सफलता की चाबी है।", "सपने वही सच होते हैं जिनके पीछे मेहनत होती है।", "हर दिन एक नया अवसर लेकर आता है।", "धैर्य रखो, मेहनत करते रहो, परिणाम ज़रूर मिलेगा।", "ज्ञान सबसे बड़ा धन है।", "कल पर मत टालो, आज ही शुरुआत करो।", "लगातार अभ्यास से कठिन भी आसान हो जाता है।", "जो गिरकर उठ जाए, वही असली विजेता है।", "एकाग्रता से किया गया थोड़ा काम भी बहुत होता है।", "किताबें सच्ची मित्र हैं, जो कभी साथ नहीं छोड़तीं।", "आत्मविश्वास सफलता का पहला रहस्य है।", "मन लगाकर पढ़ो, मंज़िल खुद पास आएगी।", "बूँद-बूँद से सागर भरता है।", "परिश्रम का फल मीठा होता है।", "सीखने की कोई उम्र नहीं होती।", "कठिन रास्ते ही सुंदर मंज़िल तक ले जाते हैं।", "खुद पर भरोसा रखो, तुम कर सकते हो।", "सफलता उन्हें मिलती है जो हार नहीं मानते।", "समय किसी का इंतज़ार नहीं करता।", "अच्छे विचार अच्छे जीवन की शुरुआत हैं।", "आज की मेहनत कल की मुस्कान बनती है।", "लक्ष्य बड़ा रखो और रोज़ थोड़ा आगे बढ़ो।", "शांत मन से पढ़ा हुआ सबसे देर तक याद रहता है।", "हर सुबह खुद को बेहतर बनाने का मौका है।"];
+const dayQuote=()=>{const d=new Date();return Q[Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5)%Q.length]};
+const S={role:null,students:[],payments:[],queue:[],notices:[],jobs:[]};
+let tab="students",unsubs=[],loginRole="s",fromQueue=null,scanner=null;
+const show=v=>["login","stu","adm"].forEach(x=>$("v-"+x).classList.toggle("hide",x!=v));
+const modal=(h,title)=>{$("pt").textContent=title;$("pa").innerHTML=h;$("m-p").classList.remove("hide")};
+
+/* ---------- auth ---------- */
+const resetUI=()=>{
+  S.role=null;S.students=[];S.payments=[];S.queue=[];S.notices=[];S.jobs=[];tab="students";
+  ["li","lp"].forEach(i=>$(i).value="");$("le").textContent="";app.loginTab("s");
+  ["m-s","m-c","m-p","m-r"].forEach(i=>$(i).classList.add("hide"));
+  $("quote").classList.add("hide");$("stu").innerHTML="";$("out").classList.add("hide");
+};
+onAuthStateChanged(auth,async u=>{
+  unsubs.forEach(f=>f());unsubs=[];
+  if(!u){resetUI();show("login");return}
+  $("le").textContent="Loading…";
+  $("out").classList.remove("hide");
+  const a=await getDoc(doc(db,"admins",u.uid));
+  S.role=a.exists()?"admin":"student";
+  const lis=(q,k)=>unsubs.push(onSnapshot(q,s=>{S[k]=s.docs.map(d=>({_id:d.id,...d.data()}));app.schedule()},e=>console.error(k,e)));
+  if(S.role=="admin"){
+    ["students","payments","waitingQueue","notices","jobs"].forEach(c=>lis(collection(db,c),c=="waitingQueue"?"queue":c));
+    show("adm");
+  }else{
+    lis(query(collection(db,"students"),where("uid","==",u.uid)),"students");
+    lis(query(collection(db,"payments"),where("uid","==",u.uid)),"payments");
+    lis(collection(db,"notices"),"notices");lis(collection(db,"jobs"),"jobs");
+    show("stu");
+  }
+});
+
+/* ---------- renderers ---------- */
+function rStudent(){
+  const s=S.students[0];
+  if(!s){$("stu").innerHTML='<div class="c">Profile not found. Please contact the library admin.</div>';return}
+  const d=dues(s),amt=d.length*FEE,pays=[...S.payments].sort((a,b)=>b.date.localeCompare(a.date));
+  const p=paidOf(s),all=[...new Set([...monthsFrom(s.admissionDate),...p])].sort();
+  $("stu").innerHTML=`
+  ${amt>0?`<div class="c dd"><b>⚠ ${t("pend")}: ₹${amt}</b><div class="mu">Please pay using the QR code below.</div></div>`:""}
+  <div class="c hero"><div class="big">${esc(s.name)}</div><div class="mu">S/O ${esc(s.fatherName)} · ID ${esc(s.id)} · ${esc(s.mobile)}</div>
+    <div class="row" style="margin-top:10px"><button class="b" onclick="app.idCard('${esc(s.id)}')">ID card</button></div></div>
+  <div class="g g3"><div class="c"><div class="mu">${t("seat")}</div><div class="big">${s.seat?"#"+s.seat:"Unreserved"}</div></div>
+    <div class="c"><div class="mu">${t("pend")}</div><div class="big dd">₹${amt}</div></div>
+    <div class="c"><div class="mu">${t("adm")}</div><div class="big">${fmt(s.admissionDate)}</div></div></div>
+  ${amt>0?`<div class="c" style="text-align:center"><b>Scan & pay (UPI)</b><div style="background:#fff;display:inline-block;padding:10px;border-radius:10px;margin:10px"><div id="upi"></div></div><div class="mu">Trisha Digital Library</div></div>`:""}
+  <div class="c"><b>💼 ${t("jobs")}</b>${S.jobs.filter(j=>/^https?:\/\//i.test(j.link)).length?[...S.jobs].filter(j=>/^https?:\/\//i.test(j.link)).sort((a,b)=>(b.date||"").localeCompare(a.date||"")).slice(0,10).map(j=>`<div class="row" style="margin-top:10px;justify-content:space-between"><div><b>${esc(j.title)}</b><div class="mu">Last date: ${fmt(j.lastDate)}</div></div><a class="b o" href="${esc(j.link)}" target="_blank" rel="noopener noreferrer">Details</a></div>`).join(""):'<div class="mu" style="margin-top:6px">No jobs posted yet.</div>'}</div>
+  <div class="c"><b>${t("notices")}</b>${S.notices.length?[...S.notices].sort((a,b)=>b.date.localeCompare(a.date)).map(n=>`<div style="margin-top:8px"><b>${esc(n.title)}</b> <span class="mu">${fmt(n.date)}</span><div>${esc(n.text)}</div></div>`).join(""):'<div class="mu">No notices.</div>'}</div>
+  <div class="c"><b>Months</b><div class="g g3" style="margin-top:8px">${all.map(k=>`<div class="c ${p.includes(k)?"pd":"dd"}" style="margin:0;padding:8px">${lbl(k)} — ${p.includes(k)?t("paid"):t("due")}</div>`).join("")}</div></div>
+  <div class="c sc"><b>${t("hist")}</b><table><tbody>${pays.map(x=>`<tr><td>${esc(x.receiptNo)}</td><td>${fmt(x.date)}</td><td>₹${x.amount}</td><td>${esc(x.mode)}</td><td><button class="b o" onclick="app.receipt('${x._id}')">Receipt</button></td></tr>`).join("")||'<tr><td class="mu">No payments yet.</td></tr>'}</tbody></table></div>`;
+  if(amt>0)new QRCode($("upi"),{text:`upi://pay?pa=${UPI}&pn=TrishaDigitalLibrary&am=${amt}&cu=INR`,width:170,height:170});
+}
+
+function filtered(){
+  const q=($("q").value||"").toLowerCase(),f=$("flt").value;
+  return S.students.filter(s=>(f=="left"?s.status=="left":s.status!="left"&&(f=="due"||s.seat))
+    &&(f=="res"?s.seat:f=="unres"?!s.seat:f=="due"?dues(s).length>0:true)
+    &&[s.name,s.mobile,s.id,s.seat].join(" ").toLowerCase().includes(q))
+    .sort((a,b)=>(a.seat||999)-(b.seat||999));
+}
+function rTable(){
+  $("tb").innerHTML=filtered().map(s=>{const d=dues(s),id=esc(s.id);return`<tr>
+    <td><div class="who"><i class="av">${esc(s.name.charAt(0).toUpperCase())}</i><div><b>${esc(s.name)}</b><div class="mu">${id} · ${esc(s.mobile)}</div></div></div></td>
+    <td>${esc(s.fatherName)}<div class="mu">${esc(s.address)}</div></td>
+    <td>${s.seat?"#"+s.seat:"—"}</td>
+    <td>${s.status=="left"?"Left":d.length?`<span class="dd">${t("due")}: ${d.length} (₹${d.length*FEE})</span><div class="mu">from ${lbl(d[0])}</div>`:`<span class="pd">${t("paid")}</span>`}</td>
+    <td><div class="row">
+      ${s.status!="left"?`<button class="b" onclick="app.collect('${id}')">${t("collect")}</button>`:""}
+      <button class="b o" onclick="app.idCard('${id}')">ID</button>
+      <button class="b o" onclick="app.openStudent('${id}')">Edit</button>
+      ${d.length?`<button class="b o" onclick="app.whatsapp('${id}')">WhatsApp</button>`:""}
+      <button class="b o" onclick="app.toggleLeft('${id}')">${s.status=="left"?"Restore":"Mark left"}</button>
+      ${s.status=="left"?`<button class="b r" onclick="app.del('${id}')">Delete</button>`:""}
+    </div></td></tr>`}).join("")||'<tr><td colspan="5" class="mu">No students found.</td></tr>';
+}
+function rSeats(){
+  const m={};S.students.filter(s=>s.status!="left"&&s.seat).forEach(s=>m[s.seat]=s);
+  $("sg").innerHTML=Array.from({length:SEATS},(_,i)=>{const n=i+1,o=m[n];return`<button class="seat ${o?"on":""}" onclick="app.seatClick(${n})"><b>#${n}</b><br>${o?esc(o.name.split(" ")[0]):"Vacant"}</button>`}).join("");
+}
+function rPay(){
+  $("pb").innerHTML=[...S.payments].sort((a,b)=>b.receiptNo.localeCompare(a.receiptNo)).map(p=>`<tr><td>${esc(p.receiptNo)}</td><td>${fmt(p.date)}</td><td>${esc(p.studentName)}</td><td class="mu">${p.months.map(lbl).join(", ")}</td><td>₹${p.amount}</td><td>${esc(p.mode)}</td><td><button class="b o" onclick="app.receipt('${p._id}')">Receipt</button></td></tr>`).join("");
+}
+function rQueue(){
+  $("qb").innerHTML=[...S.queue].sort((a,b)=>(a.requestDate||"").localeCompare(b.requestDate||"")).map((w,i)=>`<tr><td>#${i+1}</td><td><b>${esc(w.name)}</b><div class="mu">S/O ${esc(w.fatherName)} · ${esc(w.mobile)}</div></td><td>${fmt(w.requestDate)}</td><td><div class="row"><button class="b" onclick="app.fromQueue('${w._id}')">Allocate</button><button class="b r" onclick="app.delQueue('${w._id}')">✕</button></div></td></tr>`).join("")||'<tr><td class="mu">Queue is empty.</td></tr>';
+}
+function rNotices(){
+  $("nl").innerHTML=[...S.notices].sort((a,b)=>b.date.localeCompare(a.date)).map(n=>`<div class="row" style="margin-bottom:10px"><div style="flex:1"><b>${esc(n.title)}</b> <span class="mu">${fmt(n.date)}</span><div>${esc(n.text)}</div></div><button class="b r" onclick="app.delNotice('${n._id}')">✕</button></div>`).join("")||'<div class="mu">No notices.</div>';
+}
+function rReports(){
+  const ym=today().slice(0,7);
+  $("r1").textContent="₹"+S.payments.reduce((a,p)=>a+p.amount,0);
+  $("r2").textContent="₹"+S.students.reduce((a,s)=>a+dues(s).length*FEE,0);
+  $("r3").textContent=`${S.students.filter(s=>s.status!="left"&&s.seat).length} / ${SEATS}`;
+  $("r4").textContent="₹"+S.payments.filter(p=>p.date.startsWith(ym)).reduce((a,p)=>a+p.amount,0);
+}
+function rPending(){
+  const r=S.students.filter(s=>dues(s).length).sort((a,b)=>dues(b).length-dues(a).length);
+  $("pn-sum").textContent=`${r.length} students · ₹${r.reduce((a,s)=>a+dues(s).length*FEE,0)} pending`;
+  $("pnb").innerHTML=r.map(s=>{const d=dues(s),id=esc(s.id);return`<tr><td><div class="who"><i class="av">${esc(s.name.charAt(0).toUpperCase())}</i><div><b>${esc(s.name)}</b><div class="mu">${esc(s.mobile)}</div></div></div></td><td>${s.seat?"#"+s.seat:"—"}</td><td class="mu">${d.map(lbl).join(", ")}</td><td class="dd"><b>₹${d.length*FEE}</b></td><td><div class="row"><button class="b" onclick="app.collect('${id}')">${t("collect")}</button><button class="b o" onclick="app.whatsapp('${id}')">WhatsApp</button></div></td></tr>`}).join("")||'<tr><td colspan="5" class="mu">No pending fees.</td></tr>';
+}
+function rUnres(){
+  $("ub").innerHTML=S.students.filter(s=>!s.seat&&s.status!="left").map(s=>{const d=dues(s),id=esc(s.id);return`<tr><td><div class="who"><i class="av">${esc(s.name.charAt(0).toUpperCase())}</i><div><b>${esc(s.name)}</b><div class="mu">${id} · ${esc(s.mobile)}</div></div></div></td><td>${esc(s.fatherName)}<div class="mu">${esc(s.address)}</div></td><td>${d.length?`<span class="dd">${t("due")}: ${d.length} (₹${d.length*FEE})</span>`:`<span class="pd">${t("paid")}</span>`}</td><td><div class="row"><button class="b a" onclick="app.reserve('${id}')">Reserve seat</button><button class="b" onclick="app.collect('${id}')">${t("collect")}</button><button class="b o" onclick="app.openStudent('${id}')">Edit</button><button class="b o" onclick="app.toggleLeft('${id}')">Mark left</button></div></td></tr>`}).join("")||'<tr><td colspan="4" class="mu">No unreserved students.</td></tr>';
+}
+function rJobs(){
+  $("jlst").innerHTML=[...S.jobs].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(j=>`<div class="row" style="margin-bottom:10px"><div style="flex:1"><b>${esc(j.title)}</b><div class="mu">Last date: ${fmt(j.lastDate)}</div></div><button class="b r" onclick="app.delJob('${j._id}')">✕</button></div>`).join("")||'<div class="mu">No jobs yet.</div>';
+}
+function rLeft(){
+  $("lb").innerHTML=S.students.filter(s=>s.status=="left").sort((a,b)=>(b.leftDate||"").localeCompare(a.leftDate||"")).map(s=>{
+    const id=esc(s.id),p=paidOf(s),lim=(s.leftDate||today()).slice(0,7),d=monthsFrom(s.admissionDate).filter(k=>!p.includes(k)&&k<=lim);
+    return`<tr><td><div class="who"><i class="av">${esc(s.name.charAt(0).toUpperCase())}</i><div><b>${esc(s.name)}</b><div class="mu">${id} · ${esc(s.mobile)}</div></div></div></td><td>${esc(s.fatherName)}<div class="mu">${esc(s.address)}</div></td><td>${fmt(s.leftDate)}<div class="mu">${s.lastSeat?"Seat was #"+s.lastSeat:""}</div></td><td><span class="pd">${p.length} ${t("paid")}</span>${d.length?`<div class="dd">Dues at leaving: ₹${d.length*FEE}</div>`:""}</td><td><div class="row"><button class="b a" onclick="app.toggleLeft('${id}')">Restore</button><button class="b r" onclick="app.del('${id}')">Delete</button></div></td></tr>`}).join("")||'<tr><td colspan="5" class="mu">No students have left.</td></tr>';
+}
+const R={students:rTable,left:rLeft,unres:rUnres,jobs:rJobs,pending:rPending,seats:rSeats,payments:rPay,queue:rQueue,notices:rNotices,reports:rReports};
+
+/* ---------- app (called from HTML) ---------- */
+const app=window.app={
+  schedule(){cancelAnimationFrame(this._f);this._f=requestAnimationFrame(()=>this.render())},
+  render(){
+    const qe=$("quote");qe.classList.toggle("hide",S.role!="student");if(S.role=="student")qe.textContent="“"+dayQuote()+"”";
+    if(S.role=="student")return rStudent();
+    if(S.role!="admin")return;
+    Object.keys(R).forEach(x=>{$("s-"+x).classList.toggle("hide",x!=tab);$("t-"+x).className="tab"+(x==tab?" on":"")});
+    const act=S.students.filter(s=>s.status!="left"),pn=S.students.filter(s=>dues(s).length);
+    $("pcnt").textContent=pn.length;
+    $("kpi").innerHTML=`<div class="c"><div class="mu">Active students</div><div class="big">${act.length}</div></div><div class="c"><div class="mu">Pending fees</div><div class="big dd">₹${pn.reduce((a,s)=>a+dues(s).length*FEE,0)}</div></div><div class="c"><div class="mu">Seats occupied</div><div class="big">${act.filter(s=>s.seat).length} / ${SEATS}</div></div>`;
+    R[tab]();
+  },
+  tab(x){tab=x;this.render()},
+  lang(){lang=lang=="hi"?"en":"hi";localStorage.lang=lang;applyLang();this.render()},
+  theme(){const l=document.documentElement.classList.toggle("light");localStorage.theme=l?"light":"dark"},
+  loginTab(r){loginRole=r;$("lt-s").className="b"+(r=="s"?"":" o");$("lt-a").className="b"+(r=="a"?"":" o");
+    $("l-id").textContent=r=="s"?"Mobile number":"Admin email";$("l-pw").textContent=r=="s"?"PIN":"Password";$("li").type=r=="s"?"text":"email"},
+  async login(e){
+    e.preventDefault();$("le").textContent="";
+    const id=$("li").value.trim(),pw=$("lp").value;
+    const bt=e.submitter;if(bt)bt.disabled=true;
+    try{await signInWithEmailAndPassword(auth,loginRole=="s"?mail(id):id,pw)}
+    catch{$("le").textContent="Wrong mobile/email or PIN/password."}
+    if(bt)bt.disabled=false;
+  },
+  logout(){signOut(auth)},
+
+  /* students */
+  openStudent(id,seat){
+    const s=id?S.students.find(x=>x.id==id):null;
+    $("ms-t").textContent=s?"Edit student":"New student";
+    $("f-id").value=s?.id||"";$("f-n").value=s?.name||"";$("f-f").value=s?.fatherName||"";
+    $("f-m").value=s?.mobile||"";$("f-m").readOnly=!!s?.uid;$("f-a").value=s?.address||"";
+    $("f-s").value=s?.seat||seat||"";$("f-d").value=s?.admissionDate||today();
+    $("f-p").value="";$("pinw").classList.toggle("hide",!!s?.uid);
+    $("m-s").classList.remove("hide");
+  },
+  closeStudent(){$("m-s").classList.add("hide");this.scanStop();fromQueue=null},
+  async saveStudent(e){
+    e.preventDefault();
+    const eid=$("f-id").value,old=eid?S.students.find(x=>x.id==eid):null;
+    const mobile=$("f-m").value.trim(),seat=Number($("f-s").value)||null;
+    if(S.students.some(x=>x.mobile==mobile&&x.id!=eid))return alert("This mobile number is already registered.");
+    if(seat&&S.students.some(x=>x.seat==seat&&x.id!=eid&&x.status!="left"))return alert(`Seat #${seat} is already taken.`);
+    let uid=old?.uid||null;
+    if(!uid){
+      const pin=$("f-p").value||mobile.slice(-6);
+      if(pin.length<6)return alert("PIN must be at least 6 characters.");
+      try{const c=await createUserWithEmailAndPassword(secAuth,mail(mobile),pin);uid=c.user.uid;await signOut(secAuth)}
+      catch(err){return alert("Could not create login: "+err.code)}
+    }
+    let id=eid;
+    if(!id){let n=await next("student");while(S.students.some(x=>x.id=="TDL-"+String(n).padStart(3,"0")))n=await next("student");id="TDL-"+String(n).padStart(3,"0")}
+    const d={id,name:$("f-n").value.trim(),fatherName:$("f-f").value.trim(),mobile,address:$("f-a").value.trim(),seat,admissionDate:$("f-d").value,status:old?.status||"active",uid,paidMonths:old?.paidMonths||[]};
+    await setDoc(doc(db,"students",id),d,{merge:true});
+    if(fromQueue){await deleteDoc(doc(db,"waitingQueue",fromQueue));fromQueue=null}
+    this.closeStudent();
+    if(!old)alert(`Saved. Login: mobile ${mobile}, PIN ${$("f-p").value||mobile.slice(-6)}`);
+  },
+  async toggleLeft(id){
+    const s=S.students.find(x=>x.id==id),left=s.status!="left";
+    if(!confirm(left?`Mark ${s.name} as left? The seat will be freed.`:`Restore ${s.name}?`))return;
+    await updateDoc(doc(db,"students",id),left?{status:"left",lastSeat:s.seat||null,seat:null,leftDate:today()}:{status:"active"});
+  },
+  async del(id){if(confirm(`Permanently delete ${id}? Payment records are kept.`))await deleteDoc(doc(db,"students",id))},
+  seatClick(n){
+    const o=S.students.find(s=>s.seat==n&&s.status!="left");
+    if(!o)return this.openStudent(null,n);
+    const to=Number(prompt(`Move ${o.name} from seat #${n} to seat number:`));
+    if(!to)return;
+    if(to<1||to>SEATS)return alert("Invalid seat.");
+    if(S.students.some(s=>s.seat==to&&s.status!="left"))return alert(`Seat #${to} is occupied.`);
+    updateDoc(doc(db,"students",o.id),{seat:to});
+  },
+  whatsapp(id){
+    const s=S.students.find(x=>x.id==id),d=dues(s),c=s.mobile.replace(/\D/g,""),num=c.length==10?"91"+c:c;
+    const msg=`Namaste ${s.name},\nTrisha Digital Library ki fee ₹${d.length*FEE} baki hai (${d.map(lbl).join(", ")}).\nKripya portal par QR se payment karein. Dhanyawad!`;
+    window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`,"_blank");
+  },
+
+  /* payments */
+  collect(id){
+    const s=S.students.find(x=>x.id==id),p=paidOf(s),cur=today().slice(0,7);
+    const ms=monthsFrom(s.admissionDate,3).filter(k=>!p.includes(k));
+    $("pay-id").value=id;$("mc-t").textContent=`${s.name} (₹${FEE}/month)`;
+    $("mc-l").innerHTML=ms.map(k=>`<label style="margin:0;color:var(--tx)"><input type="checkbox" class="pm" value="${k}" ${k<=cur?"checked":""} style="width:auto"> ${lbl(k)}${k>cur?" (advance)":""}</label>`).join("")||'<div class="mu">Nothing to collect.</div>';
+    $("m-c").classList.remove("hide");
+  },
+  closeCollect(){$("m-c").classList.add("hide")},
+  async pay(){
+    const s=S.students.find(x=>x.id==$("pay-id").value),ms=[...document.querySelectorAll(".pm:checked")].map(c=>c.value);
+    if(!ms.length)return;
+    const no=await next("receipt");
+    const p={receiptNo:"R-"+String(no).padStart(5,"0"),studentId:s.id,studentName:s.name,uid:s.uid||null,months:ms,amount:ms.length*FEE,mode:$("pay-mode").value,date:today(),by:auth.currentUser.email};
+    const b=writeBatch(db),ref=doc(collection(db,"payments"));
+    b.set(ref,p);b.update(doc(db,"students",s.id),{paidMonths:[...(s.paidMonths||[]),...ms]});
+    await b.commit();this.closeCollect();this.showReceipt(p);
+  },
+  receipt(id){const p=S.payments.find(x=>x._id==id);if(p)this.showReceipt(p)},
+  showReceipt(p){
+    const s=S.students.find(x=>x.id==p.studentId);
+    modal(`<div style="border:2px solid var(--ac);border-radius:12px;padding:14px">
+      <div style="text-align:center"><b>TRISHA DIGITAL LIBRARY</b><div class="mu">Fee receipt</div></div><hr>
+      <div>Receipt no: <b>${esc(p.receiptNo)}</b></div><div>Date: ${fmt(p.date)}</div>
+      <div>Student: <b>${esc(p.studentName)}</b> (${esc(p.studentId)})</div>${s?`<div>Seat: ${s.seat?"#"+s.seat:"Unreserved"}</div>`:""}
+      <div>Months: ${p.months.map(lbl).join(", ")}</div><div>Mode: ${esc(p.mode)}</div>
+      <hr><div class="big">₹${p.amount}</div><div class="mu">Received by: ${esc(p.by)}</div></div>`,"Fee receipt");
+  },
+  idCard(id){
+    const s=S.students.find(x=>x.id==id);if(!s)return;
+    modal(`<div style="border:2px solid var(--am);border-radius:12px;padding:14px;text-align:center">
+      <b>TRISHA DIGITAL LIBRARY</b><div class="mu">Member card</div>
+      <div class="big" style="margin:10px">${esc(s.name)}</div><div class="mu">S/O ${esc(s.fatherName)}</div>
+      <div>ID: <b>${esc(s.id)}</b> · Seat: <b>${s.seat?"#"+s.seat:"Unreserved"}</b></div><div>${esc(s.mobile)}</div>
+      <div id="cq" style="background:#fff;display:inline-block;padding:6px;margin-top:10px"></div></div>`,"ID card");
+    new QRCode($("cq"),{text:"TDL:"+s.id,width:80,height:80});
+  },
+  closeModal(){$("m-p").classList.add("hide")},
+
+  /* queue & notices */
+  async addQueue(e){
+    e.preventDefault();
+    await addDoc(collection(db,"waitingQueue"),{name:$("wn").value.trim(),fatherName:$("wf").value.trim(),mobile:$("wm").value.trim(),address:$("wa").value.trim(),requestDate:today()});
+    e.target.reset();
+  },
+  fromQueue(id){
+    const w=S.queue.find(x=>x._id==id);if(!w)return;
+    this.openStudent();fromQueue=id; // removed from queue only after the student is saved
+    $("f-n").value=w.name;$("f-f").value=w.fatherName;$("f-m").value=w.mobile;$("f-a").value=w.address;
+  },
+  async delQueue(id){if(confirm("Remove from queue?"))await deleteDoc(doc(db,"waitingQueue",id))},
+  reserve(id){
+    const s=S.students.find(x=>x.id==id),used=new Set(S.students.filter(x=>x.status!="left"&&x.seat).map(x=>x.seat));
+    const v=Array.from({length:SEATS},(_,i)=>i+1).filter(n=>!used.has(n));
+    if(!v.length)return alert("No vacant seat available.");
+    $("rs-id").value=id;$("mr-t").textContent=s.name;$("rs-seat").innerHTML=v.map(n=>`<option>${n}</option>`).join("");$("m-r").classList.remove("hide");
+  },
+  closeReserve(){$("m-r").classList.add("hide")},
+  async confirmReserve(){
+    const id=$("rs-id").value,n=Number($("rs-seat").value);
+    if(S.students.some(x=>x.seat==n&&x.status!="left"))return alert("That seat was just taken.");
+    await updateDoc(doc(db,"students",id),{seat:n,reservedOn:today()});this.closeReserve();
+  },
+  async addJob(e){
+    e.preventDefault();const l=$("jl").value.trim();
+    if(!/^https?:\/\//i.test(l))return alert("Link must start with https://");
+    try{await addDoc(collection(db,"jobs"),{title:$("jt").value.trim(),lastDate:$("jd").value,link:l,date:today()});e.target.reset();alert("Job added.")}catch(err){alert("Could not add job: "+(err.code||err.message))}
+  },
+  async delJob(id){if(confirm("Delete this job?"))await deleteDoc(doc(db,"jobs",id))},
+  async addNotice(e){e.preventDefault();await addDoc(collection(db,"notices"),{title:$("nt").value.trim(),text:$("nm").value.trim(),date:today()});e.target.reset()},
+  async delNotice(id){if(confirm("Delete notice?"))await deleteDoc(doc(db,"notices",id))},
+
+  /* export / backup */
+  exportStudents(){dl("students.csv",csv([["ID","Name","Father","Mobile","Address","Seat","Admission","Status","Paid months"],...S.students.map(s=>[s.id,s.name,s.fatherName,s.mobile,s.address,s.seat||"",s.admissionDate,s.status||"active",paidOf(s).length])]))},
+  exportDues(){dl("dues.csv",csv([["ID","Name","Mobile","Seat","Due months","Amount"],...S.students.filter(s=>dues(s).length).map(s=>[s.id,s.name,s.mobile,s.seat||"",dues(s).map(lbl).join(" "),dues(s).length*FEE])]))},
+  exportPay(){dl("payments.csv",csv([["Receipt","Date","Student ID","Name","Months","Amount","Mode","Received by"],...S.payments.map(p=>[p.receiptNo,p.date,p.studentId,p.studentName,p.months.map(lbl).join(" "),p.amount,p.mode,p.by])]))},
+  dueReport(){
+    const r=S.students.filter(s=>dues(s).length);
+    modal(`<b>Dues report — ${fmt(today())}</b><table>${r.map(s=>`<tr><td>${esc(s.name)}<br>${esc(s.mobile)}</td><td>${s.seat?"#"+s.seat:"—"}</td><td>${dues(s).length} mo</td><td>₹${dues(s).length*FEE}</td></tr>`).join("")}</table><b>Total: ₹${r.reduce((a,s)=>a+dues(s).length*FEE,0)}</b>`,"Dues report");
+  },
+  backup(){dl(`tdl-backup-${today()}.json`,JSON.stringify({students:S.students,payments:S.payments,queue:S.queue,notices:S.notices},null,1),"application/json")},
+  async restore(e){
+    const f=e.target.files[0];if(!f||!confirm("Restore will overwrite records with the same ID. Continue?"))return;
+    const d=JSON.parse(await f.text()),ops=[];
+    const add=(c,a)=>(a||[]).forEach(x=>{const{_id,...r}=x;ops.push([doc(db,c,_id),r])});
+    add("students",d.students);add("payments",d.payments);add("waitingQueue",d.queue);add("notices",d.notices);
+    for(let i=0;i<ops.length;i+=400){const b=writeBatch(db);ops.slice(i,i+400).forEach(([r,x])=>b.set(r,x));await b.commit()}
+    alert(`Restored ${ops.length} records.`);e.target.value="";
+  },
+
+  /* ID-card scan */
+  async scanStart(){
+    $("rd").classList.remove("hide");try{await loadJs(HQ)}catch{return alert("Scanner could not load.")}scanner=scanner||new Html5Qrcode("reader");
+    scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},x=>{this.parse(x);this.scanStop()},()=>{}).catch(()=>alert("Camera unavailable."));
+  },
+  scanStop(){const h=()=>$("rd").classList.add("hide");scanner?scanner.stop().then(h).catch(h):h()},
+  async scanFile(e){
+    const f=e.target.files[0];if(!f)return;
+    try{await loadJs(TJ);const{data:{text}}=await Tesseract.recognize(f,"eng+hin");this.parse(text)}catch{alert("Could not read the image. Enter details manually.")}
+  },
+  parse(text){
+    const l=text.split("\n").map(x=>x.trim()).filter(Boolean),m=text.match(/\b[6-9]\d{9}\b/);
+    if(l[0]&&!$("f-n").value)$("f-n").value=l[0];
+    if(m&&!$("f-m").value)$("f-m").value=m[0];
+  }
+};
+
+applyLang();app.loginTab("s");
+</script>
 </body>
 </html>
