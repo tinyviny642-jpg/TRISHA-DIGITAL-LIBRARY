@@ -59,7 +59,8 @@ tbody tr:hover{background:color-mix(in srgb,var(--ac) 6%,transparent)}
 .quote{flex:2;text-align:center;font-family:"Fraunces",Georgia,serif;font-size:20px;font-weight:700;color:var(--ac);padding:0 14px;line-height:1.35}
 @media(max-width:700px){header{flex-wrap:wrap}.quote{order:5;flex-basis:100%;padding:0;font-size:17px}}
 @media(max-width:600px){main{padding:12px 10px 50px}.tab{padding:9px 12px}}
-@media print{body *{visibility:hidden}#pa,#pa *{visibility:visible;color:#000!important;background:#fff!important}#pa{position:absolute;left:0;top:0;width:100%}}
+@media print{body *{visibility:hidden}#pa,#pa *{visibility:visible}#pa>:not(.idc),#pa>:not(.idc) *{color:#000!important;background:#fff!important}.m,.m>div{position:static!important;overflow:visible!important;max-height:none!important;background:none!important;border:0!important;padding:0!important;backdrop-filter:none!important}#pa{position:absolute;left:0;top:0;width:100%;margin:0!important}}
+.qrb canvas,.qrb img{width:100%!important;height:100%!important}
 </style>
 </head>
 <body>
@@ -72,6 +73,7 @@ tbody tr:hover{background:color-mix(in srgb,var(--ac) 6%,transparent)}
   <button class="b r hide" id="out" onclick="app.logout()"><span data-t="logout">Logout</span></button>
 </header>
 <main>
+<div id="splash" class="c" style="text-align:center;max-width:300px;margin:80px auto"><div class="logo" style="margin:0 auto 10px">T</div><div class="mu">Loading…</div></div>
 
 <!-- LOGIN -->
 <section id="v-login" class="c hide login">
@@ -103,7 +105,6 @@ tbody tr:hover{background:color-mix(in srgb,var(--ac) 6%,transparent)}
     <button class="tab" id="t-queue" onclick="app.tab('queue')"><span>🕒</span><span data-t="queue"></span></button>
     <button class="tab" id="t-notices" onclick="app.tab('notices')"><span>📢</span><span data-t="notice"></span></button>
     <button class="tab" id="t-jobs" onclick="app.tab('jobs')"><span>💼</span><span data-t="jobs"></span></button>
-    <button class="tab" id="t-left" onclick="app.tab('left')"><span>🚪</span><span data-t="left"></span></button>
     <button class="tab" id="t-reports" onclick="app.tab('reports')"><span>📊</span><span data-t="rep"></span></button>
   </div>
 
@@ -111,7 +112,7 @@ tbody tr:hover{background:color-mix(in srgb,var(--ac) 6%,transparent)}
     <div class="row" style="margin-bottom:10px">
       <input id="q" placeholder="Search…" oninput="app.render()" style="max-width:280px">
       <select id="flt" onchange="app.render()" style="max-width:180px">
-        <option value="all">Active</option><option value="due">Dues pending</option>
+        <option value="all">Active</option><option value="due">Dues pending</option><option value="left">Left</option>
         
       </select>
       <button class="b" onclick="app.openStudent()">+ New</button>
@@ -122,8 +123,6 @@ tbody tr:hover{background:color-mix(in srgb,var(--ac) 6%,transparent)}
   <div id="s-unres" class="hide"><div class="c sc"><div class="row" style="margin-bottom:12px"><b style="flex:1;font-size:15px">Unreserved students <span class="mu">(flexible seat)</span></b><button class="b" onclick="app.openStudent()">+ Add unreserved</button></div><table><thead><tr><th>Student</th><th>Father / Address</th><th>Fee status</th><th></th></tr></thead><tbody id="ub"></tbody></table></div></div>
 
   <div id="s-jobs" class="hide g g3"><form class="c" onsubmit="app.addJob(event)"><label>Job title</label><input id="jt" required><label>Last date</label><input id="jd" type="date"><label>Link (https://…)</label><input id="jl" type="url" required placeholder="https://"><br><br><button class="b">Add job</button></form><div class="c" style="grid-column:span 2" id="jlst"></div></div>
-
-  <div id="s-left" class="hide"><div class="c sc"><div class="row" style="margin-bottom:12px"><b style="flex:1;font-size:15px">Left students <span class="mu">(records are kept)</span></b></div><table><thead><tr><th>Student</th><th>Father / Address</th><th>Left on</th><th>Fees</th><th></th></tr></thead><tbody id="lb"></tbody></table></div></div>
 
   <div id="s-pending" class="hide"><div class="c sc"><div class="row" style="margin-bottom:12px"><b style="flex:1;font-size:15px" id="pn-sum"></b><button class="b o" onclick="app.exportDues()">Export CSV</button><button class="b o" onclick="app.dueReport()">Print / PDF</button></div><table><thead><tr><th>Student</th><th>Seat</th><th>Unpaid months</th><th>Amount</th><th></th></tr></thead><tbody id="pnb"></tbody></table></div></div>
 
@@ -212,6 +211,7 @@ import {getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,onAuth
 import {getFirestore,collection,doc,onSnapshot,setDoc,addDoc,updateDoc,deleteDoc,getDoc,query,where,writeBatch,runTransaction} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 const cfg={apiKey:"AIzaSyDomQsYNh7ATHvC4F9jWWzKkLOTufcD0J8",authDomain:"trisha-digital-library.firebaseapp.com",projectId:"trisha-digital-library",storageBucket:"trisha-digital-library.firebasestorage.app",messagingSenderId:"551272591083",appId:"1:551272591083:web:1110ed87352f948daf98ae"};
+const LIB_PLACE="Prayagraj, Uttar Pradesh"; // printed on ID card footer, change if needed
 const FEE=400,SEATS=106,UPI="8172819119-4@ybl";
 const fb=initializeApp(cfg),auth=getAuth(fb),db=getFirestore(fb);
 const secAuth=getAuth(initializeApp(cfg,"sec")); // creates student logins without logging admin out
@@ -246,14 +246,15 @@ if(localStorage.theme=="light")document.documentElement.classList.add("light");
 /* ---------- state ---------- */
 const Q=["जो मेहनत से डरता है, वह मंज़िल से दूर रहता है।", "छोटे-छोटे प्रयास ही बड़ी सफलता की नींव हैं।", "आज का पढ़ा हुआ कल का भविष्य बनाता है।", "असफलता सीख है, अंत नहीं।", "समय का सदुपयोग ही सफलता की पहली सीढ़ी है।", "जहाँ चाह, वहाँ राह।", "अनुशासन ही सफलता की चाबी है।", "सपने वही सच होते हैं जिनके पीछे मेहनत होती है।", "हर दिन एक नया अवसर लेकर आता है।", "धैर्य रखो, मेहनत करते रहो, परिणाम ज़रूर मिलेगा।", "ज्ञान सबसे बड़ा धन है।", "कल पर मत टालो, आज ही शुरुआत करो।", "लगातार अभ्यास से कठिन भी आसान हो जाता है।", "जो गिरकर उठ जाए, वही असली विजेता है।", "एकाग्रता से किया गया थोड़ा काम भी बहुत होता है।", "किताबें सच्ची मित्र हैं, जो कभी साथ नहीं छोड़तीं।", "आत्मविश्वास सफलता का पहला रहस्य है।", "मन लगाकर पढ़ो, मंज़िल खुद पास आएगी।", "बूँद-बूँद से सागर भरता है।", "परिश्रम का फल मीठा होता है।", "सीखने की कोई उम्र नहीं होती।", "कठिन रास्ते ही सुंदर मंज़िल तक ले जाते हैं।", "खुद पर भरोसा रखो, तुम कर सकते हो।", "सफलता उन्हें मिलती है जो हार नहीं मानते।", "समय किसी का इंतज़ार नहीं करता।", "अच्छे विचार अच्छे जीवन की शुरुआत हैं।", "आज की मेहनत कल की मुस्कान बनती है।", "लक्ष्य बड़ा रखो और रोज़ थोड़ा आगे बढ़ो।", "शांत मन से पढ़ा हुआ सबसे देर तक याद रहता है।", "हर सुबह खुद को बेहतर बनाने का मौका है।"];
 const dayQuote=()=>{const d=new Date();return Q[Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5)%Q.length]};
-const S={role:null,students:[],payments:[],queue:[],notices:[],jobs:[]};
+const S={ready:false,role:null,students:[],payments:[],queue:[],notices:[],jobs:[]};
 let tab="students",unsubs=[],loginRole="s",fromQueue=null,scanner=null;
-const show=v=>["login","stu","adm"].forEach(x=>$("v-"+x).classList.toggle("hide",x!=v));
+const show=v=>{$("splash").classList.add("hide");["login","stu","adm"].forEach(x=>$("v-"+x).classList.toggle("hide",x!=v))};
+const ready=()=>{if(S.ready)return;S.ready=true;show(S.role=="admin"?"adm":"stu")};
 const modal=(h,title)=>{$("pt").textContent=title;$("pa").innerHTML=h;$("m-p").classList.remove("hide")};
 
 /* ---------- auth ---------- */
 const resetUI=()=>{
-  S.role=null;S.students=[];S.payments=[];S.queue=[];S.notices=[];S.jobs=[];tab="students";
+  S.role=null;S.ready=false;S.students=[];S.payments=[];S.queue=[];S.notices=[];S.jobs=[];tab="students";
   ["li","lp"].forEach(i=>$(i).value="");$("le").textContent="";app.loginTab("s");
   ["m-s","m-c","m-p","m-r"].forEach(i=>$(i).classList.add("hide"));
   $("quote").classList.add("hide");$("stu").innerHTML="";$("out").classList.add("hide");
@@ -262,18 +263,16 @@ onAuthStateChanged(auth,async u=>{
   unsubs.forEach(f=>f());unsubs=[];
   if(!u){resetUI();show("login");return}
   $("le").textContent="Loading…";
-  $("out").classList.remove("hide");
+  $("out").classList.remove("hide");S.ready=false;
   const a=await getDoc(doc(db,"admins",u.uid));
   S.role=a.exists()?"admin":"student";
-  const lis=(q,k)=>unsubs.push(onSnapshot(q,s=>{S[k]=s.docs.map(d=>({_id:d.id,...d.data()}));app.schedule()},e=>console.error(k,e)));
+  const lis=(q,k)=>unsubs.push(onSnapshot(q,s=>{S[k]=s.docs.map(d=>({_id:d.id,...d.data()}));if(k=="students")ready();app.schedule()},e=>{console.error(k,e);if(k=="students")ready()}));
   if(S.role=="admin"){
     ["students","payments","waitingQueue","notices","jobs"].forEach(c=>lis(collection(db,c),c=="waitingQueue"?"queue":c));
-    show("adm");
   }else{
     lis(query(collection(db,"students"),where("uid","==",u.uid)),"students");
     lis(query(collection(db,"payments"),where("uid","==",u.uid)),"payments");
     lis(collection(db,"notices"),"notices");lis(collection(db,"jobs"),"jobs");
-    show("stu");
   }
 });
 
@@ -351,12 +350,7 @@ function rUnres(){
 function rJobs(){
   $("jlst").innerHTML=[...S.jobs].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(j=>`<div class="row" style="margin-bottom:10px"><div style="flex:1"><b>${esc(j.title)}</b><div class="mu">Last date: ${fmt(j.lastDate)}</div></div><button class="b r" onclick="app.delJob('${j._id}')">✕</button></div>`).join("")||'<div class="mu">No jobs yet.</div>';
 }
-function rLeft(){
-  $("lb").innerHTML=S.students.filter(s=>s.status=="left").sort((a,b)=>(b.leftDate||"").localeCompare(a.leftDate||"")).map(s=>{
-    const id=esc(s.id),p=paidOf(s),lim=(s.leftDate||today()).slice(0,7),d=monthsFrom(s.admissionDate).filter(k=>!p.includes(k)&&k<=lim);
-    return`<tr><td><div class="who"><i class="av">${esc(s.name.charAt(0).toUpperCase())}</i><div><b>${esc(s.name)}</b><div class="mu">${id} · ${esc(s.mobile)}</div></div></div></td><td>${esc(s.fatherName)}<div class="mu">${esc(s.address)}</div></td><td>${fmt(s.leftDate)}<div class="mu">${s.lastSeat?"Seat was #"+s.lastSeat:""}</div></td><td><span class="pd">${p.length} ${t("paid")}</span>${d.length?`<div class="dd">Dues at leaving: ₹${d.length*FEE}</div>`:""}</td><td><div class="row"><button class="b a" onclick="app.toggleLeft('${id}')">Restore</button><button class="b r" onclick="app.del('${id}')">Delete</button></div></td></tr>`}).join("")||'<tr><td colspan="5" class="mu">No students have left.</td></tr>';
-}
-const R={students:rTable,left:rLeft,unres:rUnres,jobs:rJobs,pending:rPending,seats:rSeats,payments:rPay,queue:rQueue,notices:rNotices,reports:rReports};
+const R={students:rTable,unres:rUnres,jobs:rJobs,pending:rPending,seats:rSeats,payments:rPay,queue:rQueue,notices:rNotices,reports:rReports};
 
 /* ---------- app (called from HTML) ---------- */
 const app=window.app={
@@ -469,12 +463,30 @@ const app=window.app={
   },
   idCard(id){
     const s=S.students.find(x=>x.id==id);if(!s)return;
-    modal(`<div style="border:2px solid var(--am);border-radius:12px;padding:14px;text-align:center">
-      <b>TRISHA DIGITAL LIBRARY</b><div class="mu">Member card</div>
-      <div class="big" style="margin:10px">${esc(s.name)}</div><div class="mu">S/O ${esc(s.fatherName)}</div>
-      <div>ID: <b>${esc(s.id)}</b> · Seat: <b>${s.seat?"#"+s.seat:"Unreserved"}</b></div><div>${esc(s.mobile)}</div>
-      <div id="cq" style="background:#fff;display:inline-block;padding:6px;margin-top:10px"></div></div>`,"ID card");
-    new QRCode($("cq"),{text:"TDL:"+s.id,width:80,height:80});
+    const a=(s.admissionDate||today()).split("-"),vt=`${a[2]}/${a[1]}/${Number(a[0])+1}`;
+    const r=(k,v)=>`<tr><td style="padding:1.5px 0;border:0;color:#666;width:45px">${k}</td><td style="padding:1.5px 0;border:0;font-weight:bold;color:#000">: ${esc(v||"-")}</td></tr>`;
+    modal(`<div class="idc" style="width:85.6mm;height:53.98mm;margin:auto;background:#fff;color:#000;border-radius:8px;position:relative;overflow:hidden;font-family:Arial,sans-serif;display:flex;flex-direction:column;border:1px solid #ccc;-webkit-print-color-adjust:exact;print-color-adjust:exact">
+      <div style="position:absolute;top:0;right:0;width:150px;height:150px;background:linear-gradient(135deg,rgba(0,210,255,.1),rgba(26,35,126,.1));border-radius:50%;transform:translate(30%,-30%)"></div>
+      <div style="display:flex;align-items:center;padding:8px 15px;background:linear-gradient(90deg,#1a237e,#0d47a1);color:#fff;z-index:2">
+        <div style="width:35px;height:35px;background:#fff;border-radius:50%;color:#1a237e;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px">T</div>
+        <div style="margin-left:10px"><div style="font-size:14px;font-weight:900;letter-spacing:1px;text-transform:uppercase">Trisha Digital Library</div><div style="margin-top:2px;font-size:7px;color:#00d2ff;letter-spacing:1px;text-transform:uppercase">Premium Study Environment</div></div>
+      </div>
+      <div style="display:flex;padding:10px 15px;flex:1;z-index:2;align-items:center">
+        <div style="display:flex;flex-direction:column;align-items:center;margin-right:15px">
+          <div style="width:50px;height:65px;border:2px solid #1a237e;border-radius:4px;background:#f0f2f5;display:flex;justify-content:center;align-items:center;font-size:8px;color:#888"><span style="opacity:.5">PHOTO</span></div>
+          <div style="margin-top:5px;font-size:7px;font-weight:bold;color:#1a237e;background:#eee;padding:2px 5px;border-radius:3px;border:1px solid #ddd">${s.seat?"S-"+s.seat:"Unreserved"}</div>
+        </div>
+        <div style="flex:1">
+          <div style="margin:0 0 2px;font-size:15px;color:#1a237e;font-weight:900;text-transform:uppercase">${esc(s.name)}</div>
+          <div style="margin:0 0 8px;font-size:9px;color:#d32f2f;font-weight:bold;background:#ffebee;display:inline-block;padding:2px 5px;border-radius:3px">ID: ${esc(s.id)}</div>
+          <table style="width:100%;font-size:8.5px;color:#333;border-collapse:collapse">${r("Father",s.fatherName)}${r("Mobile",s.mobile)}${r("Issued",fmt(s.admissionDate))}${r("Valid Till",vt)}</table>
+        </div>
+        <div class="qrb" style="width:45px;height:45px;padding:2px;background:#fff;border:1px solid #1a237e;border-radius:4px"><div id="cq" style="width:100%;height:100%"></div></div>
+      </div>
+      <div style="background:#f0f2f5;border-top:1px solid #ddd;padding:4px 15px;display:flex;justify-content:space-between;z-index:2">
+        <span style="font-size:7px;color:#666;font-weight:bold">${esc(LIB_PLACE)}</span><span style="font-size:8px;font-weight:bold;color:#1a237e;font-style:italic">Authorised Signature</span>
+      </div></div>`,"ID card");
+    new QRCode($("cq"),{text:"TDL:"+s.id,width:80,height:80,correctLevel:QRCode.CorrectLevel.L,colorDark:"#1a237e"});
   },
   closeModal(){$("m-p").classList.add("hide")},
 
