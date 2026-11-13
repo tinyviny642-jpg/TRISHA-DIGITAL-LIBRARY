@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.vercel.trisha_digital_library.twa",
+      "sha256_cert_fingerprints": [
+        "4C:9F:B6:F0:E7:31:97:7C:AA:12:F7:A6:ED:0A:CE:23:6E:9B:95:B4:D6:11:B5:8C:FE:34:9E:1E:43:C1:41:5A"
+      ]
+    }
+  }
+]
