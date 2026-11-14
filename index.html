@@ -170,12 +170,7 @@ tbody tr:hover{background:color-mix(in srgb,var(--ac) 6%,transparent)}
 <!-- STUDENT FORM -->
 <div id="m-s" class="m hide"><div>
   <div class="row"><b id="ms-t" style="flex:1">Student</b><button class="b o" onclick="app.closeStudent()">✕</button></div>
-  <div class="c" style="margin-top:10px">
-    <div class="mu">Auto-fill from ID card</div>
-    <div class="row"><button type="button" class="b o" onclick="app.scanStart()">Camera</button>
-      <label class="b o" style="margin:0;color:var(--tx)">Upload image<input type="file" accept="image/*" class="hide" onchange="app.scanFile(event)"></label></div>
-    <div id="rd" class="hide"><div id="reader"></div><button type="button" class="b o" onclick="app.scanStop()">Close camera</button></div>
-  </div>
+  
   <form onsubmit="app.saveStudent(event)">
     <input type="hidden" id="f-id">
     <label>Full name</label><input id="f-n" required>
@@ -220,8 +215,6 @@ const secAuth=getAuth(initializeApp(cfg,"sec")); // creates student logins witho
 
 /* ---------- helpers ---------- */
 const $=i=>document.getElementById(i);
-const HQ="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js",TJ="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.5/dist/tesseract.min.js";
-const loadJs=u=>new Promise((ok,no)=>{if(document.querySelector(`script[src="${u}"]`))return ok();const s=document.createElement("script");s.src=u;s.onload=ok;s.onerror=no;document.head.appendChild(s)});
 window.addEventListener("unhandledrejection",ev=>{if(ev.reason?.code=="permission-denied")alert("Permission denied. Publish the latest firestore.rules in Firebase Console (Firestore > Rules).")});
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const today=()=>new Date().toISOString().slice(0,10);
@@ -230,7 +223,12 @@ const mail=m=>`${m}@tdl.student`;
 const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const nk=k=>{const m=/^(\w{3}) (\d{4})$/.exec(k);return m?`${m[2]}-${String(MN.indexOf(m[1])+1).padStart(2,"0")}`:k}; // old "Jan 2025" -> "2025-01"
 const paidOf=s=>(s.paidMonths||[]).map(nk);
-const monthsFrom=(adm,extra=0)=>{if(!adm)return[];let[y,m]=adm.split("-").map(Number);m--;const n=new Date(),lim=n.getFullYear()*12+n.getMonth()+extra,r=[];while(y*12+m<=lim){r.push(`${y}-${String(m+1).padStart(2,"0")}`);if(++m>11){m=0;y++}}return r};
+const iso=c=>`${c.getFullYear()}-${String(c.getMonth()+1).padStart(2,"0")}-${String(c.getDate()).padStart(2,"0")}`;
+// Fee cycles follow the admission date: cycle i starts (and is due) on admission day + i months. Key = YYYY-MM of that cycle.
+const cycDate=(adm,i)=>{const[y,m,d]=adm.split("-").map(Number),t=new Date(y,m-1+i,1),last=new Date(t.getFullYear(),t.getMonth()+1,0).getDate();return new Date(t.getFullYear(),t.getMonth(),Math.min(d,last))};
+const monthsFrom=(adm,extra=0)=>{if(!adm)return[];const n=new Date();n.setHours(0,0,0,0);const r=[];let over=0;for(let i=0;i<600;i++){const c=cycDate(adm,i);if(c>n){if(over>=extra)break;over++}r.push(iso(c).slice(0,7))}return r};
+const cdate=(s,k)=>{const[y,m]=k.split("-").map(Number),[ay,am]=s.admissionDate.split("-").map(Number);return iso(cycDate(s.admissionDate,(y-ay)*12+(m-am)))};
+const nextDue=s=>{if(!s.admissionDate)return"";const n=new Date();n.setHours(0,0,0,0);for(let i=0;i<600;i++){const c=cycDate(s.admissionDate,i);if(c>n)return iso(c)}return""};
 const dues=s=>{if(s.status=="left")return[];const p=paidOf(s);return monthsFrom(s.admissionDate).filter(k=>!p.includes(k))};
 const lbl=k=>{const[y,m]=k.split("-");return`${MN[m-1]} ${y}`};
 const csv=r=>"\ufeff"+r.map(x=>x.map(c=>{c=String(c??"");if(/^[=+\-@]/.test(c))c="'"+c;return`"${c.replace(/"/g,'""')}"`}).join(",")).join("\n");
@@ -249,7 +247,7 @@ if(localStorage.theme=="light")document.documentElement.classList.add("light");
 const Q=["जो मेहनत से डरता है, वह मंज़िल से दूर रहता है।", "छोटे-छोटे प्रयास ही बड़ी सफलता की नींव हैं।", "आज का पढ़ा हुआ कल का भविष्य बनाता है।", "असफलता सीख है, अंत नहीं।", "समय का सदुपयोग ही सफलता की पहली सीढ़ी है।", "जहाँ चाह, वहाँ राह।", "अनुशासन ही सफलता की चाबी है।", "सपने वही सच होते हैं जिनके पीछे मेहनत होती है।", "हर दिन एक नया अवसर लेकर आता है।", "धैर्य रखो, मेहनत करते रहो, परिणाम ज़रूर मिलेगा।", "ज्ञान सबसे बड़ा धन है।", "कल पर मत टालो, आज ही शुरुआत करो।", "लगातार अभ्यास से कठिन भी आसान हो जाता है।", "जो गिरकर उठ जाए, वही असली विजेता है।", "एकाग्रता से किया गया थोड़ा काम भी बहुत होता है।", "किताबें सच्ची मित्र हैं, जो कभी साथ नहीं छोड़तीं।", "आत्मविश्वास सफलता का पहला रहस्य है।", "मन लगाकर पढ़ो, मंज़िल खुद पास आएगी।", "बूँद-बूँद से सागर भरता है।", "परिश्रम का फल मीठा होता है।", "सीखने की कोई उम्र नहीं होती।", "कठिन रास्ते ही सुंदर मंज़िल तक ले जाते हैं।", "खुद पर भरोसा रखो, तुम कर सकते हो।", "सफलता उन्हें मिलती है जो हार नहीं मानते।", "समय किसी का इंतज़ार नहीं करता।", "अच्छे विचार अच्छे जीवन की शुरुआत हैं।", "आज की मेहनत कल की मुस्कान बनती है।", "लक्ष्य बड़ा रखो और रोज़ थोड़ा आगे बढ़ो।", "शांत मन से पढ़ा हुआ सबसे देर तक याद रहता है।", "हर सुबह खुद को बेहतर बनाने का मौका है।"];
 const dayQuote=()=>{const d=new Date();return Q[Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5)%Q.length]};
 const S={ready:false,role:null,students:[],payments:[],queue:[],notices:[],jobs:[]};
-let tab="students",unsubs=[],loginRole="s",fromQueue=null,scanner=null;
+let tab="students",unsubs=[],loginRole="s",fromQueue=null;
 const show=v=>{$("splash").classList.add("hide");["login","stu","adm"].forEach(x=>$("v-"+x).classList.toggle("hide",x!=v))};
 const ready=()=>{if(S.ready)return;S.ready=true;show(S.role=="admin"?"adm":"stu")};
 const modal=(h,title)=>{$("pt").textContent=title;$("pa").innerHTML=h;$("m-p").classList.remove("hide")};
@@ -290,7 +288,7 @@ function rStudent(){
     <div class="row" style="margin-top:10px"><button class="b" onclick="app.idCard('${esc(s.id)}')">ID card</button></div></div>
   <div class="g g3"><div class="c"><div class="mu">${t("seat")}</div><div class="big">${s.seat?"#"+s.seat:"Unreserved"}</div></div>
     <div class="c"><div class="mu">${t("pend")}</div><div class="big dd">₹${amt}</div></div>
-    <div class="c"><div class="mu">${t("adm")}</div><div class="big">${fmt(s.admissionDate)}</div></div></div>
+    <div class="c"><div class="mu">${t("adm")}</div><div class="big">${fmt(s.admissionDate)}</div></div><div class="c"><div class="mu">Next fee date</div><div class="big">${fmt(nextDue(s))}</div></div></div>
   ${amt>0?`<div class="c" style="text-align:center"><b>Scan & pay (UPI)</b><div style="background:#fff;display:inline-block;padding:10px;border-radius:10px;margin:10px"><div id="upi"></div></div><div class="mu">Trisha Digital Library</div></div>`:""}
   <div class="c"><b>💼 ${t("jobs")}</b>${S.jobs.filter(j=>/^https?:\/\//i.test(j.link)).length?[...S.jobs].filter(j=>/^https?:\/\//i.test(j.link)).sort((a,b)=>(b.date||"").localeCompare(a.date||"")).slice(0,10).map(j=>`<div class="row" style="margin-top:10px;justify-content:space-between"><div><b>${esc(j.title)}</b><div class="mu">Last date: ${fmt(j.lastDate)}</div></div><a class="b o" href="${esc(j.link)}" target="_blank" rel="noopener noreferrer">Details</a></div>`).join(""):'<div class="mu" style="margin-top:6px">No jobs posted yet.</div>'}</div>
   <div class="c"><b>${t("notices")}</b>${S.notices.length?[...S.notices].sort((a,b)=>b.date.localeCompare(a.date)).map(n=>`<div style="margin-top:8px"><b>${esc(n.title)}</b> <span class="mu">${fmt(n.date)}</span><div>${esc(n.text)}</div></div>`).join(""):'<div class="mu">No notices.</div>'}</div>
@@ -311,7 +309,7 @@ function rTable(){
     <td><div class="who"><i class="av">${esc(s.name.charAt(0).toUpperCase())}</i><div><b>${esc(s.name)}</b><div class="mu">${id} · ${esc(s.mobile)}</div></div></div></td>
     <td>${esc(s.fatherName)}<div class="mu">${esc(s.address)}</div></td>
     <td>${s.seat?"#"+s.seat:"—"}</td>
-    <td>${s.status=="left"?"Left":d.length?`<span class="dd">${t("due")}: ${d.length} (₹${d.length*FEE})</span><div class="mu">from ${lbl(d[0])}</div>`:`<span class="pd">${t("paid")}</span>`}</td>
+    <td>${s.status=="left"?"Left":d.length?`<span class="dd">${t("due")}: ${d.length} (₹${d.length*FEE})</span><div class="mu">from ${lbl(d[0])}</div>`:`<span class="pd">${t("paid")}</span><div class="mu">Next fee: ${fmt(nextDue(s))}</div>`}</td>
     <td><div class="row">
       ${s.status!="left"?`<button class="b" onclick="app.collect('${id}')">${t("collect")}</button>`:""}
       <button class="b o" onclick="app.idCard('${id}')">ID</button>
@@ -347,7 +345,7 @@ function rPending(){
   $("pnb").innerHTML=r.map(s=>{const d=dues(s),id=esc(s.id);return`<tr><td><div class="who"><i class="av">${esc(s.name.charAt(0).toUpperCase())}</i><div><b>${esc(s.name)}</b><div class="mu">${esc(s.mobile)}</div></div></div></td><td>${s.seat?"#"+s.seat:"—"}</td><td class="mu">${d.map(lbl).join(", ")}</td><td class="dd"><b>₹${d.length*FEE}</b></td><td><div class="row"><button class="b" onclick="app.collect('${id}')">${t("collect")}</button><button class="b o" onclick="app.whatsapp('${id}')">WhatsApp</button></div></td></tr>`}).join("")||'<tr><td colspan="5" class="mu">No pending fees.</td></tr>';
 }
 function rUnres(){
-  $("ub").innerHTML=S.students.filter(s=>!s.seat&&s.status!="left").map(s=>{const d=dues(s),id=esc(s.id);return`<tr><td><div class="who"><i class="av">${esc(s.name.charAt(0).toUpperCase())}</i><div><b>${esc(s.name)}</b><div class="mu">${id} · ${esc(s.mobile)}</div></div></div></td><td>${esc(s.fatherName)}<div class="mu">${esc(s.address)}</div></td><td>${d.length?`<span class="dd">${t("due")}: ${d.length} (₹${d.length*FEE})</span>`:`<span class="pd">${t("paid")}</span>`}</td><td><div class="row"><button class="b a" onclick="app.reserve('${id}')">Reserve seat</button><button class="b" onclick="app.collect('${id}')">${t("collect")}</button><button class="b o" onclick="app.openStudent('${id}')">Edit</button><button class="b o" onclick="app.toggleLeft('${id}')">Mark left</button></div></td></tr>`}).join("")||'<tr><td colspan="4" class="mu">No unreserved students.</td></tr>';
+  $("ub").innerHTML=S.students.filter(s=>!s.seat&&s.status!="left").map(s=>{const d=dues(s),id=esc(s.id);return`<tr><td><div class="who"><i class="av">${esc(s.name.charAt(0).toUpperCase())}</i><div><b>${esc(s.name)}</b><div class="mu">${id} · ${esc(s.mobile)}</div></div></div></td><td>${esc(s.fatherName)}<div class="mu">${esc(s.address)}</div></td><td>${d.length?`<span class="dd">${t("due")}: ${d.length} (₹${d.length*FEE})</span>`:`<span class="pd">${t("paid")}</span><div class="mu">Next fee: ${fmt(nextDue(s))}</div>`}</td><td><div class="row"><button class="b a" onclick="app.reserve('${id}')">Reserve seat</button><button class="b" onclick="app.collect('${id}')">${t("collect")}</button><button class="b o" onclick="app.openStudent('${id}')">Edit</button><button class="b o" onclick="app.toggleLeft('${id}')">Mark left</button></div></td></tr>`}).join("")||'<tr><td colspan="4" class="mu">No unreserved students.</td></tr>';
 }
 function rJobs(){
   $("jlst").innerHTML=[...S.jobs].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(j=>`<div class="row" style="margin-bottom:10px"><div style="flex:1"><b>${esc(j.title)}</b><div class="mu">Last date: ${fmt(j.lastDate)}</div></div><button class="b r" onclick="app.delJob('${j._id}')">✕</button></div>`).join("")||'<div class="mu">No jobs yet.</div>';
@@ -392,7 +390,7 @@ const app=window.app={
     $("f-p").value="";$("pinw").classList.toggle("hide",!!s?.uid);
     $("m-s").classList.remove("hide");
   },
-  closeStudent(){$("m-s").classList.add("hide");this.scanStop();fromQueue=null},
+  closeStudent(){$("m-s").classList.add("hide");fromQueue=null},
   async saveStudent(e){
     e.preventDefault();
     const eid=$("f-id").value,old=eid?S.students.find(x=>x.id==eid):null;
@@ -437,10 +435,10 @@ const app=window.app={
 
   /* payments */
   collect(id){
-    const s=S.students.find(x=>x.id==id),p=paidOf(s),cur=today().slice(0,7);
+    const s=S.students.find(x=>x.id==id),p=paidOf(s),dueSet=new Set(monthsFrom(s.admissionDate));
     const ms=monthsFrom(s.admissionDate,3).filter(k=>!p.includes(k));
     $("pay-id").value=id;$("mc-t").textContent=`${s.name} (₹${FEE}/month)`;
-    $("mc-l").innerHTML=ms.map(k=>`<label style="margin:0;color:var(--tx)"><input type="checkbox" class="pm" value="${k}" ${k<=cur?"checked":""} style="width:auto"> ${lbl(k)}${k>cur?" (advance)":""}</label>`).join("")||'<div class="mu">Nothing to collect.</div>';
+    $("mc-l").innerHTML=ms.map(k=>`<label style="margin:0;color:var(--tx)"><input type="checkbox" class="pm" value="${k}" ${dueSet.has(k)?"checked":""} style="width:auto"> ${lbl(k)} <span class="mu">${dueSet.has(k)?"due":"advance"} ${fmt(cdate(s,k))}</span></label>`).join("")||'<div class="mu">Nothing to collect.</div>';
     $("m-c").classList.remove("hide");
   },
   closeCollect(){$("m-c").classList.add("hide")},
@@ -542,22 +540,6 @@ const app=window.app={
     for(let i=0;i<ops.length;i+=400){const b=writeBatch(db);ops.slice(i,i+400).forEach(([r,x])=>b.set(r,x));await b.commit()}
     alert(`Restored ${ops.length} records.`);e.target.value="";
   },
-
-  /* ID-card scan */
-  async scanStart(){
-    $("rd").classList.remove("hide");try{await loadJs(HQ)}catch{return alert("Scanner could not load.")}scanner=scanner||new Html5Qrcode("reader");
-    scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},x=>{this.parse(x);this.scanStop()},()=>{}).catch(()=>alert("Camera unavailable."));
-  },
-  scanStop(){const h=()=>$("rd").classList.add("hide");scanner?scanner.stop().then(h).catch(h):h()},
-  async scanFile(e){
-    const f=e.target.files[0];if(!f)return;
-    try{await loadJs(TJ);const{data:{text}}=await Tesseract.recognize(f,"eng+hin");this.parse(text)}catch{alert("Could not read the image. Enter details manually.")}
-  },
-  parse(text){
-    const l=text.split("\n").map(x=>x.trim()).filter(Boolean),m=text.match(/\b[6-9]\d{9}\b/);
-    if(l[0]&&!$("f-n").value)$("f-n").value=l[0];
-    if(m&&!$("f-m").value)$("f-m").value=m[0];
-  }
 };
 
 applyLang();app.loginTab("s");
